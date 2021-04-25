@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  web:
+    build: .
+    image: ${IMAGE_BASE_PATH}/front:latest
+    networks:
+      - studio-expert-swarm
+
+networks:
+  studio-expert-swarm:
+    external: true
+

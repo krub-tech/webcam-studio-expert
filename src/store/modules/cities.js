@@ -11,8 +11,7 @@ const getters = {
   currentCity: (state) => state.currentCity,
   selectedDistricts: (state) => state.selectedDistricts,
   metroNames: (state) => {
-    const names = [...new Set(state.metroByCity.map((el) => el.name))];
-    return names;
+    return [...new Set(state.metroByCity.map((el) => el.name))];
   },
   selectedMetro: (state) => state.selectedMetro,
 };
@@ -39,8 +38,8 @@ const mutations = {
 };
 
 const actions = {
-  async getUniqeCities({ dispatch, commit }) {
-    const response = await dispatch("apiRequest", "api/user/unique_cities/");
+  async getUniqueCities({ dispatch, commit }) {
+    const response = await dispatch("apiRequest", "api/geo_info/cities/");
     commit("updateUniqueCities", response.data);
     dispatch("getDistrictsByCurrentCity");
     dispatch("getMetroByCity");
@@ -48,7 +47,7 @@ const actions = {
   async getDistrictsByCurrentCity(ctx) {
     const response = await ctx.dispatch(
       "apiRequest",
-      `api/user/districts/?city=${ctx.state.currentCity}`
+      `api/geo_info/districts/?city=${ctx.state.currentCity}`
     );
     ctx.commit("updateDistrictsByCurrentCity", response.data);
   },

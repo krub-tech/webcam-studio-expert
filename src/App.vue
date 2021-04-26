@@ -21,7 +21,7 @@ export default {
     throttle,
   },
   mounted() {
-    this.$store.dispatch("getUniqeCities");
+    this.$store.dispatch("getUniqueCities");
     this.$store.dispatch("optionsStudiosFromDB");
     this.$store.dispatch("studiosFromDB");
     this.$store.dispatch("allStudiosLength");

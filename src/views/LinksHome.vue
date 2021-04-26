@@ -40,52 +40,52 @@
 
 <script>
 export default {
-  name: 'LinksHome',
+  name: "LinksHome",
   data() {
-    return {}
+    return {};
   },
   computed: {
     currentCategory() {
-      return this.$store.state.links.currentLinksCategory
+      return this.$store.state.links.currentLinksCategory;
     },
     usefulLinksOptions() {
-      return this.$store.getters.usefulLinksOptions.categories
+      return this.$store.getters.usefulLinksOptions.categories;
     },
     usefulLinks() {
-      return this.$store.getters.usefulLinks
+      return this.$store.getters.usefulLinks;
     },
     usefulLinksLengthByCategory() {
-      return this.$store.getters.usefulLinksLengthByCategory
+      return this.$store.getters.usefulLinksLengthByCategory;
     },
   },
   methods: {
     isCurrent(str) {
-      if (this.$store.state.windowWidth < 420) return false
-      else return this.currentCategory == str
+      if (this.$store.state.windowWidth < 420) return false;
+      else return this.currentCategory == str;
     },
     linkCategoryClickHandle(category) {
-      this.$store.commit('loadCurrentLinksCategory', category)
+      this.$store.commit("loadCurrentLinksCategory", category);
       this.$store.dispatch(
-        'getLinksFromDB',
-        `api/useful_links/links?category=${category}`,
-      )
+        "getLinksFromDB",
+        `api/useful_links/links?category=${category}`
+      );
       if (this.$store.state.windowWidth < 420)
-        this.$router.push(`/links/${this.currentCategory}`)
+        this.$router.push(`/links/${this.currentCategory}`);
     },
     linkClickHandle(link) {
-      window.location.href = link
+      window.location.href = link;
     },
   },
   mounted() {
-    this.$store.dispatch('getLinksOptionsFromDB')
-    this.$store.dispatch('getLinksLengthByCategory')
+    this.$store.dispatch("getLinksOptionsFromDB");
+    this.$store.dispatch("getLinksLengthByCategory");
     this.$store.dispatch(
-      'getLinksFromDB',
-      `api/useful_links/links?category=${this.currentCategory}`,
-    )
+      "getLinksFromDB",
+      `api/useful_links/links?category=${this.currentCategory}`
+    );
   },
   beforeUpdate() {},
-}
+};
 </script>
 
 <style lang="scss">
@@ -171,8 +171,8 @@ export default {
   .links {
     display: grid;
     grid-template-areas:
-      'title title'
-      'aside links';
+      "title title"
+      "aside links";
     grid-template-rows: min-content max-content;
     grid-template-columns: 320px max-content;
     h1 {
@@ -199,7 +199,6 @@ export default {
       width: 640px;
     }
     .link--title {
-      margin-bottom: 0;
       &-name {
         width: max-content;
       }

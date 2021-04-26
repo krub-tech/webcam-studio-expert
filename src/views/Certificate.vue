@@ -34,8 +34,14 @@
           <a href="tel:+78126428980">+7 (812) 642-89-80</a>
         </p>
         <div>
-          <button class="certificate-page--btn-whtsp" />
-          <button class="certificate-page--btn-viber" />
+          <a
+            :href="`https://wa.me/+78126428980`"
+            class="certificate-page--btn-whtsp"
+          />
+          <a
+            :href="`viber://add?number=+78126428980`"
+            class="certificate-page--btn-viber"
+          />
         </div>
       </div>
     </main>

@@ -13,7 +13,7 @@
             class="header--btns-mail"
             @click="$store.dispatch('updateModal', { name: 'Feedback' })"
           />
-          <button class="header--btns-profile" />
+          <!-- <button class="header--btns-profile" /> -->
         </div>
       </div>
     </div>

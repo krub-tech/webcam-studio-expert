@@ -73,7 +73,7 @@ export default {
         this.$router.push(`/links/${this.currentCategory}`);
     },
     linkClickHandle(link) {
-      window.location.href = link;
+      window.open(link);
     },
   },
   mounted() {

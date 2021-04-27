@@ -8,6 +8,7 @@
 
 <script>
 import throttle from "lodash.throttle";
+
 export default {
   computed: {
     layout() {

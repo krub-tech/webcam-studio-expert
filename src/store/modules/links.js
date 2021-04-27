@@ -32,7 +32,7 @@ const actions = {
   async getLinksOptionsFromDB(ctx) {
     console.log("loading useful_links options...");
     const response = await ctx.dispatch(
-      "apiRequest",
+      "apiGetRequest",
       "api/useful_links/options"
     );
     ctx.commit("loadUsefulLinksOptionsToState", response.data);
@@ -40,12 +40,15 @@ const actions = {
   },
   async getLinksFromDB(ctx, query) {
     console.log("loading useful_links...");
-    const response = await ctx.dispatch("apiRequest", query);
+    const response = await ctx.dispatch("apiGetRequest", query);
     ctx.commit("loadUsefulLinksToState", response.data.results);
     console.log("load useful_links to state");
   },
   async getLinksLengthByCategory(ctx) {
-    const response = await ctx.dispatch("apiRequest", "api/useful_links/count");
+    const response = await ctx.dispatch(
+      "apiGetRequest",
+      "api/useful_links/count"
+    );
     ctx.commit("loadUsefulLinksLengthByCategoryToState", response.data);
   },
 };

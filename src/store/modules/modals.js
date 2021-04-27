@@ -105,7 +105,7 @@ const actions = {
   previewImg({ commit }, data) {
     let reader = new FileReader();
 
-    reader.onloadend = function() {
+    reader.onloadend = function () {
       data.preview.src = reader.result;
     };
 
@@ -135,7 +135,7 @@ const actions = {
       let formData = state.formData.find((el) => el.message_type == data.type);
       formData[`file_${+key + 1}`] = value;
 
-      previewWrapper.addEventListener("click", function(state) {
+      previewWrapper.addEventListener("click", function (state) {
         delete formData[`file_${+key + 1}`];
 
         previewWrapper.remove();
@@ -182,12 +182,12 @@ const actions = {
       formDataToDB.append("studio", getters.currentStudio.id);
     }
 
-    let query = "https://78-47-247-176.sslip.io/api/message/input/";
+    let query = "api/message/input/";
     if (
       state.modal.name == "Interview" ||
       state.modal.name == "Certification"
     ) {
-      query = "https://78-47-247-176.sslip.io/api/message/request/";
+      query = "api/message/request/";
     }
 
     for (let [name, value] of formDataToDB) {
@@ -197,20 +197,15 @@ const actions = {
     dispatch("dataPostToDB", { formData: formDataToDB, query: query });
     commit("updateIsSended");
   },
-  async dataPostToDB({ state }, data) {
-    const request = await fetch(data.query, {
-      method: "POST",
-      body: data.formData,
-    });
-    if (!request.ok) state.errors = await request.json();
+  async dataPostToDB({ state, dispatch }, data) {
+    const request = await dispatch("apiPostRequest", data);
+    if (!request.ok) state.errors = request;
     else {
-      const response = await request.json();
-      const result = await response;
-      console.log(result);
+      console.log(request);
     }
   },
   async getMessageOptions({ dispatch, commit }) {
-    const response = await dispatch("apiRequest", "api/message/options/");
+    const response = await dispatch("apiGetRequest", "api/message/options/");
     commit("updateMessageOptions", response.data);
   },
 };

@@ -16,6 +16,7 @@ export default new Vuex.Store({
   state: {
     windowWidth: 0,
     isMenuOpen: true,
+    localAddress: "http://78.47.247.176:4545",
   },
   getters: {
     windowWidth: (state) => state.windowWidth,
@@ -32,8 +33,21 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    apiRequest(ctx, query) {
-      return axios.get(`/${query}`);
+    apiGetRequest(ctx, query) {
+      if (window.location.href.startsWith("https")) {
+        ctx.state.localAddress = "";
+      }
+      return axios.get(`${ctx.state.localAddress}/${query}`);
+    },
+    apiPostRequest(ctx, data) {
+      if (window.location.href.startsWith("https")) {
+        ctx.state.localAddress = "";
+      }
+      return axios({
+        method: "post",
+        url: `${ctx.state.localAddress}/${data.query}`,
+        data: data.formData,
+      });
     },
   },
   modules: {

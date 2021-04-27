@@ -39,21 +39,21 @@ const mutations = {
 
 const actions = {
   async getUniqueCities({ dispatch, commit }) {
-    const response = await dispatch("apiRequest", "api/geo_info/cities/");
+    const response = await dispatch("apiGetRequest", "api/geo_info/cities/");
     commit("updateUniqueCities", response.data);
     dispatch("getDistrictsByCurrentCity");
     dispatch("getMetroByCity");
   },
   async getDistrictsByCurrentCity(ctx) {
     const response = await ctx.dispatch(
-      "apiRequest",
+      "apiGetRequest",
       `api/geo_info/districts/?city=${ctx.state.currentCity}`
     );
     ctx.commit("updateDistrictsByCurrentCity", response.data);
   },
   async getMetroByCity(ctx) {
     const response = await ctx.dispatch(
-      "apiRequest",
+      "apiGetRequest",
       `api/geo_info/metro_stations/?city=${ctx.state.currentCity}`
     );
     ctx.commit("updateMetroByCity", response.data);

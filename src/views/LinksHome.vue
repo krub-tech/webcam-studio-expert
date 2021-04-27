@@ -91,15 +91,18 @@ export default {
 <style lang="scss">
 .links {
   min-height: calc(100vh - 448px);
+
   h1 {
     font-size: 20px;
     padding: 30px 80px;
     text-align: center;
   }
 }
+
 .links--list {
   display: none;
 }
+
 .link {
   min-height: 120px;
   background-color: #fefeff;
@@ -108,6 +111,7 @@ export default {
   padding: 20px;
   margin-bottom: 20px;
   cursor: pointer;
+
   img {
     display: block;
     width: 80px;
@@ -117,19 +121,23 @@ export default {
     margin-right: 20px;
   }
 }
+
 .link--title {
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
+
   &-name {
     color: #4b74dc;
     font-weight: bold;
     font-size: 18px;
   }
+
   &-followers {
     color: #606074;
   }
 }
+
 .link--desc {
   line-height: 20px;
 }
@@ -141,6 +149,7 @@ export default {
     overflow: hidden;
     margin: 0 auto;
   }
+
   li {
     width: 100%;
     height: 56px;
@@ -151,15 +160,18 @@ export default {
     background-color: #fefeff;
     border-bottom: 1px solid var(--grey);
     padding-left: var(--fr);
+
     &::after {
       content: attr(count);
       position: absolute;
       color: #8b8ba3;
       right: 20px;
     }
+
     &.active {
       color: #e95ba8;
       font-weight: bold;
+
       &::after {
         font-weight: normal;
       }
@@ -170,11 +182,10 @@ export default {
 @media screen and (min-width: 420px) {
   .links {
     display: grid;
-    grid-template-areas:
-      "title title"
-      "aside links";
+    grid-template-areas: "title title" "aside links";
     grid-template-rows: min-content max-content;
     grid-template-columns: 320px max-content;
+
     h1 {
       grid-area: title;
       white-space: nowrap;
@@ -185,6 +196,7 @@ export default {
   }
   .links--nav {
     grid-area: aside;
+
     ul {
       margin: 0;
       border-top-left-radius: 0;
@@ -195,20 +207,24 @@ export default {
     display: block;
     grid-area: links;
     padding-left: 40px;
+
     .link {
       width: 640px;
     }
+
     .link--title {
       &-name {
         width: max-content;
       }
     }
+
     .link--desc {
       display: block;
       margin-top: 0;
     }
   }
 }
+
 @media screen and (min-width: 1360px) {
   .links {
     justify-content: center;

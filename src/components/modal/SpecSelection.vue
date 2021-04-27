@@ -16,10 +16,8 @@
     <Select
       class="specselection--year_of_birth"
       :options="years"
-      :placeholder="
-        `Год
-    рождения`
-      "
+      :placeholder="`Год
+    рождения`"
       :parentObjName="'formData'"
       :selector="'year_of_birth'"
       callback
@@ -189,7 +187,7 @@ export default {
   },
   watch: {
     districts: {
-      handler: function() {
+      handler: function () {
         this.$store.commit("assignFormDataField", {
           type: "specselection",
           field: "district",
@@ -199,7 +197,7 @@ export default {
       deep: true,
     },
     metro: {
-      handler: function() {
+      handler: function () {
         this.$store.commit("assignFormDataField", {
           type: "specselection",
           field: "metro",
@@ -327,7 +325,7 @@ export default {
   },
   async mounted() {
     const response = await this.$store.dispatch(
-      "apiRequest",
+      "apiGetRequest",
       "api/message/options/"
     );
     this.options = response.data;

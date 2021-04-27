@@ -73,14 +73,14 @@ const mutations = {
 
 const actions = {
   async optionsStudiosFromDB() {
-    const response = await this.dispatch("apiRequest", "api/user/options");
+    const response = await this.dispatch("apiGetRequest", "api/user/options");
     this.commit("loadOptionsStudiosToState", response.data);
     console.log("load studio options to state");
   },
   async studiosFromDB() {
     console.log("api query " + this.getters.query);
     let response = await this.dispatch(
-      "apiRequest",
+      "apiGetRequest",
       `api/user/studios/${this.getters.query}`
     );
     this.commit("loadCurrentStudiosToState", response.data.results);
@@ -100,7 +100,7 @@ const actions = {
   },
   async allStudiosLength({ commit, getters }) {
     const response = await this.dispatch(
-      "apiRequest",
+      "apiGetRequest",
       `api/user/studios/?city=${getters.currentCity}`
     );
     commit("updateAllStudiosLength", response.data.count);

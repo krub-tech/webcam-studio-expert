@@ -370,18 +370,19 @@ export default {
       return formDataToDB;
     },
     async dataPostToDB(formData) {
-      const request = await fetch(
-        "https://78-47-247-176.sslip.io/api/user/studios/",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
-      if (!request.ok) this.errors = await request.json();
+      const data = {
+        formData: formData,
+        query: "api/user/studios/",
+      };
+      console.log(this);
+      debugger;
+
+      const request = await this.$store.dispatch("apiPostRequest", data);
+
+      console.log(request);
+      if (!request.ok) this.errors = request;
       else {
-        const response = await request.json();
-        const result = await response;
-        console.log(result);
+        console.log(request);
         this.$store.dispatch("updateModal", { name: "ModalSendSuccess" });
       }
     },

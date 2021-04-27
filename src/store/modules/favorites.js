@@ -37,7 +37,10 @@ const mutations = {
 const actions = {
   async addStudioToFavoritesStudios(ctx, id) {
     console.log(`adding studio with id ${id} to favorites...`);
-    const response = await ctx.dispatch("apiRequest", `api/user/studios/${id}`);
+    const response = await ctx.dispatch(
+      "apiGetRequest",
+      `api/user/studios/${id}`
+    );
     ctx.commit("addStudioToFavoritesStudios", response.data);
   },
   getClientFavoritesStudiosFromLS() {

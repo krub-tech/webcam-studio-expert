@@ -18,6 +18,8 @@ prod_build:
   script:
     - docker-compose -f docker-compose-prod.yml build
     - docker-compose -f docker-compose-prod.yml push
+  only:
+    - master
 
 prod_deploy:
   stage: deploy

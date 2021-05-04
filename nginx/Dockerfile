@@ -8,7 +8,8 @@ RUN apk update && apk add --no-cache python \
     && npm run build
 
 FROM nginx:stable-alpine
-COPY nginx.conf /etc/nginx/nginx.conf
+ARG CONFIG_NAME
+COPY ./nginx/$CONFIG_NAME.conf /etc/nginx/nginx.conf
 COPY --from=frontend /app/dist /etc/nginx/html
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

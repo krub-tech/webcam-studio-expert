@@ -6,8 +6,8 @@ services:
       context: .
       dockerfile: ./nginx/Dockerfile
       args:
-        CONFIG_NAME: nginx
-    image: ${IMAGE_BASE_PATH}/front-prod:latest
+        CONFIG_NAME: nginx.test
+    image: ${IMAGE_BASE_PATH}/front-test:latest
     networks:
       - studio-expert-swarm
 

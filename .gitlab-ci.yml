@@ -10,6 +10,16 @@ before_script:
   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
 
 
+test_build:
+  stage: build
+  tags:
+    - swarm-manager-test
+  script:
+    - docker-compose -f docker-compose-test.yml build
+    - docker-compose -f docker-compose-test.yml push
+  only:
+    - branches
+
 prod_build:
   stage: build
   tags:
@@ -19,6 +29,15 @@ prod_build:
     - docker-compose -f docker-compose-prod.yml push
   only:
     - master
+
+test_deploy:
+  stage: deploy
+  tags:
+    - swarm-manager-test
+  script:
+    - docker stack deploy --with-registry-auth --compose-file=docker-compose-test.yml --prune ${CI_PROJECT_NAME}
+  only:
+    - branches
 
 prod_deploy:
   stage: deploy

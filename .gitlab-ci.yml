@@ -20,6 +20,15 @@ test_build:
   only:
     - dev
 
+test_deploy:
+  stage: deploy
+  tags:
+    - swarm-manager-test
+  script:
+    - docker stack deploy --with-registry-auth --compose-file=docker-compose-test.yml --prune ${CI_PROJECT_NAME}
+  only:
+    - dev
+
 prod_build:
   stage: build
   tags:
@@ -29,15 +38,6 @@ prod_build:
     - docker-compose -f docker-compose-prod.yml push
   only:
     - master
-
-test_deploy:
-  stage: deploy
-  tags:
-    - swarm-manager-test
-  script:
-    - docker stack deploy --with-registry-auth --compose-file=docker-compose-test.yml --prune ${CI_PROJECT_NAME}
-  only:
-    - dev
 
 prod_deploy:
   stage: deploy

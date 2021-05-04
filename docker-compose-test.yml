@@ -10,6 +10,8 @@ services:
     image: ${IMAGE_BASE_PATH}/front-test:latest
     networks:
       - studio-expert-swarm
+    ports:
+      - "4546:80"
 
 networks:
   studio-expert-swarm:

@@ -1,0 +1,87 @@
+{
+    "root": true,
+    "env": {
+        "node": true
+    },
+    "extends": ["plugin:vue/recommended", "@vue/airbnb"],
+
+    "globals": {
+        "APP_CONFIG": "readonly"
+    },
+    "rules": {
+        "arrow-body-style": "off",
+        "linebreak-style": 0,
+        "prefer-arrow-callback": "off",
+        "func-names": "off",
+        "global-require": "off",
+        "consistent-return": "off",
+        "import/extensions": [
+            "error",
+            "always",
+            {
+                "js": "never",
+                "vue": "never"
+            }
+        ],
+        "import/prefer-default-export": "off",
+        "max-len": ["error", 120],
+        "no-alert": "off",
+        "no-lonely-if": "off",
+        "no-restricted-globals": "off",
+        "no-param-reassign": "off",
+        "no-plusplus": "off",
+        "no-restricted-syntax": ["error", "LabeledStatement", "WithStatement"],
+        "no-use-before-define": [
+            "error",
+            {
+                "functions": false,
+                "classes": false
+            }
+        ],
+        "object-curly-newline": [
+            "error",
+            {
+                "ObjectExpression": {
+                    "consistent": true
+                },
+                "ObjectPattern": {
+                    "multiline": true
+                },
+                "ImportDeclaration": {
+                    "consistent": true
+                },
+                "ExportDeclaration": {
+                    "multiline": true,
+                    "minProperties": 3
+                }
+            }
+        ],
+        "prefer-destructuring": "off",
+        "prefer-template": "off",
+        "vue/html-indent": [
+            "error",
+            4,
+            {
+                "attribute": 1,
+                "baseIndent": 1,
+                "closeBracket": 0,
+                "alignAttributesVertically": true,
+                "ignores": []
+            }
+        ],
+        "vue/max-attributes-per-line": [
+            "error",
+            {
+                "singleline": 4,
+                "multiline": {
+                    "max": 1,
+                    "allowFirstLine": false
+                }
+            }
+        ],
+        "vue/require-default-prop": "off"
+    },
+    "parserOptions": {
+        "parser": "babel-eslint"
+    }
+}

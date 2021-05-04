@@ -1,3 +1,7 @@
+/* eslint no-shadow: ["error", { "allow": ["state"] }] */
+
+import { getStudioById } from '@/api/studios';
+
 const state = {
   currentStudio: {},
 };
@@ -14,13 +18,10 @@ const mutations = {
 
 const actions = {
   async studioById(ctx, id) {
-    console.log("loading current studio...");
-    const response = await ctx.dispatch(
-      "apiGetRequest",
-      `api/user/studios/${id}`
-    );
-    ctx.commit("loadStudioToState", response.data);
-    console.log("load current studio to state");
+    console.log('loading current studio...');
+    const response = await getStudioById(id);
+    ctx.commit('loadStudioToState', response);
+    console.log('load current studio to state');
   },
 };
 

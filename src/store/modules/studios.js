@@ -1,7 +1,11 @@
+/* eslint no-shadow: ["error", { "allow": ["state", "getters"] }] */
+
+import { getOptionsStudios, getStudios, getStudiosByCity } from '@/api/studios';
+
 const state = {
   filterQuery: [],
-  searchQuery: "",
-  orderingStudios: "",
+  searchQuery: '',
+  orderingStudios: '',
   optionsStudios: [],
   currentStudios: [],
   currentStudiosLength: 0,
@@ -17,22 +21,20 @@ const getters = {
   currentStudiosLength: (state) => state.currentStudiosLength,
   allStudiosLength: (state) => state.allStudiosLength,
   query: (state, getters) => {
-    let filterQ = "";
-    let searchQ = "";
-    let orderingType = "";
+    let filterQ = '';
+    let searchQ = '';
+    let orderingType = '';
     let city = `?city=${getters.currentCity}`;
     if (state.filterQuery) {
       filterQ = `&${state.filterQuery}`;
     }
     if (state.searchQuery) {
-      filterQ
-        ? (searchQ = `search=${state.searchQuery}`)
-        : (searchQ = `&search=${state.searchQuery}`);
+      if (filterQ) searchQ = `search=${state.searchQuery}`;
+      else searchQ = `&search=${state.searchQuery}`;
     }
     if (state.orderingStudios) {
-      filterQ && !searchQ
-        ? (orderingType = `ordering=${state.orderingStudios}`)
-        : (orderingType = `&ordering=${state.orderingStudios}`);
+      if (filterQ && !searchQ) orderingType = `ordering=${state.orderingStudios}`;
+      else orderingType = `&ordering=${state.orderingStudios}`;
     }
     if (getters.selectedDistricts?.length > 0) {
       city += `&district=${getters.selectedDistricts}`;
@@ -43,7 +45,8 @@ const getters = {
     if (getters.selectedMetro?.length > 0) {
       city += `&metro=${getters.selectedMetro}`;
     }
-    return `${city}&limit=${getters.paginationSize}&offset=${getters.paginationOffset}${filterQ}${searchQ}${orderingType}`;
+    return `${city}
+    &limit=${getters.paginationSize}&offset=${getters.paginationOffset}${filterQ}${searchQ}${orderingType}`;
   },
 };
 
@@ -73,37 +76,31 @@ const mutations = {
 
 const actions = {
   async optionsStudiosFromDB() {
-    const response = await this.dispatch("apiGetRequest", "api/user/options");
-    this.commit("loadOptionsStudiosToState", response.data);
-    console.log("load studio options to state");
+    const response = await getOptionsStudios();
+    this.commit('loadOptionsStudiosToState', response);
+    console.log('studio options load to state');
   },
   async studiosFromDB() {
-    console.log("api query " + this.getters.query);
-    let response = await this.dispatch(
-      "apiGetRequest",
-      `api/user/studios/${this.getters.query}`
-    );
-    this.commit("loadCurrentStudiosToState", response.data.results);
-    this.commit("loadCurrentStudiosLengthToState", response.data.count);
-    console.log(`studios load to state`);
+    console.log(`api query ${this.getters.query}`);
+    const response = await getStudios(this.getters.query);
+    this.commit('loadCurrentStudiosToState', response.results);
+    this.commit('loadCurrentStudiosLengthToState', response.count);
+    console.log('studios load to state');
   },
-  filterStudios({ commit, dispatch }, query) {
-    commit("updateFilterQuery", query);
+  filterStudios({ commit }, query) {
+    commit('updateFilterQuery', query);
   },
-  searchStudios({ commit, dispatch }, query) {
-    commit("updateSearchQuery", query);
+  searchStudios({ commit }, query) {
+    commit('updateSearchQuery', query);
   },
   sortStudios({ commit, dispatch }, query) {
-    commit("updateOrderingStudios", query);
-    commit("updatePageNumber", 1);
-    dispatch("studiosFromDB");
+    commit('updateOrderingStudios', query);
+    commit('updatePageNumber', 1);
+    dispatch('studiosFromDB');
   },
   async allStudiosLength({ commit, getters }) {
-    const response = await this.dispatch(
-      "apiGetRequest",
-      `api/user/studios/?city=${getters.currentCity}`
-    );
-    commit("updateAllStudiosLength", response.data.count);
+    const response = await getStudiosByCity(getters.currentCity);
+    commit('updateAllStudiosLength', response.count);
   },
 };
 

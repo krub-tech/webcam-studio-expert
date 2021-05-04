@@ -18,7 +18,7 @@ test_build:
     - docker-compose -f docker-compose-test.yml build
     - docker-compose -f docker-compose-test.yml push
   only:
-    - branches
+    - dev
 
 prod_build:
   stage: build
@@ -37,7 +37,7 @@ test_deploy:
   script:
     - docker stack deploy --with-registry-auth --compose-file=docker-compose-test.yml --prune ${CI_PROJECT_NAME}
   only:
-    - branches
+    - dev
 
 prod_deploy:
   stage: deploy

@@ -180,13 +180,13 @@
         <div class="filter--footer">
             <div class="filter--footer-top">
                 <p>
-                    <b>{{ filtredStudiosLength }}</b> из {{ allStudioLength }}
+                    <b>{{ filteredStudiosLength }}</b> из {{ allStudioLength }}
                 </p>
                 <button class="filter--reset" @click="formReset" />
                 <button class="filter--accept" @click="$emit('close')" />
             </div>
             <div class="filter--footer-bottom">
-                Послать заявку {{ filtredStudiosLength }} отобранным
+                Послать заявку {{ filteredStudiosLength }} отобранным
             </div>
         </div>
     </form>
@@ -241,7 +241,7 @@ export default {
       }
       return false;
     },
-    filtredStudiosLength() {
+    filteredStudiosLength() {
       return this.$store.state.studios.currentStudiosLength || 0;
     },
     allStudioLength() {

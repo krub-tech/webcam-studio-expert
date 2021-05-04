@@ -5,9 +5,9 @@ export function getUniqueCities() {
 }
 
 export function getDistrictsByCity(city) {
-  return client.get(`geo_info/districts/?city=${city}`);
+  return client.get('geo_info/districts/', { params: { city } });
 }
 
 export function getMetroByCity(city) {
-  return client.get(`geo_info/metro_stations/?city=${city}`);
+  return client.get('geo_info/metro_stations/', { params: { city } });
 }

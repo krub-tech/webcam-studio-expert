@@ -5,7 +5,7 @@ RUN apk update && apk add --no-cache python \
     && npm config set unsafe-perm true \
     && npm install -g npm \
     && npm ci \
-    && npm run build --mode prod
+    && npm run build
 
 FROM nginx:stable-alpine
 COPY nginx.conf /etc/nginx/nginx.conf

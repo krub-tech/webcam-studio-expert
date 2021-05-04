@@ -12,9 +12,8 @@ before_script:
 
 prod_build:
   stage: build
-  image: tmaier/docker-compose:latest
-  services:
-    - docker:dind
+  tags:
+    - swarm-manager-test
   script:
     - docker-compose -f docker-compose-prod.yml build
     - docker-compose -f docker-compose-prod.yml push
@@ -24,7 +23,7 @@ prod_build:
 prod_deploy:
   stage: deploy
   tags:
-    - prod-swarm
+    - swarm-manager-prod
   before_script:
     - docker login -u ${CI_DEPLOY_USER} -p ${CI_DEPLOY_PASSWORD} ${CI_REGISTRY}
   script:

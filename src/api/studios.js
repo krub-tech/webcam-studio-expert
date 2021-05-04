@@ -1,7 +1,7 @@
 import { client } from './client';
 
 export function getOptionsStudios() {
-  return client.get('user/options');
+  return client.get('user/options/');
 }
 
 export function getStudios(query) {
@@ -9,7 +9,7 @@ export function getStudios(query) {
 }
 
 export function getStudiosByCity(city) {
-  return client.get(`user/studios/?city=${city}`);
+  return client.get('user/studios/', { params: { city } });
 }
 
 export function getStudioById(id) {

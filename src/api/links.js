@@ -1,7 +1,7 @@
 import { client } from './client';
 
 export function getLinksOptions() {
-  return client.get('useful_links/options');
+  return client.get('useful_links/options/');
 }
 
 export function getLinks(category) {
@@ -9,5 +9,5 @@ export function getLinks(category) {
 }
 
 export function linksCategoryLength() {
-  return client.get('useful_links/count');
+  return client.get('useful_links/count/');
 }

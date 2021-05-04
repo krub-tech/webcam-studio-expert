@@ -1,221 +1,209 @@
 <template>
-  <form class="filter" :class="{ bg_gradient }" @submit.prevent v-if="options">
-    <div class="filter--studios-search">
-      <InputSearch
-        :placeholder="'Поиск по названию'"
-        :results="searchResults"
-        @value="searchQuery = $event"
-      />
-    </div>
-    <div class="filter-districts_metro" v-if="districts_metro_isShow">
-      <template
-        v-if="this.$store.state.cities.districtsByCurrentCity.length > 0"
-      >
-        <Select
-          :placeholder="'Район'"
-          :options="this.$store.state.cities.districtsByCurrentCity"
-          multiple
-          :parentObjName="'districts'"
-          :selector="'selected'"
-        />
-        <div class="select-selected">
-          <div
-            class="badge"
-            v-for="district in districts.selected"
-            :key="district"
-            @click="removeSelected(district, 'districts')"
-          >
-            {{ district }}
-          </div>
+    <form v-if="options" class="filter" :class="{ bg_gradient }" @submit.prevent>
+        <div class="filter--studios-search">
+            <InputSearch :placeholder="'Поиск по названию'" :results="searchResults" @value="searchQuery = $event" />
         </div>
-      </template>
-      <template v-if="this.$store.getters.metroNames.length > 0">
-        <Select
-          :placeholder="'Метро'"
-          :options="this.$store.getters.metroNames"
-          multiple
-          :parentObjName="'metro'"
-          :selector="'selected'"
-        />
-        <div class="select-selected">
-          <div
-            class="badge"
-            v-for="(metro, idx) in metro.selected"
-            :key="idx"
-            @click="removeSelected(metro, 'metro')"
-          >
-            {{ metro }}
-          </div>
+        <div v-if="districts_metro_isShow" class="filter-districts_metro">
+            <template v-if="this.$store.state.cities.districtsByCurrentCity.length > 0">
+                <Select
+                    :placeholder="'Район'"
+                    :options="this.$store.state.cities.districtsByCurrentCity"
+                    multiple
+                    :parent-obj-name="'districts'"
+                    :selector="'selected'"
+                />
+                <div class="select-selected">
+                    <div
+                        v-for="district in districts.selected"
+                        :key="district"
+                        class="badge"
+                        @click="removeSelected(district, 'districts')"
+                    >
+                        {{ district }}
+                    </div>
+                </div>
+            </template>
+            <template v-if="this.$store.getters.metroNames.length > 0">
+                <Select
+                    :placeholder="'Метро'"
+                    :options="this.$store.getters.metroNames"
+                    multiple
+                    :parent-obj-name="'metro'"
+                    :selector="'selected'"
+                />
+                <div class="select-selected">
+                    <div
+                        v-for="(metro, idx) in metro.selected"
+                        :key="idx"
+                        class="badge"
+                        @click="removeSelected(metro, 'metro')"
+                    >
+                        {{ metro }}
+                    </div>
+                </div>
+            </template>
         </div>
-      </template>
-    </div>
-    <div class="filter--studio_type">
-      <Checkbox
-        v-for="(studio_type, key) in options.studio_type"
-        :key="key"
-        :item="studio_type"
-        :parent="filterQuery.studio_type"
-        @mouseup.native="checkboxHandle('studio_type', key)"
-      />
-    </div>
-    <div class="filter--models_age">
-      <div class="inner" v-if="isNotModal">
-        <Radio
-          v-for="(models_age, key) in options.models_age"
-          :key="key"
-          :item="models_age"
-          :selector="'models_age'"
-          @mouseup.native="filterQuery.models_age = [key]"
-        />
-      </div>
-      <template v-else>
-        <Checkbox
-          v-for="(models_age, key) in options.models_age"
-          :key="key"
-          :item="models_age"
-          :parent="filterQuery.models_age"
-          @mouseup.native="checkboxHandle('models_age', key)"
-        />
-      </template>
-    </div>
-    <div class="filter--working_with_model_types">
-      <Checkbox
-        v-for="(model_types, key) in options.working_with_model_types"
-        :key="key"
-        :item="model_types"
-        :parent="filterQuery.working_with_model_types"
-        @mouseup.native="checkboxHandle('working_with_model_types', key)"
-      />
-    </div>
-    <div class="filter--min_payout_percentage">
-      <Range
-        v-if="
-          isNotModal || this.$store.state.modals.modal.name == 'SpecSelection'
-        "
-        :label="'Минимальный % выплат'"
-        :val="filterQuery.min_payout_percentage"
-        :min="30"
-        :max="90"
-        @valueChange="filterQuery.min_payout_percentage = $event"
-      />
-      <MultiRange
-        v-else
-        :label="'Минимальный % выплат'"
-        :minInVal="filterQuery.min_payout_percentage"
-        :maxInVal="filterQuery.max_payout_percentage"
-        :min="30"
-        :max="90"
-        @valueMinChange="filterQuery.min_payout_percentage = $event"
-        @valueMaxChange="filterQuery.max_payout_percentage = $event"
-      />
-    </div>
-    <div class="filter--shift_length">
-      <Range
-        :label="'Длина смены'"
-        :val="filterQuery.shift_length"
-        :min="5"
-        :max="12"
-        @valueChange="filterQuery.shift_length = $event"
-      />
-    </div>
-    <div class="filter--max_shifts_per_week">
-      <Range
-        :label="'Дней в неделю минимум'"
-        :val="filterQuery.max_shifts_per_week"
-        :min="3"
-        :max="6"
-        @valueChange="filterQuery.max_shifts_per_week = $event"
-      />
-    </div>
-    <div class="filter--staff_gender">
-      <Select
-        :options="valuesFromObject(options.staff_gender)"
-        :placeholder="`Пол администраторов`"
-        staticPlaceholder
-        callback
-        @selectedOption="staffGenderClickHandle($event)"
-      />
-      <div
-        class="badge"
-        v-if="filterQuery.staff_gender.length > 0"
-        @click="filterQuery.staff_gender = []"
-      >
-        {{ staff_gender }}
-      </div>
-    </div>
-    <div class="filter--devices">
-      <Select
-        :options="valuesFromObject(options.devices)"
-        :placeholder="`Камеры`"
-        multiple
-        :parentObjName="'filterQuery'"
-        :selector="'devices'"
-      />
-      <div class="select-selected">
-        <div
-          class="badge"
-          v-for="device in filterQuery.devices"
-          :key="device"
-          @click="selectedRemove(device, 'devices')"
-        >
-          {{ options.devices[device] }}
+        <div class="filter--studio_type">
+            <Checkbox
+                v-for="(studio_type, key) in options.studio_type"
+                :key="key"
+                :item="studio_type"
+                :parent="filterQuery.studio_type"
+                @mouseup.native="checkboxHandle('studio_type', key)"
+            />
         </div>
-      </div>
-    </div>
-    <div class="filter--conditions">
-      <Checkbox
-        v-for="(studio_condition, key) in options.conditions"
-        :key="key"
-        :item="studio_condition"
-        :parent="filterQuery.conditions"
-        @mouseup.native="checkboxHandle('conditions', key)"
-      />
-    </div>
-    <div class="filter--support_staff">
-      <Checkbox
-        v-for="(item, key) in options.support_staff"
-        :key="key"
-        :item="item"
-        :parent="filterQuery.support_staff"
-        @mouseup.native="checkboxHandle('support_staff', key)"
-      />
-    </div>
-    <div class="filter--certified">
-      <Checkbox
-        :item="'Сертифицирована'"
-        :key="true"
-        :parent="filterQuery.certified"
-        @mouseup.native="checkboxHandle('certified', true)"
-      />
-    </div>
-    <button class="close-btn" @click="$emit('close')" />
-    <div class="filter--footer">
-      <div class="filter--footer-top">
-        <p>
-          <b>{{ filtredStudiosLength }}</b> из {{ allStudioLength }}
-        </p>
-        <button class="filter--reset" @click="formReset" />
-        <button class="filter--accept" @click="$emit('close')" />
-      </div>
-      <div class="filter--footer-bottom">
-        Послать заявку {{ filtredStudiosLength }} отобранным
-      </div>
-    </div>
-  </form>
+        <div class="filter--models_age">
+            <div v-if="isNotModal" class="inner">
+                <Radio
+                    v-for="(models_age, key) in options.models_age"
+                    :key="key"
+                    :item="models_age"
+                    :selector="'models_age'"
+                    @mouseup.native="filterQuery.models_age = [key]"
+                />
+            </div>
+            <template v-else>
+                <Checkbox
+                    v-for="(models_age, key) in options.models_age"
+                    :key="key"
+                    :item="models_age"
+                    :parent="filterQuery.models_age"
+                    @mouseup.native="checkboxHandle('models_age', key)"
+                />
+            </template>
+        </div>
+        <div class="filter--working_with_model_types">
+            <Checkbox
+                v-for="(model_types, key) in options.working_with_model_types"
+                :key="key"
+                :item="model_types"
+                :parent="filterQuery.working_with_model_types"
+                @mouseup.native="checkboxHandle('working_with_model_types', key)"
+            />
+        </div>
+        <div class="filter--min_payout_percentage">
+            <Range
+                v-if="isNotModal || this.$store.state.modals.modal.name == 'SpecSelection'"
+                :label="'Минимальный % выплат'"
+                :val="filterQuery.min_payout_percentage"
+                :min="30"
+                :max="90"
+                @valueChange="filterQuery.min_payout_percentage = $event"
+            />
+            <MultiRange
+                v-else
+                :label="'Минимальный % выплат'"
+                :min-in-val="filterQuery.min_payout_percentage"
+                :max-in-val="filterQuery.max_payout_percentage"
+                :min="30"
+                :max="90"
+                @valueMinChange="filterQuery.min_payout_percentage = $event"
+                @valueMaxChange="filterQuery.max_payout_percentage = $event"
+            />
+        </div>
+        <div class="filter--shift_length">
+            <Range
+                :label="'Длина смены'"
+                :val="filterQuery.shift_length"
+                :min="5"
+                :max="12"
+                @valueChange="filterQuery.shift_length = $event"
+            />
+        </div>
+        <div class="filter--max_shifts_per_week">
+            <Range
+                :label="'Дней в неделю минимум'"
+                :val="filterQuery.max_shifts_per_week"
+                :min="3"
+                :max="6"
+                @valueChange="filterQuery.max_shifts_per_week = $event"
+            />
+        </div>
+        <div class="filter--staff_gender">
+            <Select
+                :options="valuesFromObject(options.staff_gender)"
+                :placeholder="`Пол администраторов`"
+                static-placeholder
+                callback
+                @selectedOption="staffGenderClickHandle($event)"
+            />
+            <div v-if="filterQuery.staff_gender.length > 0" class="badge" @click="filterQuery.staff_gender = []">
+                {{ staff_gender }}
+            </div>
+        </div>
+        <div class="filter--devices">
+            <Select
+                :options="valuesFromObject(options.devices)"
+                :placeholder="`Камеры`"
+                multiple
+                :parent-obj-name="'filterQuery'"
+                :selector="'devices'"
+            />
+            <div class="select-selected">
+                <div
+                    v-for="device in filterQuery.devices"
+                    :key="device"
+                    class="badge"
+                    @click="selectedRemove(device, 'devices')"
+                >
+                    {{ options.devices[device] }}
+                </div>
+            </div>
+        </div>
+        <div class="filter--conditions">
+            <Checkbox
+                v-for="(studio_condition, key) in options.conditions"
+                :key="key"
+                :item="studio_condition"
+                :parent="filterQuery.conditions"
+                @mouseup.native="checkboxHandle('conditions', key)"
+            />
+        </div>
+        <div class="filter--support_staff">
+            <Checkbox
+                v-for="(item, key) in options.support_staff"
+                :key="key"
+                :item="item"
+                :parent="filterQuery.support_staff"
+                @mouseup.native="checkboxHandle('support_staff', key)"
+            />
+        </div>
+        <div class="filter--certified">
+            <Checkbox
+                :key="true"
+                :item="'Сертифицирована'"
+                :parent="filterQuery.certified"
+                @mouseup.native="checkboxHandle('certified', true)"
+            />
+        </div>
+        <button class="close-btn" @click="$emit('close')" />
+        <div class="filter--footer">
+            <div class="filter--footer-top">
+                <p>
+                    <b>{{ filtredStudiosLength }}</b> из {{ allStudioLength }}
+                </p>
+                <button class="filter--reset" @click="formReset" />
+                <button class="filter--accept" @click="$emit('close')" />
+            </div>
+            <div class="filter--footer-bottom">
+                Послать заявку {{ filtredStudiosLength }} отобранным
+            </div>
+        </div>
+    </form>
 </template>
 
 <script>
-import Checkbox from "@/components/form/Checkbox";
-import Radio from "@/components/form/Radio";
-import Range from "@/components/form/Range";
-import MultiRange from "@/components/form/MultiRange";
-import Select from "@/components/Select";
-import InputSearch from "@/components/form/InputSearch";
+import Checkbox from '@/components/form/Checkbox';
+import Radio from '@/components/form/Radio';
+import Range from '@/components/form/Range';
+import MultiRange from '@/components/form/MultiRange';
+import Select from '@/components/Select';
+import InputSearch from '@/components/form/InputSearch';
 
-import { valuesFromObject } from "@/helpers.js";
+import { valuesFromObject } from '@/helpers';
 
 export default {
-  name: "StudiosFilter",
+  name: 'StudiosFilter',
   components: {
     Select,
     Checkbox,
@@ -226,7 +214,7 @@ export default {
   },
   data() {
     return {
-      searchQuery: "",
+      searchQuery: '',
       filterQuery: {
         studio_type: [],
         models_age: [],
@@ -245,14 +233,13 @@ export default {
   },
   computed: {
     options() {
-      if (this.$store.state.modals.modal?.name != "SpecSelection") {
+      if (this.$store.state.modals.modal?.name !== 'SpecSelection') {
         return this.$store.state.studios.optionsStudios;
-      } else if (
-        this.$store.state.modals.modal &&
-        this.$store.state.modals.modal.name == "SpecSelection"
-      ) {
+      }
+      if (this.$store.state.modals.modal && this.$store.state.modals.modal.name === 'SpecSelection') {
         return this.$store.state.modals.message_options;
       }
+      return false;
     },
     filtredStudiosLength() {
       return this.$store.state.studios.currentStudiosLength || 0;
@@ -276,6 +263,7 @@ export default {
       if (this.options.staff_gender) {
         return this.options.staff_gender[this.filterQuery.staff_gender];
       }
+      return [];
     },
     districts() {
       return { selected: this.$store.state.cities.selectedDistricts };
@@ -284,106 +272,37 @@ export default {
       return { selected: this.$store.state.cities.selectedMetro };
     },
     districts_metro_isShow() {
-      if (this.$store.state.modals.modal?.name == "Proposal") {
+      if (this.$store.state.modals.modal?.name === 'Proposal') {
         return false;
       }
       if (
-        this.$store.state.cities.districtsByCurrentCity.length > 0 ||
-        this.$store.getters.metroNames.length > 0
+        this.$store.state.cities.districtsByCurrentCity.length > 0
+                || this.$store.getters.metroNames.length > 0
       ) {
         return true;
       }
-    },
-  },
-  methods: {
-    checkboxHandle(selector, key) {
-      if (this.filterQuery[selector]) {
-        let idx = this.filterQuery[selector].indexOf(key);
-        if (idx !== -1) {
-          this.filterQuery[selector].splice(idx, 1);
-        } else {
-          this.filterQuery[selector].push(key);
-        }
-      }
-    },
-    removeSelected(value, selector) {
-      this[selector].selected.splice(
-        this[selector].selected.indexOf(value, selector),
-        1
-      );
-    },
-    staffGenderClickHandle(e) {
-      for (let [key, value] of Object.entries(this.options.staff_gender)) {
-        if (value == e) {
-          this.filterQuery.staff_gender = key;
-        }
-      }
-    },
-    selectedRemove(e, selector) {
-      console.log(e);
-      this.filterQuery[selector].map((el) => {
-        const idx = this.filterQuery[selector].indexOf(el);
-        if (idx != -1) this.filterQuery[selector].splice(idx, 1);
-      });
-    },
-    queryBuilder() {
-      this.$store.commit("updatePageNumber", 1);
-      const filterObj = this.filterQuery;
-      let queryBuild = "";
-      for (let field in filterObj) {
-        if (filterObj[field].length)
-          queryBuild += `${field}=${filterObj[field]}&`;
-      }
-      if (this.isNotModal) {
-        this.$store.dispatch("filterStudios", queryBuild);
-        this.$store.dispatch("searchStudios", this.searchQuery);
-        this.$store.commit("updateSelectedDistricts", this.districts.selected);
-        this.$store.commit("updateSelectedMetro", this.metro.selected);
-        this.$store.dispatch("studiosFromDB");
-      }
-    },
-    formReset() {
-      this.searchQuery = "";
-      this.districts.selected = [];
-      this.metro.selected = [];
-      localStorage.clientFilterQuery = {};
-      localStorage.districts = [];
-      localStorage.metro = [];
-      for (let field in this.filterQuery) {
-        this.filterQuery[field] = [];
-      }
-
-      this.$emit("reset");
-    },
-    valuesFromObject,
-    validator(selector) {
-      if (this.isNotModal) {
-        return false;
-      } else {
-        if (this.filterQuery[selector].length < 1) return true;
-        else return false;
-      }
+      return [];
     },
   },
   watch: {
     filterQuery: {
-      handler: function() {
+      handler() {
         if (this.isNotModal) {
           localStorage.clientFilterQuery = JSON.stringify(this.filterQuery);
           this.queryBuilder();
         }
-        this.$emit("filterChange");
+        this.$emit('filterChange');
       },
       deep: true,
     },
     searchQuery: {
-      handler: function() {
+      handler() {
         this.queryBuilder();
       },
       deep: true,
     },
     districts: {
-      handler: function() {
+      handler() {
         if (this.isNotModal) {
           localStorage.districts = JSON.stringify(this.districts.selected);
           this.queryBuilder();
@@ -392,7 +311,7 @@ export default {
       deep: true,
     },
     metro: {
-      handler: function() {
+      handler() {
         if (this.isNotModal) {
           localStorage.metro = JSON.stringify(this.metro.selected);
           this.queryBuilder();
@@ -413,232 +332,299 @@ export default {
         this.metro.selected = JSON.parse(localStorage.metro);
       }
     } else if (this.$store.state.studios.filterQuery?.length > 0) {
-      this.$store.commit("updateFilterQuery");
+      this.$store.commit('updateFilterQuery');
     }
-    if (this.$store.state.modals.modal?.name == "SpecSelection") {
-      this.$store.dispatch("getMessageOptions");
+    if (this.$store.state.modals.modal?.name === 'SpecSelection') {
+      this.$store.dispatch('getMessageOptions');
     }
+  },
+  methods: {
+    checkboxHandle(selector, key) {
+      if (this.filterQuery[selector]) {
+        const idx = this.filterQuery[selector].indexOf(key);
+        if (idx !== -1) {
+          this.filterQuery[selector].splice(idx, 1);
+        } else {
+          this.filterQuery[selector].push(key);
+        }
+      }
+    },
+    removeSelected(value, selector) {
+      this[selector].selected.splice(this[selector].selected.indexOf(value, selector), 1);
+    },
+    staffGenderClickHandle(e) {
+      for (const [key, value] of Object.entries(this.options.staff_gender)) {
+        if (value === e) {
+          this.filterQuery.staff_gender = key;
+        }
+      }
+    },
+    selectedRemove(e, selector) {
+      this.filterQuery[selector].for((el) => {
+        const idx = this.filterQuery[selector].indexOf(el);
+        if (idx !== -1) this.filterQuery[selector].splice(idx, 1);
+      });
+    },
+    queryBuilder() {
+      this.$store.commit('updatePageNumber', 1);
+      const filterObj = this.filterQuery;
+      let queryBuild = '';
+      for (const field in filterObj) {
+        if (filterObj[field].length) queryBuild += `${field}=${filterObj[field]}&`;
+      }
+      if (this.isNotModal) {
+        this.$store.dispatch('filterStudios', queryBuild);
+        this.$store.dispatch('searchStudios', this.searchQuery);
+        this.$store.commit('updateSelectedDistricts', this.districts.selected);
+        this.$store.commit('updateSelectedMetro', this.metro.selected);
+        this.$store.dispatch('studiosFromDB');
+      }
+    },
+    formReset() {
+      this.searchQuery = '';
+      this.districts.selected = [];
+      this.metro.selected = [];
+      localStorage.clientFilterQuery = {};
+      localStorage.districts = [];
+      localStorage.metro = [];
+
+      for (const field in this.filterQuery) {
+        if (this.filterQuery) {
+          this.filterQuery[field] = [];
+        }
+      }
+
+      this.$emit('reset');
+    },
+    valuesFromObject,
+    validator(selector) {
+      if (this.isNotModal) {
+        return false;
+      }
+      if (this.filterQuery[selector].length < 1) return true;
+      return false;
+    },
   },
 };
 </script>
 
 <style lang="scss">
 @mixin icon {
-  display: none;
-  width: var(--fr);
-  height: var(--fr);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  @content;
+    display: none;
+    width: var(--fr);
+    height: var(--fr);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    @content;
 }
 @mixin filter-item {
-  background-color: #fefeff;
-  border: 1px solid #c4c4cd;
-  border-radius: 0.5rem;
-  padding: var(--fr-m) 0.875rem;
+    background-color: #fefeff;
+    border: 1px solid #c4c4cd;
+    border-radius: 0.5rem;
+    padding: var(--fr-m) 0.875rem;
 }
 
 .filter {
-  position: relative;
+    position: relative;
 
-  & > * {
-    display: flex;
-    flex-wrap: wrap;
-    &:not(:last-of-type) {
-      padding: 0 0 var(--fr-l) 0;
-      border-bottom: 1px solid #e6e6ea;
-      margin: 0 var(--fr-l) var(--fr-l) var(--fr-l);
+    & > * {
+        display: flex;
+        flex-wrap: wrap;
+        &:not(:last-of-type) {
+            padding: 0 0 var(--fr-l) 0;
+            border-bottom: 1px solid #e6e6ea;
+            margin: 0 var(--fr-l) var(--fr-l) var(--fr-l);
+        }
     }
-  }
-  .close-btn {
-    right: 8px;
-  }
-  &.bg_gradient {
-    &::before {
-      content: "";
-      width: 100vw;
-      height: 60px;
-      position: absolute;
-      top: -60px;
-      background: linear-gradient(90deg, #c45792 0%, #7f53c4 100%);
-      opacity: 0.6;
+    .close-btn {
+        right: 8px;
     }
-  }
+    &.bg_gradient {
+        &::before {
+            content: "";
+            width: 100vw;
+            height: 60px;
+            position: absolute;
+            top: -60px;
+            background: linear-gradient(90deg, #c45792 0%, #7f53c4 100%);
+            opacity: 0.6;
+        }
+    }
 }
 .filter--studios-search {
-  position: relative;
-  padding-top: var(--fr-l) !important;
-  input {
-    font-family: inherit;
-    font-size: inherit;
-    @include filter-item;
-    border-radius: var(--fr-2);
-    padding-left: 2.5rem;
-  }
-  .input-search {
-    width: 100%;
-    margin-bottom: 0;
-  }
-  &::after {
-    content: "";
-    position: absolute;
-    left: 16px;
-    top: 44px;
-    width: 0.875rem;
-    height: 0.875rem;
-    background: no-repeat center / contain url("~@/assets/svg/i-search.svg");
-  }
+    position: relative;
+    padding-top: var(--fr-l) !important;
+    input {
+        font-family: inherit;
+        font-size: inherit;
+        @include filter-item;
+        border-radius: var(--fr-2);
+        padding-left: 2.5rem;
+    }
+    .input-search {
+        width: 100%;
+        margin-bottom: 0;
+    }
+    &::after {
+        content: "";
+        position: absolute;
+        left: 16px;
+        top: 44px;
+        width: 0.875rem;
+        height: 0.875rem;
+        background: no-repeat center / contain url("~@/assets/svg/i-search.svg");
+    }
 }
 .filter-districts_metro {
-  padding-bottom: 0 !important;
-  .select-wrapper {
-    width: 100%;
-  }
-  .select {
-    @include filter-item;
-    display: flex;
-    justify-content: space-between;
-    width: inherit;
-  }
-  .selected-options {
-    display: none;
-  }
-  .selected-districts {
-    width: 100%;
-    .badge {
-      display: block;
+    padding-bottom: 0 !important;
+    .select-wrapper {
+        width: 100%;
     }
-  }
+    .select {
+        @include filter-item;
+        display: flex;
+        justify-content: space-between;
+        width: inherit;
+    }
+    .selected-options {
+        display: none;
+    }
+    .selected-districts {
+        width: 100%;
+        .badge {
+            display: block;
+        }
+    }
 }
 .filter--studio_type {
-  .checkbox input[type="checkbox"] + label {
-    margin-bottom: 0;
-  }
+    .checkbox input[type="checkbox"] + label {
+        margin-bottom: 0;
+    }
 }
 .filter--working_with_model_types,
 .filter--conditions,
 .filter--support_staff,
 .filter--certified {
-  padding-bottom: 20px !important;
+    padding-bottom: 20px !important;
 }
 .filter--models_age {
-  .inner {
-    position: relative;
-    display: flex;
-    @include filter-item;
-    padding: 4px;
-    &::after {
-      content: "лет";
-      position: absolute;
-      right: -40px;
-      top: 50%;
-      transform: translateY(-60%);
-      color: #606074;
+    .inner {
+        position: relative;
+        display: flex;
+        @include filter-item;
+        padding: 4px;
+        &::after {
+            content: "лет";
+            position: absolute;
+            right: -40px;
+            top: 50%;
+            transform: translateY(-60%);
+            color: #606074;
+        }
     }
-  }
 }
 .filter--devices {
-  .select {
-    width: 240px;
-    @include filter-item;
-    justify-content: space-between;
-  }
-  .selected-options {
-    display: none;
-  }
-  padding-bottom: 0 !important;
+    .select {
+        width: 240px;
+        @include filter-item;
+        justify-content: space-between;
+    }
+    .selected-options {
+        display: none;
+    }
+    padding-bottom: 0 !important;
 }
 .filter--staff_gender {
-  @extend .filter--devices;
-  padding-bottom: 30px !important;
-  .badge {
-    margin-top: 16px;
-    margin-left: 8px;
-    margin-bottom: 0;
-  }
+    @extend .filter--devices;
+    padding-bottom: 30px !important;
+    .badge {
+        margin-top: 16px;
+        margin-left: 8px;
+        margin-bottom: 0;
+    }
 }
 .filter--footer {
-  position: sticky;
-  bottom: 0;
-  left: 0;
-  height: 120px;
-  & > * {
-    width: 100%;
-    height: 50%;
-    display: flex;
-    align-items: center;
-  }
-  &-top {
-    justify-content: space-between;
-    background-color: #ffbee1;
-    padding: 20px 20px 20px 20px;
-    p {
-      font-size: 20px;
-      margin-right: 30px;
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    height: 120px;
+    & > * {
+        width: 100%;
+        height: 50%;
+        display: flex;
+        align-items: center;
     }
-  }
-  &-bottom {
-    justify-content: center;
-    background: linear-gradient(272.12deg, #e9dbff 0%, #cdf1ff 100%);
-  }
+    &-top {
+        justify-content: space-between;
+        background-color: #ffbee1;
+        padding: 20px 20px 20px 20px;
+        p {
+            font-size: 20px;
+            margin-right: 30px;
+        }
+    }
+    &-bottom {
+        justify-content: center;
+        background: linear-gradient(272.12deg, #e9dbff 0%, #cdf1ff 100%);
+    }
 }
 .filter--reset {
-  width: 85px;
-  height: 40px;
-  background-color: rgba(#a5527e, 0.2);
-  border-radius: 8px;
-  margin-right: 10px;
-  &::after {
-    content: "Сброс";
-  }
+    width: 85px;
+    height: 40px;
+    background-color: rgba(#a5527e, 0.2);
+    border-radius: 8px;
+    margin-right: 10px;
+    &::after {
+        content: "Сброс";
+    }
 }
 .filter--accept {
-  width: 120px;
-  height: 40px;
-  background-color: white;
-  border-radius: 8px;
-  &::after {
-    content: "Применить";
-  }
+    width: 120px;
+    height: 40px;
+    background-color: white;
+    border-radius: 8px;
+    &::after {
+        content: "Применить";
+    }
 }
 
 .select-selected {
-  display: flex;
-  flex-wrap: wrap;
-  padding-top: 10px;
-  width: 100%;
-  min-height: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    padding-top: 10px;
+    width: 100%;
+    min-height: 30px;
 }
 
 @media screen and (min-width: 420px) {
-  .filter {
-    width: 300px;
-    height: min-content;
-    background-color: #fbfbfd;
-    border-top-right-radius: var(--fr);
-    &::after,
-    &::before {
-      display: none;
+    .filter {
+        width: 300px;
+        height: min-content;
+        background-color: #fbfbfd;
+        border-top-right-radius: var(--fr);
+        &::after,
+        &::before {
+            display: none;
+        }
+        .close-btn {
+            display: none;
+        }
     }
-    .close-btn {
-      display: none;
+    .filter--reset {
+        width: 140px;
+        margin-right: 0;
+        &::after {
+            content: "Сбросить всё";
+        }
     }
-  }
-  .filter--reset {
-    width: 140px;
-    margin-right: 0;
-    &::after {
-      content: "Сбросить всё";
+    .filter--accept {
+        display: none;
     }
-  }
-  .filter--accept {
-    display: none;
-  }
 }
 @media screen and (min-width: 1360px) {
-  .filter {
-    border-top-left-radius: var(--fr);
-  }
+    .filter {
+        border-top-left-radius: var(--fr);
+    }
 }
 </style>

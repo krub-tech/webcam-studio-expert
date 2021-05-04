@@ -1,20 +1,15 @@
 <template>
-  <div class="radio">
-    <input
-      type="radio"
-      :id="`${$vnode.key}`"
-      :name="selector"
-      :class="{ active: isSelect }"
-    />
-    <label :for="`${$vnode.key}`">
-      {{ item }}
-    </label>
-  </div>
+    <div class="radio">
+        <input :id="`${$vnode.key}`" type="radio" :name="selector" :class="{ active: isSelect }">
+        <label :for="`${$vnode.key}`">
+            {{ item }}
+        </label>
+    </div>
 </template>
 
 <script>
 export default {
-  name: "Radio",
+  name: 'Radio',
   props: {
     item: {
       type: String,
@@ -22,7 +17,7 @@ export default {
     },
     selector: {
       type: String,
-      default: "",
+      default: '',
     },
   },
   computed: {

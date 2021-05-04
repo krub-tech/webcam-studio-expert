@@ -1,16 +1,19 @@
+/* eslint no-shadow: ["error", { "allow": ["state"] }] */
+
+import { getLinksOptions, getLinks, linksCategoryLength } from '@/api/links';
+
 const state = {
-  currentLinksCategory: "telegram_channels",
+  currentLinksCategory: 'telegram_channels',
   usefulLinksOptions: [],
   usefulLinks: [],
   usefulLinksLengthByCategoryToState: [],
-  linksQuery: "",
+  linksQuery: '',
 };
 
 const getters = {
   usefulLinksOptions: (state) => state.usefulLinksOptions,
   usefulLinks: (state) => state.usefulLinks,
-  usefulLinksLengthByCategory: (state) =>
-    state.usefulLinksLengthByCategoryToState,
+  usefulLinksLengthByCategory: (state) => state.usefulLinksLengthByCategoryToState,
 };
 
 const mutations = {
@@ -30,26 +33,18 @@ const mutations = {
 
 const actions = {
   async getLinksOptionsFromDB(ctx) {
-    console.log("loading useful_links options...");
-    const response = await ctx.dispatch(
-      "apiGetRequest",
-      "api/useful_links/options"
-    );
-    ctx.commit("loadUsefulLinksOptionsToState", response.data);
-    console.log("load useful_links options to state");
+    console.log('loading useful_links options...');
+    const response = await getLinksOptions();
+    ctx.commit('loadUsefulLinksOptionsToState', response);
   },
   async getLinksFromDB(ctx, query) {
-    console.log("loading useful_links...");
-    const response = await ctx.dispatch("apiGetRequest", query);
-    ctx.commit("loadUsefulLinksToState", response.data.results);
-    console.log("load useful_links to state");
+    console.log('loading useful_links...');
+    const response = await getLinks(query);
+    ctx.commit('loadUsefulLinksToState', response.results);
   },
   async getLinksLengthByCategory(ctx) {
-    const response = await ctx.dispatch(
-      "apiGetRequest",
-      "api/useful_links/count"
-    );
-    ctx.commit("loadUsefulLinksLengthByCategoryToState", response.data);
+    const response = await linksCategoryLength();
+    ctx.commit('loadUsefulLinksLengthByCategoryToState', response);
   },
 };
 

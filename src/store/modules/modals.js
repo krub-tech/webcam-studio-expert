@@ -1,37 +1,42 @@
+/* eslint no-shadow: ["error", { "allow": ["state"] }] */
+
+import { getMessageOptions } from '@/api/messages';
+import { postFormData } from '@/api/client';
+
 const state = {
-  isSended: false,
+  isSent: false,
   modal: null,
   formData: [
     {
-      message_type: "interview",
+      message_type: 'interview',
       name: null,
       phone: null,
       year_of_birth: null,
       answer_to: [],
     },
     {
-      message_type: "feedback",
+      message_type: 'feedback',
       message: null,
       name: null,
       phone: null,
       answer_to: [],
     },
     {
-      message_type: "complaint",
+      message_type: 'complaint',
       message: null,
       name: null,
       phone: null,
       answer_to: [],
     },
     {
-      message_type: "certification",
+      message_type: 'certification',
       message: null,
       name: null,
       phone: null,
       answer_to: [],
     },
     {
-      message_type: "specselection",
+      message_type: 'specselection',
       name: null,
       phone: null,
       year_of_birth: null,
@@ -61,13 +66,13 @@ const mutations = {
     state.modal = payload;
   },
   pushFormDataField: (state, payload) => {
-    state.formData.map((el) => {
-      if (el.message_type == payload.type) {
+    state.formData.forEach((el) => {
+      if (el.message_type === payload.type) {
         if (el[payload.field] == null) {
           el[payload.field] = payload.event;
           return;
         }
-        if (el[payload.field].indexOf(payload.event) == -1) {
+        if (el[payload.field].indexOf(payload.event) === -1) {
           el[payload.field].push(payload.event);
         } else {
           el[payload.field].splice(el.answer_to.indexOf(payload.event), 1);
@@ -76,8 +81,8 @@ const mutations = {
     });
   },
   assignFormDataField: (state, payload) => {
-    state.formData.map((el) => {
-      if (el.message_type == payload.type) {
+    state.formData.forEach((el) => {
+      if (el.message_type === payload.type) {
         el[payload.field] = payload.event;
       }
     });
@@ -85,25 +90,24 @@ const mutations = {
   updateYearOfBirth: (state, payload) => {
     state.year_of_birth = payload;
   },
-  updateIsSended: (state) => {
-    state.isSended = !state.isSended;
+  updateIsSent: (state) => {
+    state.isSent = !state.isSent;
   },
   updateMessageOptions: (state, payload) => {
     state.message_options = payload;
   },
-  modalClose: (state, dispatch) => {
+  modalClose: (state) => {
     state.modal = null;
   },
 };
 
 const actions = {
   updateModal(ctx, payload) {
-    ctx.commit("updateModal", payload);
-    if (document.querySelector(".modal-wrapper"))
-      document.querySelector(".modal-wrapper").scrollTop = 0;
+    ctx.commit('updateModal', payload);
+    if (document.querySelector('.modal-wrapper')) document.querySelector('.modal-wrapper').scrollTop = 0;
   },
-  previewImg({ commit }, data) {
-    let reader = new FileReader();
+  previewImg(ctx, data) {
+    const reader = new FileReader();
 
     reader.onloadend = function () {
       data.preview.src = reader.result;
@@ -111,66 +115,66 @@ const actions = {
 
     if (data.file) {
       reader.readAsDataURL(data.file);
-    } else {
-      preview.src = "";
     }
   },
   filesInputHandle({ state }, data) {
-    const previews = data.el.querySelector(".modal--photos-files");
-    for (let [key, value] of Object.entries(data.event.target.files)) {
+    const previews = data.el.querySelector('.modal--photos-files');
+    for (const [key, value] of Object.entries(data.event.target.files)) {
       let preview;
-      if (value.type.match("image")) {
-        preview = document.createElement("img");
-        this.dispatch("previewImg", { preview: preview, file: value });
+      if (value.type.match('image')) {
+        preview = document.createElement('img');
+        this.dispatch('previewImg', { preview, file: value });
       } else {
-        preview = document.createElement("div");
+        preview = document.createElement('div');
         preview.innerText = value.name;
-        preview.classList.add("badge");
+        preview.classList.add('badge');
       }
-      let previewWrapper = document.createElement("div");
-      previewWrapper.classList.add("preview-wrapper");
+      const previewWrapper = document.createElement('div');
+      previewWrapper.classList.add('preview-wrapper');
       previewWrapper.appendChild(preview);
       previews.appendChild(previewWrapper);
 
-      let formData = state.formData.find((el) => el.message_type == data.type);
+      const formData = state.formData.find((el) => el.message_type === data.type);
       formData[`file_${+key + 1}`] = value;
 
-      previewWrapper.addEventListener("click", function (state) {
+      previewWrapper.addEventListener('click', () => {
         delete formData[`file_${+key + 1}`];
 
         previewWrapper.remove();
       });
     }
   },
-  invalidMessage({}, selector) {
+  invalidMessage(ctx, selector) {
     const invalidElem = document.querySelector(`input[class*='${selector}']`);
     if (invalidElem) {
-      invalidElem.classList.add("invalid");
+      invalidElem.classList.add('invalid');
     }
   },
-  submitHandle({ state, getters, dispatch, commit }, type) {
-    let formDataToDB = new FormData();
+  submitHandle({ state, dispatch, commit }, type) {
+    const formDataToDB = new FormData();
     let isValid = false;
 
-    state.formData.map((el) => {
-      if (el.message_type == type) {
+    state.formData.forEach((el) => {
+      if (el.message_type === type) {
         if (el.name && el.phone) {
           isValid = true;
         } else {
-          dispatch("invalidMessage", "name");
-          dispatch("invalidMessage", "phone");
+          dispatch('invalidMessage', 'name');
+          dispatch('invalidMessage', 'phone');
         }
-        for (let [key, value] of Object.entries(el)) {
-          if (key == "phone") {
-            value = value?.replace(/\D/g, "");
-            if (value?.length > 12) {
+        for (const [key, value] of Object.entries(el)) {
+          if (key === 'phone') {
+            const newV = value?.replace(/\D/g, '');
+            if (newV?.length > 12) {
               isValid = false;
-              dispatch("invalidMessage", "phone");
+              dispatch('invalidMessage', 'phone');
+            } else {
+              formDataToDB.append(key, newV);
             }
           }
-          if (key == "answer_to") {
-            el.answer_to.map((el) => {
-              formDataToDB.append("answer_to", el);
+          if (key === 'answer_to') {
+            el.answer_to.forEach((l) => {
+              formDataToDB.append('answer_to', l);
             });
           } else formDataToDB.append(key, value);
         }
@@ -178,35 +182,32 @@ const actions = {
     });
 
     if (!isValid) return;
-    if (type === "interview") {
-      formDataToDB.append("studio", getters.currentStudio.id);
+    if (type === 'interview') {
+      formDataToDB.append('studio', getters.currentStudio.id);
     }
 
-    let query = "api/message/input/";
-    if (
-      state.modal.name == "Interview" ||
-      state.modal.name == "Certification"
-    ) {
-      query = "api/message/request/";
+    let query = 'message/input/';
+    if (state.modal.name === 'Interview' || state.modal.name === 'Certification') {
+      query = 'message/request/';
     }
 
-    for (let [name, value] of formDataToDB) {
+    for (const [name, value] of formDataToDB) {
       console.log(`${name} = ${value}`);
     }
 
-    dispatch("dataPostToDB", { formData: formDataToDB, query: query });
-    commit("updateIsSended");
+    dispatch('dataPostToDB', { formData: formDataToDB, query });
+    commit('updateIsSent');
   },
-  async dataPostToDB({ state, dispatch }, data) {
-    const request = await dispatch("apiPostRequest", data);
+  async dataPostToDB({ state }, data) {
+    const request = await postFormData(data);
     if (!request.ok) state.errors = request;
     else {
       console.log(request);
     }
   },
-  async getMessageOptions({ dispatch, commit }) {
-    const response = await dispatch("apiGetRequest", "api/message/options/");
-    commit("updateMessageOptions", response.data);
+  async getMessageOptions({ commit }) {
+    const response = await getMessageOptions();
+    commit('updateMessageOptions', response);
   },
 };
 

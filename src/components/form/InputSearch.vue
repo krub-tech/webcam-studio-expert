@@ -1,32 +1,28 @@
 <template>
-  <div class="input-search">
-    <input
-      type="text"
-      :id="id"
-      :placeholder="placeholder"
-      v-model="value"
-      @input="inputHandle"
-    />
-    <label for="id"></label>
-    <ul class="results" v-if="value && !isChoose">
-      <li
-        v-for="(result, key) in res"
-        :key="result.id"
-        @click="resultChooseHandle(results[key])"
-      >
-        {{ result }}
-      </li>
-    </ul>
-  </div>
+    <div class="input-search">
+        <input
+            :id="id"
+            v-model="value"
+            type="text"
+            :placeholder="placeholder"
+            @input="inputHandle"
+        >
+        <label for="id" />
+        <ul v-if="value && !isChoose" class="results">
+            <li v-for="(result, key) in res" :key="result.id" @click="resultChooseHandle(results[key])">
+                {{ result }}
+            </li>
+        </ul>
+    </div>
 </template>
 
 <script>
 export default {
-  name: "InputSearch",
+  name: 'InputSearch',
   props: {
     placeholder: {
       type: String,
-      default: "Введите текст",
+      default: 'Введите текст',
     },
     results: {
       required: true,
@@ -37,12 +33,12 @@ export default {
     },
     id: {
       type: String,
-      default: "",
+      default: '',
     },
   },
   data() {
     return {
-      value: "",
+      value: '',
       isChoose: false,
     };
   },
@@ -50,15 +46,19 @@ export default {
     res() {
       if (this.fieldName && this.results) {
         return this.results.map((el) => el[this.fieldName]);
-      } else {
-        return this.results;
       }
+      return this.results;
     },
+  },
+  mounted() {
+    this.$parent.$on('reset', () => {
+      this.value = '';
+    });
   },
   methods: {
     inputHandle() {
       this.isChoose = false;
-      this.$emit("value", this.value);
+      this.$emit('value', this.value);
     },
     resultChooseHandle(result) {
       this.isChoose = true;
@@ -67,104 +67,99 @@ export default {
       } else {
         this.value = result;
       }
-      if (result) this.$emit("choose", result);
+      if (result) this.$emit('choose', result);
     },
-  },
-  mounted() {
-    this.$parent.$on("reset", () => {
-      this.value = "";
-    });
   },
 };
 </script>
 
 <style lang="scss">
 @mixin input-invalid {
-  border: 1px solid red;
-  margin-bottom: 0;
-  & + label {
-    width: 100%;
-    min-height: 28px;
-    display: flex;
-    justify-content: flex-start;
-    color: red;
-    font-size: 12px;
-  }
-  @content;
+    border: 1px solid red;
+    margin-bottom: 0;
+    & + label {
+        width: 100%;
+        min-height: 28px;
+        display: flex;
+        justify-content: flex-start;
+        color: red;
+        font-size: 12px;
+    }
+    @content;
 }
 
 .input-search {
-  height: 40px;
-  position: relative;
-  margin-bottom: 28px;
-  input {
-    width: 100%;
-    height: inherit;
-    background-color: #fefeff;
-    border: 1px solid #c4c4cd;
-    border-radius: 4px;
-    padding: 10px 12px;
-
-    &::placeholder {
-      font-family: "Averta CY";
-      font-size: 1rem;
-    }
-    & + label {
-      display: none;
-    }
-  }
-  &.invalid {
+    height: 40px;
+    position: relative;
+    margin-bottom: 28px;
     input {
-      @include input-invalid;
+        width: 100%;
+        height: inherit;
+        background-color: #fefeff;
+        border: 1px solid #c4c4cd;
+        border-radius: 4px;
+        padding: 10px 12px;
+
+        &::placeholder {
+            font-family: "Averta CY";
+            font-size: 1rem;
+        }
+        & + label {
+            display: none;
+        }
     }
-  }
-  &.invalidMessageFromDB {
-    @include input-invalid;
-    & + label {
-      position: relative;
+    &.invalid {
+        input {
+            @include input-invalid;
+        }
     }
-  }
+    &.invalidMessageFromDB {
+        @include input-invalid;
+        & + label {
+            position: relative;
+        }
+    }
 }
 .results {
-  max-height: 300px;
-  overflow: auto;
-  scrollbar-width: none;
-  list-style: none;
-  position: absolute;
-  left: 0;
-  right: 0;
-  transform: translateY(100%);
-  border-radius: 0.5rem;
-  bottom: -0.75rem;
-  box-shadow: 0px 0px 100px #e1f0f9;
-  z-index: 1;
-  &::-webkit-scrollbar {
-    width: 1.5rem;
-    &-thumb {
-      border: 0.5rem solid white;
-      border-radius: 2rem;
-      background-color: var(--grey);
+    max-height: 300px;
+    overflow: auto;
+    scrollbar-width: none;
+    list-style: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    transform: translateY(100%);
+    border-radius: 0.5rem;
+    bottom: -0.75rem;
+    box-shadow: 0px 0px 100px #e1f0f9;
+    z-index: 1;
+    &::-webkit-scrollbar {
+        width: 1.5rem;
+        &-thumb {
+            border: 0.5rem solid white;
+            border-radius: 2rem;
+            background-color: var(--grey);
+        }
+        &-track {
+            background: white;
+            border-top-right-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+        }
+        &-button {
+            display: none;
+        }
     }
-    &-track {
-      background: white;
-      border-top-right-radius: 0.5rem;
-      border-bottom-right-radius: 0.5rem;
+    li {
+        height: 60px;
+        display: flex;
+        align-items: center;
+        background-color: white;
+        padding-left: 16px;
+        cursor: pointer;
+        &:active,
+        &.active {
+            color: #e95ba8;
+        }
     }
-    &-button {
-      display: none;
-    }
-  }
-  li {
-    height: 60px;
-    display: flex;
-    align-items: center;
-    background-color: white;
-    padding-left: 16px;
-    cursor: pointer;
-    &:active,
-    &.active {
-      color: #e95ba8;
-    }
-  }
 }
 </style>

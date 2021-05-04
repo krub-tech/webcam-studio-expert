@@ -1,19 +1,19 @@
 <template>
-  <div class="sendSuccess modal">
-    <p>Заявка отправлена, скоро с Вами свяжутся</p>
-    <button class="modal--submit" @click.prevent="modalClose">
-      Закрыть
-    </button>
-  </div>
+    <div class="sendSuccess modal">
+        <p>Заявка отправлена, скоро с Вами свяжутся</p>
+        <button class="modal--submit" @click.prevent="modalClose">
+            Закрыть
+        </button>
+    </div>
 </template>
 
 <script>
 export default {
-  name: "ModalSendSuccess",
+  name: 'ModalSendSuccess',
   methods: {
     modalClose() {
-      this.$store.commit("modalClose");
-      this.$store.commit("updateIsSended");
+      this.$store.commit('modalClose');
+      this.$store.commit('updateIsSent');
     },
   },
 };
@@ -21,9 +21,9 @@ export default {
 
 <style lang="scss">
 .sendSuccess {
-  p {
-    text-align: center;
-    margin-bottom: 28px;
-  }
+    p {
+        text-align: center;
+        margin-bottom: 28px;
+    }
 }
 </style>

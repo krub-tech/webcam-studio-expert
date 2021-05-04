@@ -1,6 +1,10 @@
+/* eslint no-shadow: ["error", { "allow": ["state"] }] */
+
+import { getUniqueCities, getDistrictsByCity, getMetroByCity } from '@/api/cities';
+
 const state = {
   unique_cities: [],
-  currentCity: "Санкт-Петербург",
+  currentCity: 'Санкт-Петербург',
   districtsByCurrentCity: [],
   selectedDistricts: [],
   metroByCity: [],
@@ -10,9 +14,7 @@ const state = {
 const getters = {
   currentCity: (state) => state.currentCity,
   selectedDistricts: (state) => state.selectedDistricts,
-  metroNames: (state) => {
-    return [...new Set(state.metroByCity.map((el) => el.name))];
-  },
+  metroNames: (state) => [...new Set(state.metroByCity.map((el) => el.name))],
   selectedMetro: (state) => state.selectedMetro,
 };
 
@@ -39,33 +41,27 @@ const mutations = {
 
 const actions = {
   async getUniqueCities({ dispatch, commit }) {
-    const response = await dispatch("apiGetRequest", "api/geo_info/cities/");
-    commit("updateUniqueCities", response.data);
-    dispatch("getDistrictsByCurrentCity");
-    dispatch("getMetroByCity");
+    const response = await getUniqueCities();
+    commit('updateUniqueCities', response);
+    dispatch('getDistrictsByCurrentCity');
+    dispatch('getMetroByCurrentCity');
   },
   async getDistrictsByCurrentCity(ctx) {
-    const response = await ctx.dispatch(
-      "apiGetRequest",
-      `api/geo_info/districts/?city=${ctx.state.currentCity}`
-    );
-    ctx.commit("updateDistrictsByCurrentCity", response.data);
+    const response = await getDistrictsByCity(ctx.state.currentCity);
+    ctx.commit('updateDistrictsByCurrentCity', response);
   },
-  async getMetroByCity(ctx) {
-    const response = await ctx.dispatch(
-      "apiGetRequest",
-      `api/geo_info/metro_stations/?city=${ctx.state.currentCity}`
-    );
-    ctx.commit("updateMetroByCity", response.data);
+  async getMetroByCurrentCity(ctx) {
+    const response = await getMetroByCity(ctx.state.currentCity);
+    ctx.commit('updateMetroByCity', response);
   },
   updateCurrentCity({ dispatch, commit }, data) {
-    commit("updateCurrentCity", data);
-    dispatch("getDistrictsByCurrentCity");
-    commit("updateSelectedDistricts", []);
-    dispatch("getMetroByCity");
-    commit("updatePageNumber", 1);
-    dispatch("studiosFromDB");
-    dispatch("allStudiosLength");
+    commit('updateCurrentCity', data);
+    dispatch('getDistrictsByCurrentCity');
+    commit('updateSelectedDistricts', []);
+    dispatch('getMetroByCurrentCity');
+    commit('updatePageNumber', 1);
+    dispatch('studiosFromDB');
+    dispatch('allStudiosLength');
   },
 };
 

@@ -1,182 +1,155 @@
 <template>
-  <section class="specselection modal">
-    <h1>Подбор студии</h1>
-    <p class="specselection--subtitle">
-      Мы подберем Вам подходящие студии, учитывая Ваши пожелания и
-      предоставленную информацию.
-    </p>
-    <input
-      type="text"
-      id="specselection_name"
-      class="modal--name"
-      placeholder="Ваше имя"
-      v-model="formData.name"
-    />
-    <label for="specselection_name"></label>
-    <Select
-      class="specselection--year_of_birth"
-      :options="years"
-      :placeholder="`Год
-    рождения`"
-      :parentObjName="'formData'"
-      :selector="'year_of_birth'"
-      callback
-      @selectedOption="
-        $store.commit('assignFormDataField', {
-          type: 'specselection',
-          field: 'year_of_birth',
-          event: $event,
-        })
-      "
-    />
-    <div class="specselection--model_type" v-if="options">
-      <div
-        class="radio"
-        v-for="(item, idx) in options.model_type"
-        :key="item"
-        @mouseup="radioHandle(idx, 'model_type')"
-      >
+    <section class="specselection modal">
+        <h1>Подбор студии</h1>
+        <p class="specselection--subtitle">
+            Мы подберем Вам подходящие студии, учитывая Ваши пожелания и предоставленную информацию.
+        </p>
         <input
-          type="radio"
-          :id="`specselection_model_type-${idx}`"
-          name="specselection_model_type"
+            id="specselection_name"
+            v-model="formData.name"
+            type="text"
+            class="modal--name"
+            placeholder="Ваше имя"
+        >
+        <label for="specselection_name" />
+        <Select
+            class="specselection--year_of_birth"
+            :options="years"
+            :placeholder="`Год рождения`"
+            :parent-obj-name="'formData'"
+            :selector="'year_of_birth'"
+            callback
+            @selectedOption="
+                $store.commit('assignFormDataField', {
+                    type: 'specselection',
+                    field: 'year_of_birth',
+                    event: $event,
+                })
+            "
         />
-        <label :for="`specselection_model_type-${idx}`">
-          {{ item }}
-        </label>
-      </div>
-    </div>
-    <Select
-      class="specselection--english_level"
-      v-if="options"
-      :options="Object.values(options.english_level)"
-      :placeholder="`Уровень английского`"
-      :parentObjName="'formData'"
-      :selector="'english_level'"
-      callback
-      @selectedOption="selectHandle($event, 'english_level')"
-    />
-    <div
-      class="specselection--english-desc"
-      @click="linkClickHandle('EnglishDesc')"
-    >
-      Пояснение уровней
-    </div>
-    <hr />
-    <h2>Желаемые условия</h2>
-    <Select
-      class="specselection--city"
-      v-if="options"
-      :options="$store.state.cities.unique_cities"
-      :placeholder="`Город`"
-      :parentObjName="'formData'"
-      :selector="'city'"
-      callback
-      @selectedOption="cityHandle($event)"
-    />
-    <StudiosFilter ref="SpecSelFilter" />
-    <input
-      type="tel"
-      id="specselection_phone"
-      class="modal--phone"
-      placeholder="Телефон"
-      v-model="formData.phone"
-      @input="phoneInput($event.target)"
-    />
-    <label for="specselection_phone"></label>
-    <div class="modal--answer_to" v-if="formData">
-      <p class="label">Если предпочитаете письменно:</p>
-      <Checkbox
-        v-for="answer in ['whatsapp', 'viber', 'telegram']"
-        :key="answer"
-        :item="answer"
-        :parent="formData.answer_to"
-        @mouseup.native="checkboxHandle(answer, 'answer_to')"
-      />
-    </div>
-    <textarea
-      placeholder="Дополнительная информация о Вас"
-      v-model="formData.additional_information"
-    />
-    <p class="label">Предлагаем приложить Ваши фото:</p>
-    <div class="modal--photos-files"></div>
-    <input
-      type="file"
-      class="modal--photos"
-      id="photos"
-      multiple
-      @input="filesInputHandle($event)"
-    />
-    <label for="photos"><p>Загрузить фото или файлы</p></label>
-    <div class="modal--photos-files">
-      <span
-        class="badge"
-        v-for="image in photos"
-        :key="image.name"
-        @click="removePhoto(image.name)"
-        >{{ image.name }}</span
-      >
-    </div>
-    <p class="modal--agree">
-      Нажимая “Отправить”, Вы соглашаетесь с
-      <a href="#" @click.prevent="linkClickHandle('Terms')"
-        >пользовательским соглашением</a
-      >
-      и
-      <a href="#" @click.prevent="linkClickHandle('Privacy')">
-        политикой конфиденциальности</a
-      >
-    </p>
-    <button class="modal--submit" @click.prevent="submitHandle">
-      Отправить
-    </button>
-  </section>
+        <div v-if="options" class="specselection--model_type">
+            <div
+                v-for="(item, idx) in options.model_type"
+                :key="item"
+                class="radio"
+                @mouseup="radioHandle(idx, 'model_type')"
+            >
+                <input :id="`specselection_model_type-${idx}`" type="radio" name="specselection_model_type">
+                <label :for="`specselection_model_type-${idx}`">
+                    {{ item }}
+                </label>
+            </div>
+        </div>
+        <Select
+            v-if="options"
+            class="specselection--english_level"
+            :options="Object.values(options.english_level)"
+            :placeholder="`Уровень английского`"
+            :parent-obj-name="'formData'"
+            :selector="'english_level'"
+            callback
+            @selectedOption="selectHandle($event, 'english_level')"
+        />
+        <div class="specselection--english-desc" @click="linkClickHandle('EnglishDesc')">
+            Пояснение уровней
+        </div>
+        <hr>
+        <h2>Желаемые условия</h2>
+        <Select
+            v-if="options"
+            class="specselection--city"
+            :options="$store.state.cities.unique_cities"
+            :placeholder="`Город`"
+            :parent-obj-name="'formData'"
+            :selector="'city'"
+            callback
+            @selectedOption="cityHandle($event)"
+        />
+        <StudiosFilter ref="SpecSelFilter" />
+        <input
+            id="specselection_phone"
+            v-model="formData.phone"
+            type="tel"
+            class="modal--phone"
+            placeholder="Телефон"
+            @input="phoneInput($event.target)"
+        >
+        <label for="specselection_phone" />
+        <div v-if="formData" class="modal--answer_to">
+            <p class="label">
+                Если предпочитаете письменно:
+            </p>
+            <Checkbox
+                v-for="answer in ['whatsapp', 'viber', 'telegram']"
+                :key="answer"
+                :item="answer"
+                :parent="formData.answer_to"
+                @mouseup.native="checkboxHandle(answer, 'answer_to')"
+            />
+        </div>
+        <textarea v-model="formData.additional_information" placeholder="Дополнительная информация о Вас" />
+        <p class="label">
+            Предлагаем приложить Ваши фото:
+        </p>
+        <div class="modal--photos-files" />
+        <input
+            id="photos"
+            type="file"
+            class="modal--photos"
+            multiple
+            @input="filesInputHandle($event)"
+        >
+        <label for="photos"><p>Загрузить фото или файлы</p></label>
+        <div class="modal--photos-files">
+            <span v-for="image in photos" :key="image.name" class="badge" @click="removePhoto(image.name)">
+                {{ image.name }}
+            </span>
+        </div>
+        <p class="modal--agree">
+            Нажимая “Отправить”, Вы соглашаетесь с
+            <a href="#" @click.prevent="linkClickHandle('Terms')">пользовательским соглашением</a>
+            и
+            <a href="#" @click.prevent="linkClickHandle('Privacy')"> политикой конфиденциальности</a>
+        </p>
+        <button class="modal--submit" @click.prevent="submitHandle">
+            Отправить
+        </button>
+    </section>
 </template>
 
 <script>
-import Select from "@/components/Select";
-import Checkbox from "@/components/form/Checkbox";
-import Radio from "@/components/form/Radio";
-import StudiosFilter from "@/components/StudiosFilter";
+import Select from '@/components/Select';
+import Checkbox from '@/components/form/Checkbox';
+import StudiosFilter from '@/components/StudiosFilter';
 
-import { phoneInput } from "@/helpers.js";
+import { phoneInput } from '@/helpers';
 
 export default {
-  name: "SpecSelection",
+  name: 'SpecSelection',
   components: {
     Select,
     Checkbox,
-    Radio,
     StudiosFilter,
   },
   data() {
     return {
       options: null,
       photos: [],
-      requiredFields: [
-        "city",
-        "name",
-        "phone",
-        "year_of_birth",
-        "model_type",
-        "english_level",
-      ],
-      city: "",
+      requiredFields: ['city', 'name', 'phone', 'year_of_birth', 'model_type', 'english_level'],
+      city: '',
     };
   },
   computed: {
     years() {
-      let now = 2021;
-      let res = [];
+      const now = 2021;
+      const res = [];
       for (let i = 0; i < 20; i++) {
         res.push(now - 18 - i);
       }
       return res;
     },
     formData() {
-      return this.$store.state.modals.formData.find((el) => {
-        return el.message_type == "specselection";
-      });
+      return this.$store.state.modals.formData.find((el) => el.message_type === 'specselection');
     },
     districts() {
       return this.$store.state.cities.selectedDistricts;
@@ -187,64 +160,88 @@ export default {
   },
   watch: {
     districts: {
-      handler: function () {
-        this.$store.commit("assignFormDataField", {
-          type: "specselection",
-          field: "district",
+      handler() {
+        this.$store.commit('assignFormDataField', {
+          type: 'specselection',
+          field: 'district',
           event: this.$store.state.cities.selectedDistricts,
         });
       },
       deep: true,
     },
     metro: {
-      handler: function () {
-        this.$store.commit("assignFormDataField", {
-          type: "specselection",
-          field: "metro",
+      handler() {
+        this.$store.commit('assignFormDataField', {
+          type: 'specselection',
+          field: 'metro',
           event: this.$store.state.cities.selectedMetro,
         });
       },
       deep: true,
     },
   },
+  async mounted() {
+    const response = await this.$store.dispatch('apiGetRequest', 'api/message/options/');
+    this.options = response.data;
+    this.$refs.SpecSelFilter.$on('filterChange', () => {
+      for (const [key, value] of Object.entries(this.$refs.SpecSelFilter.filterQuery)) {
+        if (value?.length) {
+          this.$store.commit('assignFormDataField', {
+            type: 'specselection',
+            field: key,
+            event: value,
+          });
+        }
+      }
+    });
+    this.city = this.$store.state.cities.currentCity;
+    this.$store.commit('updateCurrentCity', '');
+    this.$store.dispatch('getDistrictsByCurrentCity');
+    this.$store.dispatch('getMetroByCurrentCity');
+  },
+  beforeDestroy() {
+    this.$store.commit('updateCurrentCity', this.city);
+    this.$store.dispatch('getDistrictsByCurrentCity');
+    this.$store.dispatch('getMetroByCurrentCity');
+  },
   methods: {
     phoneInput,
     radioHandle(idx, selector) {
-      this.$store.commit("assignFormDataField", {
-        type: "specselection",
+      this.$store.commit('assignFormDataField', {
+        type: 'specselection',
         field: selector,
         event: idx,
       });
     },
     checkboxHandle(idx, selector) {
-      this.$store.commit("pushFormDataField", {
-        type: "specselection",
+      this.$store.commit('pushFormDataField', {
+        type: 'specselection',
         field: selector,
         event: idx,
       });
     },
     cityHandle(e) {
-      this.$store.dispatch("updateCurrentCity", e);
-      this.$store.commit("assignFormDataField", {
-        type: "specselection",
-        field: "city",
+      this.$store.dispatch('updateCurrentCity', e);
+      this.$store.commit('assignFormDataField', {
+        type: 'specselection',
+        field: 'city',
         event: e,
       });
     },
     selectHandle(e, selector) {
       let key;
-      for (let [k, value] of Object.entries(this.options[selector])) {
-        if (value == e) key = k;
+      for (const [k, value] of Object.entries(this.options[selector])) {
+        if (value === e) key = k;
       }
-      this.$store.commit("assignFormDataField", {
-        type: "specselection",
+      this.$store.commit('assignFormDataField', {
+        type: 'specselection',
         field: selector,
         event: key,
       });
     },
     filesInputHandle(e) {
       const imagesStudio = e.target.files;
-      Array.from(imagesStudio).map((img, key) => {
+      Array.from(imagesStudio).forEach((img, key) => {
         if (key < 5) {
           this.formData[`image_${key + 1}`] = img;
           this.photos.push(img);
@@ -253,35 +250,38 @@ export default {
     },
     removePhoto(name) {
       let idx = null;
-      this.photos.map((photo, key) => {
+      this.photos.forEach((photo, key) => {
         delete this.formData[`image_${key + 1}`];
-        if (photo.name == name) {
+        if (photo.name === name) {
           idx = this.photos.indexOf(photo);
           this.photos.splice(idx, 1);
         }
       });
     },
     linkClickHandle(componentName) {
-      this.$store.dispatch("updateModal", {
+      this.$store.dispatch('updateModal', {
         name: componentName,
-        from: "SpecSelection",
+        from: 'SpecSelection',
       });
     },
     isActive(item, selector) {
       return this.formData[selector].includes(item);
     },
     submitHandle() {
-      let formDataToDB = new FormData();
-      for (let [key, value] of Object.entries(this.formData)) {
-        if (key == "phone") {
-          value = value?.replace(/\D/g, "");
-          if (value?.length > 12) {
+      const formDataToDB = new FormData();
+      let isValid;
+      for (const [key, value] of Object.entries(this.formData)) {
+        if (key === 'phone') {
+          const newV = value?.replace(/\D/g, '');
+          if (newV?.length > 12) {
             isValid = false;
-            dispatch("invalidMessage", "phone");
+            this.$store.dispatch('invalidMessage', 'phone');
+          } else {
+            formDataToDB.append(key, newV);
           }
         }
-        if (typeof value != "string" && value?.length > 1) {
-          value.map((el) => {
+        if (typeof value !== 'string' && value?.length > 1) {
+          value.forEach((el) => {
             formDataToDB.append(key, el);
           });
         } else if (value !== null) {
@@ -289,162 +289,132 @@ export default {
         }
       }
 
-      for (let [name, value] of formDataToDB) {
+      for (const [name, value] of formDataToDB) {
         console.log(`${name} = ${value}`);
       }
 
-      const isValid = this.validator();
+      isValid = this.validator();
       console.log(isValid);
       if (isValid) {
-        this.$store.dispatch("dataPostToDB", {
+        this.$store.dispatch('dataPostToDB', {
           formData: formDataToDB,
-          query:
-            "https://78-47-247-176.sslip.io/api/message/help_in_selecting_studio/",
+          query: 'message/help_in_selecting_studio/',
         });
-        this.$store.commit("updateIsSended");
+        this.$store.commit('updateIsSent');
       }
     },
     validator() {
       let cnt = 0;
       let isValid = false;
 
-      this.requiredFields.map((field) => {
+      this.requiredFields.forEach((field) => {
         const invalidElem = this.$el.querySelector(`[class*='${field}']`);
-        invalidElem.classList.add("invalid");
+        invalidElem.classList.add('invalid');
 
-        if (this.formData[field] && this.formData[field].length != 0) {
+        if (this.formData[field] && this.formData[field].length !== 0) {
           cnt++;
-          invalidElem.classList.remove("invalid");
+          invalidElem.classList.remove('invalid');
         }
 
-        if (this.requiredFields.length == cnt) isValid = true;
+        if (this.requiredFields.length === cnt) isValid = true;
       });
 
       return isValid;
     },
-  },
-  async mounted() {
-    const response = await this.$store.dispatch(
-      "apiGetRequest",
-      "api/message/options/"
-    );
-    this.options = response.data;
-    this.$refs.SpecSelFilter.$on("filterChange", () => {
-      for (let [key, value] of Object.entries(
-        this.$refs.SpecSelFilter.filterQuery
-      )) {
-        if (value?.length) {
-          this.$store.commit("assignFormDataField", {
-            type: "specselection",
-            field: key,
-            event: value,
-          });
-        }
-      }
-    });
-    this.city = this.$store.state.cities.currentCity;
-    this.$store.commit("updateCurrentCity", "");
-    this.$store.dispatch("getDistrictsByCurrentCity");
-    this.$store.dispatch("getMetroByCity");
-  },
-  beforeDestroy() {
-    this.$store.commit("updateCurrentCity", this.city);
-    this.$store.dispatch("getDistrictsByCurrentCity");
-    this.$store.dispatch("getMetroByCity");
   },
 };
 </script>
 
 <style lang="scss">
 .specselection {
-  p {
-    line-height: 1.3;
-    color: #606074;
-  }
-  h2 {
-    font-size: 18px;
-    margin-bottom: 28px;
-  }
-
-  &--city {
-    width: max-content;
-    align-self: flex-start;
-    margin-bottom: 30px;
-
-    width: 290px;
-    margin-left: 2px;
-    .select {
-      display: flex;
-      justify-content: space-between;
-      width: inherit;
+    p {
+        line-height: 1.3;
+        color: #606074;
     }
-  }
-  &--subtitle {
-    margin-bottom: 28px;
-  }
-  &--year_of_birth {
-    margin-bottom: 28px;
-  }
-  &--model_type {
-    margin-bottom: 28px;
-    .radio {
-      display: inline-block;
-      background-color: #fefeff;
+    h2 {
+        font-size: 18px;
+        margin-bottom: 28px;
+    }
 
-      margin-bottom: 6px;
-      input[type="radio"] {
-        & + label {
-          border: 1px solid #c4c4cd;
-          border-radius: 0.5rem;
+    &--city {
+        width: max-content;
+        align-self: flex-start;
+        margin-bottom: 30px;
+
+        width: 290px;
+        margin-left: 2px;
+        .select {
+            display: flex;
+            justify-content: space-between;
+            width: inherit;
         }
-      }
-      input[type="radio"]:checked {
-        & + label {
-          background-color: #ffc5e4;
-          border: 1px solid #ffc5e4;
-        }
-      }
     }
-  }
-  &--english-desc {
-    align-self: flex-start;
-    width: max-content;
-    color: #606074;
-    background-color: #e5e5ef;
-    padding: 6px 10px;
-    padding-left: 28px;
-    border-radius: 6px;
-    margin-top: 20px;
-    cursor: pointer;
-    position: relative;
-    &::before {
-      content: "";
-      position: absolute;
-      width: 14px;
-      height: 14px;
-      left: 8px;
-      background-image: url("~@/assets/svg/i-question.svg");
+    &--subtitle {
+        margin-bottom: 28px;
     }
-  }
+    &--year_of_birth {
+        margin-bottom: 28px;
+    }
+    &--model_type {
+        margin-bottom: 28px;
+        .radio {
+            display: inline-block;
+            background-color: #fefeff;
 
-  .filter {
-    &--models_age,
-    &--working_with_model_types,
-    &--support_staff {
-      display: none;
+            margin-bottom: 6px;
+            input[type="radio"] {
+                & + label {
+                    border: 1px solid #c4c4cd;
+                    border-radius: 0.5rem;
+                }
+            }
+            input[type="radio"]:checked {
+                & + label {
+                    background-color: #ffc5e4;
+                    border: 1px solid #ffc5e4;
+                }
+            }
+        }
     }
-  }
-  &.modal {
-    hr {
-      width: 100%;
-      height: 1px;
+    &--english-desc {
+        align-self: flex-start;
+        width: max-content;
+        color: #606074;
+        background-color: #e5e5ef;
+        padding: 6px 10px;
+        padding-left: 28px;
+        border-radius: 6px;
+        margin-top: 20px;
+        cursor: pointer;
+        position: relative;
+        &::before {
+            content: "";
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            left: 8px;
+            background-image: url("~@/assets/svg/i-question.svg");
+        }
     }
-    .specselection--city {
-      &.invalid::before {
-        content: "Выберите город";
-        transform: translateY(-100%);
-      }
+
+    .filter {
+        &--models_age,
+        &--working_with_model_types,
+        &--support_staff {
+            display: none;
+        }
     }
-  }
+    &.modal {
+        hr {
+            width: 100%;
+            height: 1px;
+        }
+        .specselection--city {
+            &.invalid::before {
+                content: "Выберите город";
+                transform: translateY(-100%);
+            }
+        }
+    }
 }
 </style>

@@ -30,6 +30,7 @@ const state = {
     },
     {
       message_type: 'certification',
+      studio: 1,
       message: null,
       name: null,
       phone: null,
@@ -163,7 +164,9 @@ const actions = {
           dispatch('invalidMessage', 'phone');
         }
         for (const [key, value] of Object.entries(el)) {
+          formDataToDB.append(key, value);
           if (key === 'phone') {
+            formDataToDB.delete(key, value);
             const newV = value?.replace(/\D/g, '');
             if (newV?.length > 12) {
               isValid = false;
@@ -173,10 +176,11 @@ const actions = {
             }
           }
           if (key === 'answer_to') {
+            formDataToDB.delete(key, value);
             el.answer_to.forEach((l) => {
               formDataToDB.append('answer_to', l);
             });
-          } else formDataToDB.append(key, value);
+          }
         }
       }
     });

@@ -26,7 +26,7 @@ export default {
       required: false,
     },
     val: {
-      type: Array,
+      type: Number,
       required: true,
     },
     min: {

@@ -2,11 +2,10 @@
     <div v-show="isMenuOpen" class="nav-wrapper">
         <nav class="nav">
             <div class="nav--city">
-                <Select
+                <nSelect
                     class="select--cities"
                     :options="cities"
                     :placeholder="$store.state.cities.currentCity"
-                    callback
                     @selectedOption="selectCityOptionHandle"
                 />
             </div>
@@ -41,10 +40,14 @@
 
 <script>
 import Select from '@/components/Select';
+import nSelect from '@/components/nSelect';
+
+import { eventBus } from '@/main';
 
 export default {
   components: {
     Select,
+    nSelect,
   },
   props: {
     isMenuOpen: {
@@ -76,8 +79,8 @@ export default {
     },
   },
   mounted() {
-    if (!this.$store.state.modals.modal && localStorage.city) {
-      this.$store.state.cities.currentCity = localStorage.city;
+    if (localStorage.currentCity) {
+      this.$store.state.cities.currentCity = localStorage.currentCity;
     }
   },
   methods: {
@@ -104,6 +107,9 @@ export default {
     },
     selectCityOptionHandle(data) {
       this.$store.dispatch('updateCurrentCity', data);
+      localStorage.currentCity = data;
+      localStorage.selectedDistricts = [];
+      eventBus.$emit('resetSelects');
     },
     navClickhandle(componentName) {
       this.$store.dispatch('updateModal', {

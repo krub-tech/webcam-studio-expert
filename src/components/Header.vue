@@ -81,8 +81,12 @@ export default {
     },
     toFavorites() {
       this.$store.commit('favoritesOpen');
-      const firstFavoriteStudio = Array.from(this.$store.state.favorites.favoritesStudios)[0].id;
-      this.$nextTick(() => this.$router.push(`/studio/${firstFavoriteStudio}`));
+      if (this.$store.state.windowWidth < 420) {
+        this.$router.push('/favorites');
+      } else {
+        const firstFavoriteStudio = Array.from(this.$store.state.favorites.favoritesStudios)[0].id;
+        this.$nextTick(() => this.$router.push(`/studio/${firstFavoriteStudio}`));
+      }
     },
     throttle,
   },

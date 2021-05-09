@@ -7,7 +7,7 @@
         </div>
         <aside class="filter-wrapper">
             <button class="filter-btn" @click="filterMobShow = !filterMobShow" />
-            <StudiosFilter :class="{ open_filter: filterMobShow }" @close="filterMobShow = !filterMobShow" />
+            <Filt :class="{ open_filter: filterMobShow }" @close="filterMobShow = !filterMobShow" />
         </aside>
         <div class="studios--count" :class="{ dirty: isFiltered }">
             <p class="studios--count-current">
@@ -24,7 +24,7 @@
                 @selectedOption="sortSelectOptionHandle"
             />
         </div>
-        <div class="studios--results">
+        <div v-if="!filterMobShow" class="studios--results">
             <Cards />
         </div>
     </section>
@@ -33,14 +33,14 @@
 <script>
 import Select from '@/components/Select';
 import Cards from '@/components/Cards';
-import StudiosFilter from '@/components/StudiosFilter';
+import Filt from '@/components/Filt';
 
 export default {
   name: 'Studios',
   components: {
     Select,
     Cards,
-    StudiosFilter,
+    Filt,
   },
   data() {
     return {
@@ -154,7 +154,7 @@ export default {
     .filter-wrapper {
         grid-area: filter;
         height: min-content;
-        .filter {
+        .filt {
             width: 100%;
             max-width: 420px;
             position: absolute;
@@ -282,10 +282,10 @@ export default {
         }
         .filter-wrapper {
             align-items: flex-start;
-            .filter {
+            .filt {
                 position: relative;
                 left: 0;
-                top: 0;
+
                 z-index: 0;
             }
         }

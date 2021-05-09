@@ -38,7 +38,8 @@
     --white: #fefeff;
     --black: #242022;
     --grey: #e5e5ef;
-    --grey2: #c4c4c4;
+    --grey-filt: #FBFBFD;
+    --grey-hr: #E6E6EA;
     --dark-grey: #606074;
     --blue: #4b74dc;
 }
@@ -208,12 +209,12 @@ button {
         background-position: center;
         background-size: contain;
     }
-    &:last-of-type {
-        margin-bottom: 28px;
-    }
     &:not(:last-of-type) {
         margin-right: var(--fr-m);
     }
+  &:last-of-type {
+    margin-bottom: 30px;
+  }
 }
 
 .modal {
@@ -489,6 +490,17 @@ button {
         }
     }
 }
+
+.form-module {
+  margin-bottom: 28px;
+  .select {
+    @include filter-item;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
 
 @media screen and (min-width: 420px) {
     .btn-back {

@@ -56,7 +56,7 @@
         <Select
             v-if="optionsStudios.work_with_sites"
             class="proposal--work_with_sites"
-            :options="valuesFromObject(optionsStudios.work_with_sites)"
+            :options="arrayFrom(optionsStudios.work_with_sites)"
             :placeholder="`Сайты, с которыми работаете`"
             multiple
             :parent-obj-name="`formData`"
@@ -137,7 +137,7 @@ import StudiosFilter from '@/components/StudiosFilter';
 import Select from '@/components/Select';
 import InputSearch from '@/components/form/InputSearch';
 
-import { valuesFromObject, phoneInput } from '@/helpers';
+import { arrayFrom, phoneInput } from '@/helpers';
 import { postFormData } from '@/api/client';
 
 export default {
@@ -209,7 +209,7 @@ export default {
     });
   },
   methods: {
-    valuesFromObject,
+    arrayFrom,
     phoneInput,
     cityInputHandle(query) {
       const url = 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address';
@@ -228,7 +228,6 @@ export default {
       fetch(url, options)
         .then((response) => response.json())
         .then((result) => {
-          console.dir(result);
           this.formData.address_json = result.suggestions;
         })
         .catch((error) => console.log('error', error));
@@ -331,15 +330,16 @@ export default {
           if (typeof value === 'object' && key !== 'studioPhotos') {
             value.map((el) => formDataToDB.append(key, el));
           } else if (key !== 'studioPhotos') {
+            formDataToDB.append(key, value);
             if (key === 'phone' || key === 'whatsapp' || key === 'viber') {
+              formDataToDB.delete(key, value);
               const newV = value.replace(/\D/g, '');
 
               if (newV?.length > 12) {
                 this.$store.dispatch('invalidMessage', key);
               }
-              formDataToDB.append(key, newV);
+              formDataToDB.set(key, newV);
             }
-            formDataToDB.append(key, value);
           }
         }
       }
@@ -355,16 +355,17 @@ export default {
         formData,
         query: 'user/studios/',
       };
-
-      const request = await postFormData(data);
-
-      console.log(request);
-      if (!request.ok) this.errors = request;
-      else {
-        console.log(request);
+      const response = await postFormData(data);
+      console.log(response);
+      if (response.id) {
         this.$store.dispatch('updateModal', {
           name: 'ModalSendSuccess',
+          from: 'Proposal',
         });
+      }
+      if (!response.id) {
+        console.log(123);
+        this.errors = response;
       }
     },
     submitHandle() {

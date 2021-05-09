@@ -13,5 +13,5 @@ export function getStudiosByCity(city) {
 }
 
 export function getStudioById(id) {
-  return client.get(`user/studios/${id}`);
+  return client.get(`user/studios/${id}/`);
 }

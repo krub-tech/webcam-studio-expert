@@ -5,7 +5,7 @@ export function getLinksOptions() {
 }
 
 export function getLinks(category) {
-  return client.get(`useful_links/links${category}`);
+  return client.get(`useful_links/links/${category}`);
 }
 
 export function linksCategoryLength() {

@@ -83,7 +83,7 @@ export default {
 
 <style lang="scss">
 .links {
-    min-height: calc(100vh - 448px);
+    min-height: 100vh;
 
     h1 {
         font-size: 20px;

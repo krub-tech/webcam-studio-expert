@@ -9,7 +9,7 @@
             </div>
             <div class="footer--mid">
                 <div class="footer--mid-inner">
-                    <a href="#">Индивидуальный подбор студии</a>
+                    <a href="#" @click.prevent="modalLinkClickHandle('SpecSelection')">Индивидуальный подбор студии</a>
                     <router-link to="/links">
                         Полезные ссылки
                     </router-link>

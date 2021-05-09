@@ -9,6 +9,8 @@
         "APP_CONFIG": "readonly"
     },
     "rules": {
+        "no-else-return": "off",
+        "no-trailing-spaces": "off",
         "arrow-body-style": "off",
         "linebreak-style": 0,
         "prefer-arrow-callback": "off",

@@ -7,14 +7,14 @@ const state = {
   currentCity: 'Санкт-Петербург',
   districtsByCurrentCity: [],
   selectedDistricts: [],
-  metroByCity: [],
+  metroByCurrentCity: [],
   selectedMetro: [],
 };
 
 const getters = {
   currentCity: (state) => state.currentCity,
   selectedDistricts: (state) => state.selectedDistricts,
-  metroNames: (state) => [...new Set(state.metroByCity.map((el) => el.name))],
+  metroNamesByCurrentCity: (state) => [...new Set(state.metroByCurrentCity.map((el) => el.name))],
   selectedMetro: (state) => state.selectedMetro,
 };
 
@@ -31,8 +31,8 @@ const mutations = {
   updateSelectedDistricts(state, payload) {
     state.selectedDistricts = payload;
   },
-  updateMetroByCity(state, payload) {
-    state.metroByCity = payload;
+  updateMetroByCurrentCity(state, payload) {
+    state.metroByCurrentCity = payload;
   },
   updateSelectedMetro(state, payload) {
     state.selectedMetro = payload;
@@ -52,16 +52,25 @@ const actions = {
   },
   async getMetroByCurrentCity(ctx) {
     const response = await getMetroByCity(ctx.state.currentCity);
-    ctx.commit('updateMetroByCity', response);
+    ctx.commit('updateMetroByCurrentCity', response);
   },
   updateCurrentCity({ dispatch, commit }, data) {
     commit('updateCurrentCity', data);
     dispatch('getDistrictsByCurrentCity');
     commit('updateSelectedDistricts', []);
     dispatch('getMetroByCurrentCity');
+    commit('updateSelectedMetro', []);
     commit('updatePageNumber', 1);
     dispatch('studiosFromDB');
     dispatch('allStudiosLength');
+  },
+  updateSelectedDistricts(ctx, payload) {
+    ctx.commit('updateSelectedDistricts', payload);
+    ctx.dispatch('studiosFromDB');
+  },
+  updateSelectedMetro(ctx, payload) {
+    ctx.commit('updateSelectedMetro', payload);
+    ctx.dispatch('studiosFromDB');
   },
 };
 

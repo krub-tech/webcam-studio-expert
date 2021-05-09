@@ -5,6 +5,7 @@
             v-model="value"
             type="text"
             :placeholder="placeholder"
+            @focus="focusHandle"
             @input="inputHandle"
         >
         <label for="id" />
@@ -51,11 +52,13 @@ export default {
     },
   },
   mounted() {
-    this.$parent.$on('reset', () => {
-      this.value = '';
-    });
+    this.$parent.$on('filtReset', this.clearValue);
   },
   methods: {
+    focusHandle() {
+      this.value = '';
+      this.inputHandle();
+    },
     inputHandle() {
       this.isChoose = false;
       this.$emit('value', this.value);
@@ -68,6 +71,9 @@ export default {
         this.value = result;
       }
       if (result) this.$emit('choose', result);
+    },
+    clearValue() {
+      this.value = '';
     },
   },
 };
@@ -91,11 +97,10 @@ export default {
 .input-search {
     height: 40px;
     position: relative;
-    margin-bottom: 28px;
     input {
         width: 100%;
         height: inherit;
-        background-color: #fefeff;
+        background-color: var(--white);
         border: 1px solid #c4c4cd;
         border-radius: 4px;
         padding: 10px 12px;

@@ -13,7 +13,7 @@ export default {
   methods: {
     modalClose() {
       this.$store.commit('modalClose');
-      this.$store.commit('updateIsSent');
+      this.$store.state.modals.isSent = false;
     },
   },
 };

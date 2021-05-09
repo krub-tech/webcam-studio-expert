@@ -43,9 +43,10 @@ export default {
   methods: {
     closeModal() {
       if (
-        this.$store.state.modals.modal.name === 'Terms'
+        this.$store.state.modals.modal.from
+        && (this.$store.state.modals.modal.name === 'Terms'
                 || this.$store.state.modals.modal.name === 'Privacy'
-                || this.$store.state.modals.modal.name === 'EnglishDesc'
+                || this.$store.state.modals.modal.name === 'EnglishDesc')
       ) {
         this.$store.dispatch('updateModal', {
           name: this.$store.state.modals.modal.from,

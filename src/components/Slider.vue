@@ -49,14 +49,12 @@ export default {
   methods: {
     prev() {
       if (this.count === 0) this.count = this.data.length;
-      else return false;
       this.count--;
       this.move();
     },
     next() {
       this.count++;
       if (this.count === this.data.length) this.count = 0;
-      else return false;
       this.move();
     },
     move() {

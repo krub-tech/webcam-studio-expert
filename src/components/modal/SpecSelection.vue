@@ -1,5 +1,5 @@
 <template>
-    <section class="specselection modal">
+    <form class="specselection modal">
         <h1>Подбор студии</h1>
         <p class="specselection--subtitle">
             Мы подберем Вам подходящие студии, учитывая Ваши пожелания и предоставленную информацию.
@@ -65,6 +65,8 @@
             callback
             @selectedOption="cityHandle($event)"
         />
+        <DistrictsSelect :city="city" />
+        <MetroSelect :city="city" />
         <StudiosFilter ref="SpecSelFilter" />
         <input
             id="specselection_phone"
@@ -114,7 +116,7 @@
         <button class="modal--submit" @click.prevent="submitHandle">
             Отправить
         </button>
-    </section>
+    </form>
 </template>
 
 <script>
@@ -122,7 +124,11 @@ import Select from '@/components/Select';
 import Checkbox from '@/components/form/Checkbox';
 import StudiosFilter from '@/components/StudiosFilter';
 
+import DistrictsSelect from '@/components/form/modules/DistrictsSelect';
+import MetroSelect from '@/components/form/modules/MetroSelect';
+
 import { phoneInput } from '@/helpers';
+import { getMessageOptions } from '@/api/messages';
 
 export default {
   name: 'SpecSelection',
@@ -130,6 +136,8 @@ export default {
     Select,
     Checkbox,
     StudiosFilter,
+    DistrictsSelect,
+    MetroSelect,
   },
   data() {
     return {
@@ -181,8 +189,8 @@ export default {
     },
   },
   async mounted() {
-    const response = await this.$store.dispatch('apiGetRequest', 'api/message/options/');
-    this.options = response.data;
+    const response = await this.getMessageOptions();
+    this.options = response;
     this.$refs.SpecSelFilter.$on('filterChange', () => {
       for (const [key, value] of Object.entries(this.$refs.SpecSelFilter.filterQuery)) {
         if (value?.length) {
@@ -194,18 +202,28 @@ export default {
         }
       }
     });
-    this.city = this.$store.state.cities.currentCity;
-    this.$store.commit('updateCurrentCity', '');
-    this.$store.dispatch('getDistrictsByCurrentCity');
-    this.$store.dispatch('getMetroByCurrentCity');
   },
   beforeDestroy() {
-    this.$store.commit('updateCurrentCity', this.city);
-    this.$store.dispatch('getDistrictsByCurrentCity');
-    this.$store.dispatch('getMetroByCurrentCity');
+    for (const [key, value] of Object.entries(this.formData)) {
+      if (typeof value === 'string' && value !== 'specselection') {
+        this.$store.commit('assignFormDataField', {
+          type: 'specselection',
+          field: key,
+          event: null,
+        });
+      }
+      if (typeof value !== 'string') {
+        this.$store.commit('assignFormDataField', {
+          type: 'specselection',
+          field: key,
+          event: [],
+        });
+      }
+    }
   },
   methods: {
     phoneInput,
+    getMessageOptions,
     radioHandle(idx, selector) {
       this.$store.commit('assignFormDataField', {
         type: 'specselection',
@@ -221,7 +239,7 @@ export default {
       });
     },
     cityHandle(e) {
-      this.$store.dispatch('updateCurrentCity', e);
+      this.city = e;
       this.$store.commit('assignFormDataField', {
         type: 'specselection',
         field: 'city',
@@ -271,21 +289,22 @@ export default {
       const formDataToDB = new FormData();
       let isValid;
       for (const [key, value] of Object.entries(this.formData)) {
-        if (key === 'phone') {
-          const newV = value?.replace(/\D/g, '');
-          if (newV?.length > 12) {
-            isValid = false;
-            this.$store.dispatch('invalidMessage', 'phone');
-          } else {
-            formDataToDB.append(key, newV);
-          }
-        }
         if (typeof value !== 'string' && value?.length > 1) {
           value.forEach((el) => {
             formDataToDB.append(key, el);
           });
         } else if (value !== null) {
           if (value?.length !== 0) formDataToDB.append(key, value);
+        }
+        if (key === 'phone') {
+          formDataToDB.delete(key, value);
+          const newV = value?.replace(/\D/g, '');
+          if (newV?.length > 12) {
+            isValid = false;
+            this.$store.dispatch('invalidMessage', 'phone');
+          } else {
+            formDataToDB.set(key, newV);
+          }
         }
       }
 

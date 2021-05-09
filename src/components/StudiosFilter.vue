@@ -1,47 +1,7 @@
 <template>
-    <form v-if="options" class="filter" :class="{ bg_gradient }" @submit.prevent>
+    <div v-if="options" class="filter" :class="{ bg_gradient }" @submit.prevent>
         <div class="filter--studios-search">
             <InputSearch :placeholder="'Поиск по названию'" :results="searchResults" @value="searchQuery = $event" />
-        </div>
-        <div v-if="districts_metro_isShow" class="filter-districts_metro">
-            <template v-if="this.$store.state.cities.districtsByCurrentCity.length > 0">
-                <Select
-                    :placeholder="'Район'"
-                    :options="this.$store.state.cities.districtsByCurrentCity"
-                    multiple
-                    :parent-obj-name="'districts'"
-                    :selector="'selected'"
-                />
-                <div class="select-selected">
-                    <div
-                        v-for="district in districts.selected"
-                        :key="district"
-                        class="badge"
-                        @click="removeSelected(district, 'districts')"
-                    >
-                        {{ district }}
-                    </div>
-                </div>
-            </template>
-            <template v-if="this.$store.getters.metroNames.length > 0">
-                <Select
-                    :placeholder="'Метро'"
-                    :options="this.$store.getters.metroNames"
-                    multiple
-                    :parent-obj-name="'metro'"
-                    :selector="'selected'"
-                />
-                <div class="select-selected">
-                    <div
-                        v-for="(metro, idx) in metro.selected"
-                        :key="idx"
-                        class="badge"
-                        @click="removeSelected(metro, 'metro')"
-                    >
-                        {{ metro }}
-                    </div>
-                </div>
-            </template>
         </div>
         <div class="filter--studio_type">
             <Checkbox
@@ -85,7 +45,7 @@
             <Range
                 v-if="isNotModal || this.$store.state.modals.modal.name == 'SpecSelection'"
                 :label="'Минимальный % выплат'"
-                :val="filterQuery.min_payout_percentage"
+                :val="+filterQuery.min_payout_percentage"
                 :min="30"
                 :max="90"
                 @valueChange="filterQuery.min_payout_percentage = $event"
@@ -104,7 +64,7 @@
         <div class="filter--shift_length">
             <Range
                 :label="'Длина смены'"
-                :val="filterQuery.shift_length"
+                :val="+filterQuery.shift_length"
                 :min="5"
                 :max="12"
                 @valueChange="filterQuery.shift_length = $event"
@@ -113,7 +73,7 @@
         <div class="filter--max_shifts_per_week">
             <Range
                 :label="'Дней в неделю минимум'"
-                :val="filterQuery.max_shifts_per_week"
+                :val="+filterQuery.max_shifts_per_week"
                 :min="3"
                 :max="6"
                 @valueChange="filterQuery.max_shifts_per_week = $event"
@@ -121,19 +81,26 @@
         </div>
         <div class="filter--staff_gender">
             <Select
-                :options="valuesFromObject(options.staff_gender)"
+                :options="arrayFrom(options.staff_gender)"
                 :placeholder="`Пол администраторов`"
                 static-placeholder
                 callback
                 @selectedOption="staffGenderClickHandle($event)"
             />
-            <div v-if="filterQuery.staff_gender.length > 0" class="badge" @click="filterQuery.staff_gender = []">
-                {{ staff_gender }}
+            <div class="select-selected">
+                <div
+                    v-if="filterQuery.staff_gender.length > 0"
+
+                    class="badge"
+                    @click="filterQuery.staff_gender = []"
+                >
+                    {{ staff_gender }}
+                </div>
             </div>
         </div>
         <div class="filter--devices">
             <Select
-                :options="valuesFromObject(options.devices)"
+                :options="arrayFrom(options.devices)"
                 :placeholder="`Камеры`"
                 multiple
                 :parent-obj-name="'filterQuery'"
@@ -189,7 +156,7 @@
                 Послать заявку {{ filteredStudiosLength }} отобранным
             </div>
         </div>
-    </form>
+    </div>
 </template>
 
 <script>
@@ -200,7 +167,7 @@ import MultiRange from '@/components/form/MultiRange';
 import Select from '@/components/Select';
 import InputSearch from '@/components/form/InputSearch';
 
-import { valuesFromObject } from '@/helpers';
+import { arrayFrom } from '@/helpers';
 
 export default {
   name: 'StudiosFilter',
@@ -277,7 +244,7 @@ export default {
       }
       if (
         this.$store.state.cities.districtsByCurrentCity.length > 0
-                || this.$store.getters.metroNames.length > 0
+                || this.$store.getters.metroNamesByCurrentCity.length > 0
       ) {
         return true;
       }
@@ -360,7 +327,7 @@ export default {
       }
     },
     selectedRemove(e, selector) {
-      this.filterQuery[selector].for((el) => {
+      this.filterQuery[selector].forEach((el) => {
         const idx = this.filterQuery[selector].indexOf(el);
         if (idx !== -1) this.filterQuery[selector].splice(idx, 1);
       });
@@ -396,7 +363,7 @@ export default {
 
       this.$emit('reset');
     },
-    valuesFromObject,
+    arrayFrom,
     validator(selector) {
       if (this.isNotModal) {
         return false;
@@ -537,12 +504,6 @@ export default {
 }
 .filter--staff_gender {
     @extend .filter--devices;
-    padding-bottom: 30px !important;
-    .badge {
-        margin-top: 16px;
-        margin-left: 8px;
-        margin-bottom: 0;
-    }
 }
 .filter--footer {
     position: sticky;

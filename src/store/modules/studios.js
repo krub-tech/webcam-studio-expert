@@ -22,31 +22,22 @@ const getters = {
   allStudiosLength: (state) => state.allStudiosLength,
   query: (state, getters) => {
     let filterQ = '';
-    let searchQ = '';
-    let orderingType = '';
+    const searchQ = state.searchQuery;
+    let ordType = '';
     let city = `?city=${getters.currentCity}`;
     if (state.filterQuery) {
-      filterQ = `&${state.filterQuery}`;
-    }
-    if (state.searchQuery) {
-      if (filterQ) searchQ = `search=${state.searchQuery}`;
-      else searchQ = `&search=${state.searchQuery}`;
+      filterQ = `${state.filterQuery}`;
     }
     if (state.orderingStudios) {
-      if (filterQ && !searchQ) orderingType = `ordering=${state.orderingStudios}`;
-      else orderingType = `&ordering=${state.orderingStudios}`;
+      ordType = `&ordering=${state.orderingStudios}`;
     }
-    if (getters.selectedDistricts?.length > 0) {
-      city += `&district=${getters.selectedDistricts}`;
-    }
-    if (getters.selectedDistricts?.length > 0) {
+    if (getters.selectedDistricts?.length) {
       city += `&district=${getters.selectedDistricts}`;
     }
     if (getters.selectedMetro?.length > 0) {
       city += `&metro=${getters.selectedMetro}`;
     }
-    return `${city}
-    &limit=${getters.paginationSize}&offset=${getters.paginationOffset}${filterQ}${searchQ}${orderingType}`;
+    return `${city}&limit=${getters.paginationSize}&offset=${getters.paginationOffset}${filterQ}${searchQ}${ordType}`;
   },
 };
 
@@ -101,6 +92,14 @@ const actions = {
   async allStudiosLength({ commit, getters }) {
     const response = await getStudiosByCity(getters.currentCity);
     commit('updateAllStudiosLength', response.count);
+  },
+  updateSearchQuery(ctx, payload) {
+    ctx.commit('updateSearchQuery', payload);
+    ctx.dispatch('studiosFromDB');
+  },
+  updateFilterQuery(ctx, payload) {
+    ctx.commit('updateFilterQuery', payload);
+    ctx.dispatch('studiosFromDB');
   },
 };
 

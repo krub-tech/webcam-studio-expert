@@ -1,6 +1,6 @@
 /* eslint no-shadow: ["error", { "allow": ["input"] }] */
 
-function valuesFromObject(object) {
+function arrayFrom(object) {
   return object ? Object.values(object) : [];
 }
 
@@ -16,6 +16,13 @@ function checkBoxHandle(object, selector, key) {
     result = object[selector];
   }
   return result;
+}
+
+function toArray(array, payload) {
+  const idx = array.indexOf(payload);
+  if (idx === -1) array.push(payload);
+  else array.splice(idx, 1);
+  return array;
 }
 
 function phoneInput(input) {
@@ -109,5 +116,5 @@ function insertAfter(newNode, referenceNode) {
 }
 
 export {
-  valuesFromObject, checkBoxHandle, phoneInput, previewImg, insertAfter,
+  arrayFrom, checkBoxHandle, phoneInput, previewImg, insertAfter, toArray,
 };

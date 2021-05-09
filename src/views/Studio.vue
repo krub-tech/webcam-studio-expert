@@ -1,48 +1,6 @@
 <template>
     <section class="studio-wrapper">
-        <aside class="studios--aside">
-            <div class="studios--aside-header">
-                <button class="btn-filter" @click="$router.push('/')">
-                    <img src="@/assets/svg/i-back_arrow.svg">
-                    К фильтру
-                </button>
-                <button
-                    class="btn-favorites"
-                    :class="{ btn_favorites_active: favoritesOpen }"
-                    @click="favoritesClickHandle"
-                >
-                    Избранное
-                </button>
-            </div>
-            <template v-if="studios">
-                <article
-                    v-for="st in studios"
-                    :key="st.id"
-                    class="studios--aside-card"
-                    @click="toStudio($event, st.id)"
-                >
-                    <div class="title">
-                        <p class="name">
-                            {{ st.name }}
-                        </p>
-                        <p class="percent">
-                            {{ st.min_payout_percentage }}-{{ st.max_payout_percentage }}%
-                        </p>
-                    </div>
-                    <div class="desc">
-                        <p class="address">
-                            {{ st.address }}
-                        </p>
-                        <Like :id="st.id" />
-                    </div>
-                    <template v-if="st.certified">
-                        <div class="certificate">
-                            <a href="#">Сертифицирована</a>
-                        </div>
-                    </template>
-                </article>
-            </template>
-        </aside>
+        <Aside />
         <main class="studio">
             <div class="studio--title">
                 <button class="btn-back" @click="$router.go(-1)" />
@@ -97,11 +55,31 @@
             <div class="studio--address">
                 {{ studio.address }}
             </div>
+            <div v-if="studio.metro.length" class="studio--metro">
+                <p v-for="metro in studio.metro" :key="metro.id">
+                    {{ metro.name }} <b>{{ metro.distance }} м.</b>
+                </p>
+            </div>
             <div v-show="hideEmptyField(`conditions`)" class="studio--conditions">
                 <h3>Условия работы</h3>
                 <template v-if="studio.conditions">
                     <p v-for="condition in Object.values(studio.conditions)" :key="condition" class="studio--condition">
                         {{ optionsStudios.conditions[condition] }}
+                    </p>
+                    <p class="studio--condition">
+                        от {{ studio.shift_length }} ч в день
+                    </p>
+                    <p class="studio--condition">
+                        от {{ studio.max_shifts_per_week }} дней в неделю
+                    </p>
+                    <p v-if="studio.support_staff.find(el => el === 'trainer')" class="studio--condition">
+                        Есть тренеры
+                    </p>
+                    <p v-if="studio.support_staff.find(el => el === 'operator_translator')" class="studio--condition">
+                        Есть операторы
+                    </p>
+                    <p class="studio--condition condition-staff_gender">
+                        Пол администраторов: <span>{{ optionsStudios.staff_gender[studio.staff_gender] }}</span>
                     </p>
                 </template>
             </div>
@@ -139,7 +117,7 @@
                 {{ studio.description }}
             </div>
             <div class="studio--interview">
-                <div class="studio--btn-like" :class="{ liked: ftrBtnIsLiked }" @click="footerLikeClickHandle()">
+                <div class="studio--btn-like" :class="{ liked: ftrBtnIsLiked }" @click="footerLikeClickHandle">
                     <Like :id="studio.id" />
                 </div>
                 <button class="studio--btn-interview" @click="interviewBtnHandle">
@@ -148,7 +126,7 @@
             </div>
             <div class="studio--contacts">
                 <p>
-                    <a :href="studio.site">{{ studio.site }}</a>
+                    <a :href="studio.site" target="_blank">{{ studio.site }}</a>
                 </p>
                 <p>
                     <a :href="`tel:${studio.phone}`">{{ studio.phone }}</a>
@@ -164,6 +142,7 @@
 
 <script>
 import Like from '@/components/buttons/Like';
+import Aside from '@/components/Aside';
 import Slider from '@/components/Slider';
 
 export default {
@@ -171,6 +150,7 @@ export default {
   components: {
     Like,
     Slider,
+    Aside,
   },
   beforeRouteLeave(to, from, next) {
     this.$store.commit('favoritesClose');
@@ -197,17 +177,15 @@ export default {
       for (let i = 0; i < 5; i++) {
         const fieldName = `image_${i}`;
         if (this.studio[fieldName]) result.push(this.studio[fieldName]);
-        else return false;
       }
       return result;
     },
-    favoritesOpen() {
-      return this.$store.state.favorites.favoritesOpen;
-    },
     ftrBtnIsLiked() {
-      let result;
+      let result = false;
       this.$store.state.favorites.favoritesStudios.forEach((el) => {
-        if (el.id === this.$route.params.id) result = true;
+        if (el.id === +this.$route.params.id) {
+          result = true;
+        }
       });
       return result;
     },
@@ -230,10 +208,7 @@ export default {
       else return false;
       this.$store.dispatch('studioById', id);
     },
-    favoritesClickHandle() {
-      if (this.$store.state.favorites.favoritesOpen) this.$store.commit('favoritesClose');
-      else this.$store.commit('favoritesOpen');
-    },
+
     footerLikeClickHandle() {
       if (this.$store.state.windowWidth < 420) this.$store.dispatch('addStudioToFavoritesStudios', this.studio.id);
     },
@@ -273,6 +248,23 @@ export default {
         @content;
     }
 }
+@mixin small-point-from-left {
+    position: relative;
+    margin-left: 12px;
+    &::after {
+        content: "";
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        bottom: 0;
+        transform: translateY(-50%);
+        border-radius: 50%;
+        background-color: var(--black);
+        opacity: 0.1;
+        left: -18px;
+        @content;
+    }
+}
 @mixin icon {
     display: none;
     width: var(--fr);
@@ -289,6 +281,9 @@ export default {
     p {
         display: inline-block;
     }
+    .studio--aside {
+    display: none;
+}
 }
 .studio {
     min-width: 300px;
@@ -380,6 +375,7 @@ export default {
     img {
         width: max-content;
         display: inline-block;
+        transform: translateY(25%);
     }
     .title {
         display: inline-block;
@@ -432,6 +428,20 @@ export default {
         background-position: center;
         background-size: contain;
         background-repeat: no-repeat;
+    }
+}
+.studio--metro {
+    margin: var(--fr-l) 0 var(--fr-2) 0;
+    padding-bottom: 40px;
+    border-bottom: 1px solid #eeeef6;
+    p {
+        line-height: 2;
+        &:not(:last-of-type) {
+            @include small-point;
+        }
+        b {
+            color: var(--dark-grey);
+        }
     }
 }
 .studio--conditions {
@@ -586,10 +596,6 @@ export default {
     background-image: url("~@/assets/svg/i-viber.svg");
 }
 
-.studios--aside {
-    display: none;
-}
-
 .clr {
     display: block;
     clear: both;
@@ -603,6 +609,9 @@ export default {
         grid-template-areas: "studios-list studio";
         column-gap: var(--fr-2);
         padding: var(--fr-2);
+            .studio--aside {
+    display: block;
+}
     }
     .studio {
         grid-area: studio;
@@ -649,13 +658,15 @@ export default {
         width: max-content;
         @include small-point;
     }
-    .studio--models_age:not(:last-of-type) {
-        margin-right: 2rem;
-        @include small-point;
-    }
     .studio--model_types {
         width: max-content;
+        &:not(:first-child) {
+            @include small-point-from-left;
+        }
         margin-right: 1.5rem;
+    }
+    .studio--min_payout_percentage {
+        margin-top: 6px;
     }
     .studio--address {
         margin: var(--fr-l) 0 var(--fr-2);
@@ -709,79 +720,12 @@ export default {
             @include small-point;
         }
     }
-    .studios--aside {
-        display: block;
-        grid-area: studios-list;
-        &-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: var(--fr-l);
-            button {
-                height: var(--fr-2);
-                padding: 0.75rem;
-                border-radius: 0.5rem;
-            }
-            .btn-filter {
-                display: flex;
-                align-items: center;
-                background-color: #e5e5ef;
-                img {
-                    margin-right: var(--fr-m);
-                }
-            }
-            .btn-favorites {
-                background-color: var(--white);
-                border: 1px solid #c4c4cd;
-                &.btn_favorites_active {
-                    border: 1px solid #ff93cd;
-                }
-            }
-        }
-        &-card {
-            cursor: pointer;
-            background-color: var(--white);
-            color: #606074;
-            border-radius: 0.5rem;
-            padding: var(--fr);
-            margin-bottom: 0.75rem;
 
-            .title {
-                display: flex;
-                justify-content: space-between;
-                margin-bottom: 0.75rem;
-                .name {
-                    font-weight: bold;
-                }
-            }
-            .desc {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                margin-bottom: 1rem;
-                .address {
-                    font-size: 16px;
-                }
-            }
-            .certificate {
-                position: relative;
-                margin-left: var(--fr-l);
-                &::before {
-                    content: "";
-                    position: absolute;
-                    width: var(--fr);
-                    height: 22px;
-                    left: -30px;
-                    bottom: 0;
-                    transform: translateY(12.5%);
-                    background-image: url("~@/assets/svg/i-cert.svg");
-                }
-                a {
-                    font-size: 16px;
-                    text-decoration: none;
-                    color: inherit;
-                }
-            }
-        }
+}
+
+.condition-staff_gender {
+    span {
+        text-transform: lowercase;
     }
 }
 

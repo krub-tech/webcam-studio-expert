@@ -29,6 +29,11 @@ const routes = [
     name: 'Certificate',
     component: () => import('../views/Certificate.vue'),
   },
+  {
+    path: '/favorites',
+    name: 'Favorites',
+    component: () => import('../components/Aside.vue'),
+  },
 ];
 
 const router = new VueRouter({

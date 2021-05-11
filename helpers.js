@@ -1,7 +1,8 @@
 import CyrillicToTranslit from 'cyrillic-to-translit-js'
 
 function toTranslite(city) {
-  return new CyrillicToTranslit().transform(city)
+  const result = new CyrillicToTranslit().transform(city)
+  return result.split(' ').join('-').toLowerCase()
 }
 
 function toCyrillic(city) {

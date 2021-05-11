@@ -11,7 +11,7 @@
         @close="filterMobShow = !filterMobShow"
       />
     </aside> -->
-    <!-- <div class="studios--count" :class="{ dirty: isFiltered }">
+    <div class="studios--count">
       <p class="studios--count-current">
         {{ currentStudiosLength }}
       </p>
@@ -20,34 +20,71 @@
     <div class="sort-wrapper">
       <Select
         class="sort"
-        :options="for_sort"
+        :options="sortingTypes"
         :placeholder="`Сортировка`"
         callback
         @selectedOption="sortSelectOptionHandle"
       />
-    </div> -->
-    <div class="studios--results">
-      <Cards />
     </div>
+    <Nuxt />
   </section>
 </template>
 
 <script>
-import Cards from '@/components/Cards'
-
+import Select from '@/components/Select'
+import { getStudiosByCity } from '@/api/studios'
 import { toCyrillic } from '@/helpers'
+
 export default {
   name: 'StudiosLayout',
   components: {
-    Cards,
+    Select,
+  },
+  data() {
+    return {
+      sortingTypes: ['По умолчанию', 'По названию', 'По процентам'],
+      studiosByCityLength: 0,
+    }
+  },
+  async fetch() {
+    const response = await getStudiosByCity(
+      this.toCyrillic(this.$route.params.city)
+    )
+    this.studiosByCityLength = response.count
+  },
+  mounted() {
+    console.log('route', this.$route.params)
   },
   methods: {
+    getStudiosByCity,
     toCyrillic,
+    sortSelectOptionHandle(data) {
+      let query
+      switch (data) {
+        case 'По названию':
+          query = 'name'
+          break
+        case 'По процентам':
+          query = 'min_payout_percentage'
+          break
+        default:
+          break
+      }
+      console.log(query)
+      // this.$store.dispatch('sortStudios', query)
+    },
   },
 }
 </script>
 
 <style lang="scss">
+@mixin item {
+  background-color: #fefeff;
+  border: 1px solid #c4c4cd;
+  border-radius: 0.5rem;
+  padding: var(--fr-m) 0.875rem;
+}
+
 .studios {
   white-space: nowrap;
   display: grid;
@@ -66,7 +103,7 @@ export default {
     justify-content: center;
     align-items: center;
     h1 {
-      font-size: 1.125rem;
+      font-size: 18px;
     }
     p {
       line-height: 1.4;
@@ -115,10 +152,7 @@ export default {
       display: block;
       text-align: center;
       min-width: max-content;
-      background-color: #e5e5ef;
-      border: 1px solid #e5e5ef;
-      padding: var(--fr-m) 0.875rem;
-      border-radius: 0.5rem;
+      @include item;
       .options {
         left: -60px;
       }
@@ -126,9 +160,6 @@ export default {
         display: none;
       }
     }
-  }
-  &--results {
-    grid-area: cont;
   }
 }
 .studios--count {
@@ -239,9 +270,6 @@ export default {
     .filter-btn {
       display: none;
     }
-    &--results {
-      padding-left: var(--fr-l);
-    }
   }
   .studios--count {
     display: none;
@@ -254,9 +282,6 @@ export default {
     grid-template-columns: 300px 1000px;
     &--title {
       padding-left: 0;
-    }
-    &--results {
-      padding-left: var(--fr-2);
     }
   }
 }

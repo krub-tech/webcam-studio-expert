@@ -22,10 +22,10 @@ export default {
   },
   computed: {
     isLiked() {
-      let result = false
-      this.$store.state.favorites.favoritesStudios.forEach((el) => {
-        if (el.id === this.id) result = true
-      })
+      const result = false
+      // this.$store.state.favorites.favoritesStudios.forEach((el) => {
+      //   if (el.id === this.id) result = true
+      // })
       return result
     },
   },

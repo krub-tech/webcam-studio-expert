@@ -146,11 +146,7 @@
         {{ studio.description }}
       </div>
       <div class="studio--interview">
-        <div
-          class="studio--btn-like"
-          :class="{ liked: ftrBtnIsLiked }"
-          @click="footerLikeClickHandle"
-        >
+        <div class="studio--btn-like" @click="footerLikeClickHandle">
           <!-- <Like :id="studio.id" /> -->
         </div>
         <button class="studio--btn-interview" @click="interviewBtnHandle">
@@ -193,10 +189,6 @@ export default {
     // Like,
     // Slider,
     // Aside,
-  },
-  beforeRouteLeave(to, from, next) {
-    this.$store.commit('favoritesClose')
-    next()
   },
   data() {
     return {

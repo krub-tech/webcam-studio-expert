@@ -1,7 +1,12 @@
 <template>
   <article
     class="card"
-    @click="toStudio($event, { name: data.name, id: data.id })"
+    @click="
+      toStudio($event, {
+        name: data.name.split(' ').join('-').toLowerCase(),
+        id: data.id,
+      })
+    "
   >
     <div class="card--inner">
       <div class="card--img">
@@ -58,12 +63,14 @@
 </template>
 
 <script>
+import Like from '@/components/buttons/Like'
+
 import { getOptionsStudios } from '@/api/studios'
 import { toCyrillic } from '@/helpers'
 
 export default {
   name: 'Card',
-  components: {},
+  components: { Like },
   props: {
     data: {
       type: Object,

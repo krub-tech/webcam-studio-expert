@@ -15,16 +15,16 @@
       <p class="studios--count-current">
         {{ currentStudiosLength }}
       </p>
-      /{{ allStudiosLength }}
+      /{{ studiosByCityLength }}
     </div>
     <div class="sort-wrapper">
-      <Select
-        class="sort"
-        :options="sortingTypes"
-        :placeholder="`Сортировка`"
-        callback
-        @selectedOption="sortSelectOptionHandle"
-      />
+      <div class="select-wrapper sort">
+        <Select
+          :options="sortingTypes"
+          :placeholder="`Сортировка`"
+          @selectedOption="sortSelectOptionHandle"
+        />
+      </div>
     </div>
     <Nuxt />
   </section>
@@ -51,9 +51,6 @@ export default {
       this.toCyrillic(this.$route.params.city)
     )
     this.studiosByCityLength = response.count
-  },
-  mounted() {
-    console.log('route', this.$route.params)
   },
   methods: {
     getStudiosByCity,

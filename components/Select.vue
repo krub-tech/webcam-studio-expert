@@ -133,5 +133,10 @@ export default {
     align-items: center;
     background-color: white;
   }
+  .arrow {
+    width: 12px;
+    height: 8px;
+    margin-left: 8px;
+  }
 }
 </style>

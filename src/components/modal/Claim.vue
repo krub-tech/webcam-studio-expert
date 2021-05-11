@@ -89,6 +89,24 @@ export default {
       return this.$store.state.modals.formData.find((el) => el.message_type === 'complaint');
     },
   },
+  beforeDestroy() {
+    for (const [key, value] of Object.entries(this.formData)) {
+      if (typeof value === 'string' && value !== 'complaint') {
+        this.$store.commit('assignFormDataField', {
+          type: 'complaint',
+          field: key,
+          event: null,
+        });
+      }
+      if (typeof value !== 'string') {
+        this.$store.commit('assignFormDataField', {
+          type: 'complaint',
+          field: key,
+          event: [],
+        });
+      }
+    }
+  },
   methods: {
     phoneInput,
     checkboxHandle(e) {

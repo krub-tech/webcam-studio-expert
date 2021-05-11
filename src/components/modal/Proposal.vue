@@ -180,6 +180,7 @@ export default {
         'models_age',
         'work_with_sites',
         'image_1',
+        'staff_gender',
       ],
       errors: {},
     };
@@ -304,9 +305,10 @@ export default {
       let isValid = false;
 
       this.requiredFields.forEach((field) => {
+        console.log(field);
         const invalidElem = this.$el.querySelector(`[class*='${field}']`);
         invalidElem.classList.add('invalid');
-
+        console.log(invalidElem);
         if (this.formData[field] && this.formData[field].length !== 0) {
           cnt++;
           invalidElem.classList.remove('invalid');

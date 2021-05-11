@@ -92,6 +92,24 @@ export default {
       return this.$store.state.modals.formData.find((el) => el.message_type === 'feedback');
     },
   },
+  beforeDestroy() {
+    for (const [key, value] of Object.entries(this.formData)) {
+      if (typeof value === 'string' && value !== 'feedback') {
+        this.$store.commit('assignFormDataField', {
+          type: 'feedback',
+          field: key,
+          event: null,
+        });
+      }
+      if (typeof value !== 'string') {
+        this.$store.commit('assignFormDataField', {
+          type: 'feedback',
+          field: key,
+          event: [],
+        });
+      }
+    }
+  },
   methods: {
     phoneInput,
     checkboxHandle(e) {

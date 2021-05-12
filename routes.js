@@ -13,7 +13,7 @@ const dynamicRoutes = async () => {
           `/${toTranslite(city).toLowerCase()}/${studio.name
             .split(' ')
             .join('-')
-            .toLowerCase()}`
+            .toLowerCase()}/${studio.id}`
         )
       })
     })

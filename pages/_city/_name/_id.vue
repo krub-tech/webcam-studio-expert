@@ -65,7 +65,7 @@
       <div class="studio--address">
         {{ studio.address }}
       </div>
-      <div v-if="studio.metro.length" class="studio--metro">
+      <div v-if="studio.metro && studio.metro.length" class="studio--metro">
         <p v-for="metro in studio.metro" :key="metro.id">
           {{ metro.name }} <b>{{ metro.distance }} м.</b>
         </p>
@@ -180,8 +180,8 @@
 // import Aside from '@/components/Aside'
 // import Slider from '@/components/Slider'
 
+import { toCyrillic } from '@/helpers'
 import { getStudioById, getOptionsStudios } from '@/api/studios'
-import { dynamicRoutes } from '@/routes'
 
 export default {
   name: 'Studio',
@@ -197,9 +197,8 @@ export default {
     }
   },
   async fetch() {
-    this.studio = await getStudioById(1)
-    this.optionsStudios = await getOptionsStudios()
-    console.dir(await this.dynamicRoutes())
+    this.studio = await this.getStudioById(this.$route.params.id)
+    this.optionsStudios = await this.getOptionsStudios()
   },
   computed: {
     // studio() {
@@ -233,9 +232,9 @@ export default {
     // },
   },
   methods: {
-    dynamicRoutes,
     getStudioById,
     getOptionsStudios,
+    toCyrillic,
     hideEmptyField(selector) {
       if (this.studio[selector]) {
         if (!this.studio[selector].length) return false

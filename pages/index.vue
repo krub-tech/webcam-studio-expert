@@ -14,8 +14,7 @@ export default {
     }
   },
   async fetch() {
-    const response = await this.getUniqueCities()
-    this.cities = response
+    this.cities = await this.getUniqueCities()
   },
   methods: {
     getUniqueCities,

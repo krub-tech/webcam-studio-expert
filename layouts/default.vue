@@ -1,17 +1,24 @@
 <template>
-  <div>
+  <div class="page-body">
     <Header />
-    <Nuxt />
+    <Nuxt class="content" />
   </div>
 </template>
 
 <script>
 import Header from '@/components/Header'
+
 export default {
+  name: 'StudiosLayout',
   components: {
     Header,
   },
 }
 </script>
 
-<style></style>
+<style lang="scss">
+.content {
+  position: absolute;
+  top: 150px;
+}
+</style>

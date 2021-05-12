@@ -14,7 +14,7 @@
         </div>
       </div>
     </div>
-    <Navbar :is-menu-open="isMenuOpen" />
+    <Navbar />
     <button class="close-btn" />
   </header>
 </template>
@@ -37,45 +37,6 @@ export default {
       scrollCount: 0,
       pageOffset: 0,
     }
-  },
-  computed: {
-    // windowWidth() {
-    //   return this.$store.state.windowWidth
-    // },
-    // isMenuOpen() {
-    //   return this.$store.state.isMenuOpen
-    // },
-    // bg_gradient() {
-    //   return this.isMenuOpen && this.$store.state.windowWidth < 420
-    // },
-  },
-  watch: {
-    windowWidth(val) {
-      if (val < 420) {
-        this.$store.commit('menuHide')
-      } else {
-        this.$store.commit('menuOpen')
-      }
-    },
-  },
-  methods: {
-    burgerClickHandle() {
-      if (this.isMenuOpen) this.$store.commit('menuHide')
-      else this.$store.commit('menuOpen')
-    },
-    toFavorites() {
-      this.$store.commit('favoritesOpen')
-      if (this.$store.state.windowWidth < 420) {
-        this.$router.push('/favorites')
-      } else {
-        const firstFavoriteStudio = Array.from(
-          this.$store.state.favorites.favoritesStudios
-        )[0].id
-        this.$nextTick(() =>
-          this.$router.push(`/studio/${firstFavoriteStudio}`)
-        )
-      }
-    },
   },
 }
 </script>

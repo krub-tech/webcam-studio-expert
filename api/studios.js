@@ -5,7 +5,7 @@ export function getOptionsStudios() {
 }
 
 export function getStudios(query) {
-  return client.get(`user/studios/${query}`)
+  return client.get(`user/studios/`, query)
 }
 
 export function getStudiosByCity(city) {

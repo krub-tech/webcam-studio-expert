@@ -1,12 +1,12 @@
 <template>
   <div class="nav-wrapper">
     <nav class="nav">
-      <div class="nav--city">
+      <div v-if="cities" class="nav--city">
         <Select
           class="select--cities"
           :options="cities"
           :placeholder="toCyrillic($route.params.city)"
-          @selectedOption="selectCityOptionHandle"
+          @selectedOption="selectCityHandle"
         />
       </div>
       <div class="nav--inner">
@@ -41,7 +41,7 @@ export default {
   props: {
     isMenuOpen: {
       type: Boolean,
-      required: true,
+      required: false,
     },
   },
   data() {
@@ -58,21 +58,7 @@ export default {
   async fetch() {
     this.cities = await getUniqueCities()
   },
-  watch: {
-    city: {
-      handler(e) {
-        if (!this.$store.state.modals.modal) {
-          localStorage.city = e
-        }
-      },
-      deep: true,
-    },
-  },
-  mounted() {
-    if (localStorage.currentCity) {
-      this.$store.state.cities.currentCity = localStorage.currentCity
-    }
-  },
+
   methods: {
     getUniqueCities,
     toCyrillic,
@@ -98,7 +84,7 @@ export default {
       }
       this.$store.commit('menuHide')
     },
-    selectCityOptionHandle(data) {
+    selectCityHandle(data) {
       this.$router.push({ name: 'city', params: { city: toTranslite(data) } })
     },
     navClickhandle(componentName) {

@@ -1,36 +1,40 @@
 <template>
-  <section class="studios">
-    <div class="studios--title">
-      <h1>Вебкам студии г. {{ currentCity }}</h1>
-      <p>Место для SEO-подстрочника</p>
-    </div>
-    <!-- <aside class="filter-wrapper">
+  <div class="page-body">
+    <Header />
+    <section class="studios">
+      <div class="studios--title">
+        <h1>Вебкам студии г. {{ toCyrillic($route.params.city) }}</h1>
+        <p>Место для SEO-подстрочника</p>
+      </div>
+      <!-- <aside class="filter-wrapper">
       <button class="filter-btn" @click="filterMobShow = !filterMobShow" />
       <Filt
         :class="{ open_filter: filterMobShow }"
         @close="filterMobShow = !filterMobShow"
       />
     </aside> -->
-    <div class="studios--count">
-      <p class="studios--count-current">
-        {{ currentStudiosLength }}
-      </p>
-      /{{ studiosByCityLength }}
-    </div>
-    <div class="sort-wrapper">
-      <div class="select-wrapper sort">
-        <Select
-          :options="sortingTypes"
-          :placeholder="`Сортировка`"
-          @selectedOption="sortSelectOptionHandle"
-        />
+      <div class="studios--count">
+        <p class="studios--count-current">
+          {{ currentStudiosLength }}
+        </p>
+        /{{ studiosByCityLength }}
       </div>
-    </div>
-    <Nuxt />
-  </section>
+      <div class="sort-wrapper">
+        <div class="select-wrapper sort">
+          <Select
+            :options="sortingTypes"
+            :placeholder="`Сортировка`"
+            @selectedOption="sortSelectOptionHandle"
+          />
+        </div>
+      </div>
+      <Nuxt />
+    </section>
+  </div>
 </template>
 
 <script>
+import Header from '@/components/Header'
 import Select from '@/components/Select'
 import { getStudiosByCity } from '@/api/studios'
 import { toCyrillic } from '@/helpers'
@@ -39,6 +43,7 @@ export default {
   name: 'StudiosLayout',
   components: {
     Select,
+    Header,
   },
   data() {
     return {
@@ -47,20 +52,10 @@ export default {
     }
   },
   async fetch() {
-    const response = await getStudiosByCity(
+    const studios = await getStudiosByCity(
       this.toCyrillic(this.$route.params.city)
     )
-    this.studiosByCityLength = response.count
-  },
-  computed: {
-    currentCity() {
-      return this.toCyrillic(this.$route.params.city)
-        .split('-')
-        .map((word) => {
-          return word[0].toUpperCase() + word.substr(1)
-        })
-        .join('-')
-    },
+    this.studiosByCityLength = studios.count
   },
   methods: {
     getStudiosByCity,
@@ -93,6 +88,7 @@ export default {
 }
 
 .studios {
+  top: 150px;
   white-space: nowrap;
   display: grid;
   grid-template-areas:

@@ -1,7 +1,7 @@
 <template>
   <section class="studios">
     <div class="studios--title">
-      <h1>Вебкам студии г. {{ toCyrillic($route.params.city) }}</h1>
+      <h1>Вебкам студии г. {{ currentCity }}</h1>
       <p>Место для SEO-подстрочника</p>
     </div>
     <!-- <aside class="filter-wrapper">
@@ -51,6 +51,16 @@ export default {
       this.toCyrillic(this.$route.params.city)
     )
     this.studiosByCityLength = response.count
+  },
+  computed: {
+    currentCity() {
+      return this.toCyrillic(this.$route.params.city)
+        .split('-')
+        .map((word) => {
+          return word[0].toUpperCase() + word.substr(1)
+        })
+        .join('-')
+    },
   },
   methods: {
     getStudiosByCity,

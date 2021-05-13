@@ -5,6 +5,7 @@ export function getOptionsStudios() {
 }
 
 export function getStudiosByQuery(query) {
+  console.log(query)
   return client.get(`user/studios/`, { params: query })
 }
 

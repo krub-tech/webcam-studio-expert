@@ -58,9 +58,6 @@ export default {
     routes: dynamicRoutes,
   },
   env: {
-    BASE_API_URL:
-      process.env.NODE_ENV !== 'production'
-        ? 'http://78.47.247.176:4545/api'
-        : '/api',
+    BASE_API_URL: process.env.BASE_API_URL,
   },
 }

@@ -19,6 +19,7 @@ const dynamicRoutes = async () => {
       })
     })
   )
+  console.log(routes)
   return routes
 }
 

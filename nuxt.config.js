@@ -19,7 +19,7 @@ export default {
   css: ['@/assets/css/main.scss'],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ['@/plugins/router'],
+  // plugins: ['@/plugins/router'],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -56,5 +56,11 @@ export default {
   },
   generate: {
     routes: dynamicRoutes,
+  },
+  env: {
+    BASE_API_URL:
+      process.env.NODE_ENV !== 'production'
+        ? 'http://78.47.247.176:4545/api'
+        : '/api',
   },
 }

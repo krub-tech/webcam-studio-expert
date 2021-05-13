@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export const client = axios.create({
-  baseURL: 'http://78.47.247.176:4545/api',
+  baseURL: process.env.BASE_API_URL,
 })
 
 export function postFormData(data) {

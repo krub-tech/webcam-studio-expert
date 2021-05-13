@@ -17,11 +17,15 @@
     </div>
     <div class="sort-wrapper">
       <div class="select-wrapper sort">
-        <Select :options="sortingTypes" :placeholder="`Сортировка`" />
+        <Select
+          :options="sortingTypes"
+          :placeholder="`Сортировка`"
+          @selectedOption="sortingSelect"
+        />
       </div>
     </div>
     <div class="studios--results">
-      <Cards />
+      <Cards :studios="studios" />
     </div>
   </section>
 </template>
@@ -29,6 +33,7 @@
 <script>
 import Cards from '@/components/Cards'
 
+import { getStudiosByCity, getStudiosByQuery } from '@/api/studios'
 import { getDistrictsByCity } from '@/api/cities'
 import { toCyrillic } from '@/helpers'
 
@@ -43,14 +48,41 @@ export default {
   },
   data() {
     return {
+      studios: null,
       sortingTypes: ['По умолчанию', 'По названию', 'По процентам'],
       studiosByCityLength: 0,
     }
   },
-  async fetch() {},
+  async fetch() {
+    const response = await this.getStudiosByCity(
+      this.toCyrillic(this.$route.params.city)
+    )
+    this.studios = response.results
+  },
   methods: {
+    getStudiosByCity,
+    getStudiosByQuery,
     getDistrictsByCity,
     toCyrillic,
+    async sortingSelect(data) {
+      let query
+      switch (data) {
+        case 'По умолчанию':
+          query = ''
+          break
+        case 'По названию':
+          query = 'name'
+          break
+        case 'По процентам':
+          query = 'min_payout_percentage'
+          break
+        default:
+          break
+      }
+
+      const studios = await this.getStudiosByQuery({ ordering: query })
+      this.studios = studios.results
+    },
   },
 }
 </script>

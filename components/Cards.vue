@@ -27,16 +27,14 @@ export default {
   components: {
     Card,
   },
-  data() {
-    return {
-      studios: null,
-    }
+  props: {
+    studios: {
+      type: Array,
+      default: () => [],
+    },
   },
-  async fetch() {
-    const response = await this.getStudiosByCity(
-      this.toCyrillic(this.$route.params.city)
-    )
-    this.studios = response.results
+  data() {
+    return {}
   },
   methods: {
     getStudiosByCity,

@@ -11,7 +11,6 @@ export default ({ app }) => {
       registredRoutes.push(`/${toTranslite(city)}`)
     })
     registredRoutes.push('/')
-    console.log(registredRoutes)
     if (!registredRoutes.includes(to.path)) next(from.path)
     else next()
   })

@@ -3,6 +3,7 @@ import { getUniqueCities } from './api/cities'
 import { getStudiosByCity } from './api/studios'
 
 const dynamicRoutes = async () => {
+  console.log('start')
   const cities = await getUniqueCities()
   const routes = []
   await Promise.all(

@@ -5,7 +5,7 @@
         <Select
           class="select--cities"
           :options="cities"
-          :placeholder="toCyrillic($route.params.city)"
+          :placeholder="$toCyrillic($route.params.city)"
           @selectedOption="selectCityHandle"
         />
       </div>
@@ -31,8 +31,7 @@
 <script>
 import Select from '@/components/Select'
 
-import { getUniqueCities } from '@/api/cities'
-import { toCyrillic, toTranslite } from '@/helpers'
+import { getStudiosByCity } from '@/api/studios'
 
 export default {
   components: {
@@ -46,7 +45,6 @@ export default {
   },
   data() {
     return {
-      cities: null,
       for_models: [
         'Каталог студий',
         'Индивидуальный подбор студии',
@@ -55,14 +53,14 @@ export default {
       ],
     }
   },
-  async fetch() {
-    this.cities = await getUniqueCities()
+  computed: {
+    cities() {
+      return this.$store.state.cities.uniques
+    },
   },
 
   methods: {
-    getUniqueCities,
-    toCyrillic,
-    toTranslite,
+    getStudiosByCity,
     selectOptionHandle(data) {
       switch (data) {
         case 'Каталог студий':
@@ -84,8 +82,13 @@ export default {
       }
       this.$store.commit('menuHide')
     },
-    selectCityHandle(data) {
-      this.$router.push({ name: 'city', params: { city: toTranslite(data) } })
+    async selectCityHandle(city) {
+      const studios = await this.getStudiosByCity(city)
+      this.$store.commit('studios/updateCurrentStudios', studios.results)
+      this.$router.push({
+        name: 'city',
+        params: { city: this.$toTranslite(city) },
+      })
     },
     navClickhandle(componentName) {
       this.$store.dispatch('updateModal', {

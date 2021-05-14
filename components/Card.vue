@@ -20,11 +20,11 @@
       </div>
       <template v-for="type in Object.values(data.studio_type)">
         <p
-          v-if="optionsStudios && optionsStudios.studio_type"
+          v-if="studiosOptions && studiosOptions.studio_type"
           :key="type"
           class="card--studio-type"
         >
-          {{ optionsStudios.studio_type[type] }}
+          {{ studiosOptions.studio_type[type] }}
         </p>
       </template>
       <div class="card--row">
@@ -35,13 +35,13 @@
         >
           <img :src="require(`../assets/svg/i-${icon}.svg`)" />
         </div>
-        <template v-if="optionsStudios && optionsStudios.models_age">
+        <template v-if="studiosOptions && studiosOptions.models_age">
           <div
             v-for="age in Object.values(data.models_age)"
             :key="age"
             class="card--models_age"
           >
-            {{ optionsStudios.models_age[age] }}
+            {{ studiosOptions.models_age[age] }}
           </div>
         </template>
         <div class="card--min_payout_percentage">
@@ -65,7 +65,6 @@
 <script>
 import Like from '@/components/buttons/Like'
 
-import { getOptionsStudios } from '@/api/studios'
 import { toCyrillic } from '@/helpers'
 
 export default {
@@ -77,16 +76,12 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      optionsStudios: null,
-    }
-  },
-  async fetch() {
-    this.optionsStudios = await getOptionsStudios()
+  computed: {
+    studiosOptions() {
+      return this.$store.state.studios.options
+    },
   },
   methods: {
-    getOptionsStudios,
     arrayFromObject(object) {
       return object ? Object.values(object) : []
     },

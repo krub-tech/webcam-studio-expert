@@ -1,6 +1,6 @@
 import { client } from './client'
 
-export function getOptionsStudios() {
+export function getStudiosOptions() {
   return client.get('user/options/')
 }
 

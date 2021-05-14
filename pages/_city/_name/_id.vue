@@ -1,7 +1,7 @@
 <template>
   <section class="studio-wrapper">
     <StudioSidebar :studios="studios" />
-    <main v-if="studio && optionsStudios" class="studio">
+    <main v-if="studio && studiosOptions" class="studio">
       <div class="studio--title">
         <button class="btn-back" @click="$router.go(-1)" />
         <h2>{{ studio.name }}</h2>
@@ -23,7 +23,7 @@
               :key="type"
               class="studio--studio_type"
             >
-              {{ optionsStudios.studio_type[type] }}
+              {{ studiosOptions.studio_type[type] }}
             </p>
           </template>
           <template v-if="studio.models_age">
@@ -32,7 +32,7 @@
               :key="age"
               class="studio--models_age"
             >
-              {{ optionsStudios.models_age[age] }}
+              {{ studiosOptions.models_age[age] }}
             </p>
           </template>
         </div>
@@ -45,7 +45,7 @@
             >
               <img :src="require(`@/assets/svg/i-${icon}.svg`)" />
               <span class="title">
-                {{ optionsStudios.working_with_model_types[icon] }}
+                {{ studiosOptions.working_with_model_types[icon] }}
               </span>
             </p>
           </template>
@@ -70,7 +70,7 @@
           {{ metro.name }} <b>{{ metro.distance }} м.</b>
         </p>
       </div>
-      <div v-show="hideEmptyField(`conditions`)" class="studio--conditions">
+      <div class="studio--conditions">
         <h3>Условия работы</h3>
         <template v-if="studio.conditions">
           <p
@@ -78,7 +78,7 @@
             :key="condition"
             class="studio--condition"
           >
-            {{ optionsStudios.conditions[condition] }}
+            {{ studiosOptions.conditions[condition] }}
           </p>
           <p class="studio--condition">от {{ studio.shift_length }} ч в день</p>
           <p class="studio--condition">
@@ -100,11 +100,11 @@
           </p>
           <p class="studio--condition condition-staff_gender">
             Пол администраторов:
-            <span>{{ optionsStudios.staff_gender[studio.staff_gender] }}</span>
+            <span>{{ studiosOptions.staff_gender[studio.staff_gender] }}</span>
           </p>
         </template>
       </div>
-      <div v-show="hideEmptyField(`devices`)" class="studio--devices">
+      <div class="studio--devices">
         <h3>Оборудование</h3>
         <template v-if="studio.devices">
           <p
@@ -112,11 +112,11 @@
             :key="device"
             class="studio--device"
           >
-            {{ optionsStudios.devices[device] }}
+            {{ studiosOptions.devices[device] }}
           </p>
         </template>
       </div>
-      <div v-show="hideEmptyField(`work_with_sites`)" class="studio--sites">
+      <div class="studio--sites">
         <h3>Работа на сайтах</h3>
         <template v-if="studio.work_with_sites">
           <p
@@ -125,7 +125,7 @@
             class="studio--site"
           >
             <a href="#">
-              {{ optionsStudios.work_with_sites[site] }}
+              {{ studiosOptions.work_with_sites[site] }}
             </a>
           </p>
         </template>
@@ -181,12 +181,7 @@ import StudioSidebar from '@/components/StudioSidebar'
 
 // import Slider from '@/components/Slider'
 
-import { toCyrillic } from '@/helpers'
-import {
-  getStudioById,
-  getOptionsStudios,
-  getStudiosByCity,
-} from '@/api/studios'
+import { getStudioById, getStudiosByCity } from '@/api/studios'
 
 export default {
   name: 'StudioById',
@@ -199,28 +194,24 @@ export default {
   data() {
     return {
       studio: null,
-      studios: null,
-      optionsStudios: null,
     }
   },
   async fetch() {
     this.studio = await this.getStudioById(this.$route.params.id)
-    const studios = await this.getStudiosByCity(
-      this.toCyrillic(this.$route.params.city)
-    )
-    this.studios = studios.results
-    this.optionsStudios = await this.getOptionsStudios()
+  },
+  computed: {
+    studios() {
+      return this.$store.state.studios.currents
+    },
+    studiosOptions() {
+      return this.$store.state.studios.options
+    },
   },
   methods: {
     getStudioById,
-    getOptionsStudios,
     getStudiosByCity,
-    toCyrillic,
-    hideEmptyField(selector) {
-      if (this.studio[selector]) {
-        if (!this.studio[selector].length) return false
-        else return true
-      }
+    toCyrillic(city) {
+      return this.$toCyrillic(city)
     },
     toStudio(e, id) {
       if (e.target.tagName !== 'BUTTON') this.moveToPageHandle(id)

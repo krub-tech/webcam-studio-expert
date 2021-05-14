@@ -25,8 +25,12 @@
 </template>
 
 <script>
+import Like from '@/components/buttons/like'
 export default {
   name: 'MobileListCard',
+  components: {
+    Like,
+  },
   props: {
     studio: {
       type: Object,

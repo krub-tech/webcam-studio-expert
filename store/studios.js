@@ -1,9 +1,12 @@
 export const state = () => ({
-  currentStudios: null,
+  currents: null,
+  options: null,
 })
 export const mutations = {
   updateCurrentStudios(state, payload) {
-    state.currentStudios = payload
+    state.currents = payload
+  },
+  updateStudiosOptions(state, payload) {
+    state.options = payload
   },
 }
-export const getters = {}

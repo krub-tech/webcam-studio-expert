@@ -33,63 +33,53 @@
 <script>
 import Cards from '@/components/Cards'
 
-import { getStudiosByCity, getStudiosByQuery } from '@/api/studios'
-import { getDistrictsByCity } from '@/api/cities'
-import { toCyrillic } from '@/helpers'
+import { getStudiosByQuery } from '@/api/studios'
 
 export default {
   name: 'StudiosByCity',
   components: {
     Cards,
   },
-  asyncData({ params }) {
-    const city = params.city
-    return { city }
-  },
   data() {
     return {
-      studios: null,
       sortingTypes: ['По умолчанию', 'По названию', 'По процентам'],
       studiosByCityLength: 0,
+      query: {
+        ordering: null,
+      },
     }
   },
-  async fetch() {
-    const response = await this.getStudiosByCity(
-      this.toCyrillic(this.$route.params.city)
-    )
-    this.studios = response.results
-  },
-  watch: {
-    studios: {
-      handler(newValue) {
-        this.$store.commit('studios/updateCurrentStudios', newValue)
-      },
-      deep: true,
+  computed: {
+    studios() {
+      return this.$store.state.studios.currents
     },
   },
   methods: {
-    getStudiosByCity,
     getStudiosByQuery,
-    getDistrictsByCity,
-    toCyrillic,
+    toCyrillic(city) {
+      return this.$toCyrillic(city)
+    },
     async sortingSelect(data) {
-      let query
       switch (data) {
         case 'По умолчанию':
-          query = ''
+          this.query.ordering = null
           break
         case 'По названию':
-          query = 'name'
+          this.query.ordering = 'name'
           break
         case 'По процентам':
-          query = 'min_payout_percentage'
+          this.query.ordering = 'min_payout_percentage'
           break
         default:
           break
       }
-
-      const studios = await this.getStudiosByQuery({ ordering: query })
-      this.studios = studios.results
+      if (this.query.ordering) {
+        const studios = await this.getStudiosByQuery(this.query)
+        this.$store.commit('studios/updateCurrentStudios', studios.results)
+      } else {
+        const studios = await this.getStudiosByQuery({})
+        this.$store.commit('studios/updateCurrentStudios', studios.results)
+      }
     },
   },
 }

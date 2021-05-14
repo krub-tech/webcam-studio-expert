@@ -5,6 +5,7 @@
 <script>
 import { toTranslite } from '@/helpers'
 import { getUniqueCities } from '@/api/cities'
+
 export default {
   name: 'Main',
   middleware: 'redirect-to-spb',

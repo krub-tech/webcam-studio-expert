@@ -60,4 +60,7 @@ export default {
   env: {
     BASE_API_URL: 'http://78.47.247.176:4545/api',
   },
+  router: {
+    mode: 'history',
+  },
 }

@@ -8,7 +8,10 @@
         </button>
         <Logo />
         <div class="header--btns">
-          <Like class="header--btns-favorites" />
+          <Like
+            class="header--btns-favorites"
+            @click.native="toFavoritesPage"
+          />
           <button class="header--btns-mail" />
           <!-- <button class="header--btns-profile" /> -->
         </div>
@@ -24,6 +27,9 @@ import Logo from '@/components/Logo'
 import Like from '@/components/buttons/Like'
 import Navbar from '@/components/Navbar'
 
+import { getStudioById } from '@/api/studios'
+import throttle from 'lodash.throttle'
+
 export default {
   name: 'Header',
   components: {
@@ -37,6 +43,38 @@ export default {
       scrollCount: 0,
       pageOffset: 0,
     }
+  },
+  mounted() {
+    this.$nextTick(function () {
+      this.resizeHandle()
+    })
+    window.addEventListener('resize', this.throttle(this.resizeHandle, 500))
+  },
+  methods: {
+    getStudioById,
+    throttle,
+    getFirstFavoritesStudio() {
+      if (localStorage.favoritesIndexes) {
+        return JSON.parse(localStorage.favoritesIndexes).find((item, idx) => {
+          return idx === 0
+        })
+      }
+    },
+    async toFavoritesPage() {
+      const firstFavoritesStudioIdx = this.getFirstFavoritesStudio()
+      const studio = await this.getStudioById(firstFavoritesStudioIdx)
+      this.$router.push({
+        name: 'city-name-id',
+        params: {
+          city: this.$route.params.city,
+          name: studio.name,
+          id: firstFavoritesStudioIdx,
+        },
+      })
+    },
+    resizeHandle() {
+      this.$store.commit('updateWindowWidth', window.innerWidth)
+    },
   },
 }
 </script>

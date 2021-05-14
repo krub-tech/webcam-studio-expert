@@ -59,6 +59,14 @@ export default {
     )
     this.studios = response.results
   },
+  watch: {
+    studios: {
+      handler(newValue) {
+        this.$store.commit('studios/updateCurrentStudios', newValue)
+      },
+      deep: true,
+    },
+  },
   methods: {
     getStudiosByCity,
     getStudiosByQuery,

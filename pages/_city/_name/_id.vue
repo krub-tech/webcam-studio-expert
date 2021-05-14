@@ -1,12 +1,12 @@
 <template>
   <section class="studio-wrapper">
-    <!-- <Aside /> -->
+    <StudioSidebar :studios="studios" />
     <main v-if="studio && optionsStudios" class="studio">
       <div class="studio--title">
         <button class="btn-back" @click="$router.go(-1)" />
         <h2>{{ studio.name }}</h2>
         <div class="studio--btn-like">
-          <!-- <Like :id="studio.id" ref="like" /> -->
+          <Like :id="studio.id" />
         </div>
         <button class="studio--btn-interview" @click="interviewBtnHandle">
           Оставить заявку
@@ -147,7 +147,7 @@
       </div>
       <div class="studio--interview">
         <div class="studio--btn-like" @click="footerLikeClickHandle">
-          <!-- <Like :id="studio.id" /> -->
+          <Like :id="studio.id" />
         </div>
         <button class="studio--btn-interview" @click="interviewBtnHandle">
           Записаться на собеседование
@@ -176,69 +176,50 @@
 </template>
 
 <script>
-// import Like from '@/components/buttons/Like'
-// import Aside from '@/components/Aside'
+import Like from '@/components/buttons/Like'
+import StudioSidebar from '@/components/StudioSidebar'
+
 // import Slider from '@/components/Slider'
 
 import { toCyrillic } from '@/helpers'
-import { getStudioById, getOptionsStudios } from '@/api/studios'
+import {
+  getStudioById,
+  getOptionsStudios,
+  getStudiosByCity,
+} from '@/api/studios'
 
 export default {
-  name: 'Studio',
+  name: 'StudioById',
   components: {
-    // Like,
+    Like,
+    StudioSidebar,
     // Slider,
     // Aside,
   },
   data() {
     return {
       studio: null,
+      studios: null,
       optionsStudios: null,
     }
   },
   async fetch() {
     this.studio = await this.getStudioById(this.$route.params.id)
+    const studios = await this.getStudiosByCity(
+      this.toCyrillic(this.$route.params.city)
+    )
+    this.studios = studios.results
     this.optionsStudios = await this.getOptionsStudios()
-  },
-  computed: {
-    // studio() {
-    //   return this.$store.state.studio.currentStudio
-    // },
-    // optionsStudios() {
-    //   return this.$store.getters.optionsStudios
-    // },
-    // studios() {
-    //   if (this.favoritesOpen) {
-    //     return this.$store.state.favorites.favoritesStudios
-    //   }
-    //   return this.$store.getters.currentStudios
-    // },
-    // slides() {
-    //   const result = []
-    //   for (let i = 0; i < 5; i++) {
-    //     const fieldName = `image_${i}`
-    //     if (this.studio[fieldName]) result.push(this.studio[fieldName])
-    //   }
-    //   return result
-    // },
-    // ftrBtnIsLiked() {
-    //   let result = false
-    //   this.$store.state.favorites.favoritesStudios.forEach((el) => {
-    //     if (el.id === +this.$route.params.id) {
-    //       result = true
-    //     }
-    //   })
-    //   return result
-    // },
   },
   methods: {
     getStudioById,
     getOptionsStudios,
+    getStudiosByCity,
     toCyrillic,
     hideEmptyField(selector) {
       if (this.studio[selector]) {
         if (!this.studio[selector].length) return false
-        if (this.studio[selector].length > 0) return true
+        else return true
       }
     },
     toStudio(e, id) {

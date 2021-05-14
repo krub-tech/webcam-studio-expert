@@ -7,6 +7,8 @@
 </template>
 
 <script>
+import { toArray } from '@/helpers'
+
 export default {
   name: 'Like',
   props: {
@@ -17,23 +19,36 @@ export default {
   },
   data() {
     return {
-      // isLiked: false,
+      isLiked: false,
     }
   },
-  computed: {
-    isLiked() {
-      const result = false
-      // this.$store.state.favorites.favoritesStudios.forEach((el) => {
-      //   if (el.id === this.id) result = true
-      // })
-      return result
-    },
+  mounted() {
+    this.isLiked = this.isLike()
   },
-  mounted() {},
   methods: {
+    toArray,
     likeClickHandle() {
-      if (this.id) this.$store.dispatch('addStudioToFavoritesStudios', this.id)
-      else return false
+      if (this.id) {
+        if (!localStorage.favoritesIndexes) {
+          localStorage.favoritesIndexes = JSON.stringify([this.id])
+        } else {
+          localStorage.favoritesIndexes = JSON.stringify(
+            this.toArray(JSON.parse(localStorage.favoritesIndexes), this.id)
+          )
+        }
+        this.isLiked = this.isLike()
+      } else return false
+    },
+    isLike() {
+      let result = false
+      if (this.id) {
+        if (localStorage.favoritesIndexes) {
+          JSON.parse(localStorage.favoritesIndexes).forEach((id) => {
+            if (this.id === id) result = true
+          })
+        }
+      }
+      return result
     },
   },
 }

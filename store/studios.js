@@ -10,3 +10,11 @@ export const mutations = {
     state.options = payload
   },
 }
+export const getters = {
+  query: (state, getters, rootState) => {
+    return {
+      city: rootState.cities.current,
+      ordering: null,
+    }
+  },
+}

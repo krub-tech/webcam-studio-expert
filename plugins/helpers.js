@@ -12,6 +12,7 @@ export default ({ app }, inject) => {
     return result.split(' ').join('-').toLowerCase()
   })
   inject('toCyrillic', (city) => {
+    if (city === 'kazan') return 'Казань'
     const result = new CyrillicToTranslit().reverse(city)
     if (result) {
       return result

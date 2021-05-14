@@ -1,7 +1,7 @@
 <template>
   <section class="studios">
     <div class="studios--title">
-      <h1>Вебкам студии г. {{ toCyrillic($route.params.city) }}</h1>
+      <h1>Вебкам студии г. {{ $store.state.cities.current }}</h1>
       <p>Место для SEO-подстрочника</p>
     </div>
     <!-- <aside class="filter-wrapper">
@@ -56,9 +56,6 @@ export default {
   },
   methods: {
     getStudiosByQuery,
-    toCyrillic(city) {
-      return this.$toCyrillic(city)
-    },
     async sortingSelect(data) {
       switch (data) {
         case 'По умолчанию':

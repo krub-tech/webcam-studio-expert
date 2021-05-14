@@ -5,7 +5,7 @@
         <Select
           class="select--cities"
           :options="cities"
-          :placeholder="$toCyrillic($route.params.city)"
+          :placeholder="$store.state.cities.current"
           @selectedOption="selectCityHandle"
         />
       </div>
@@ -82,20 +82,12 @@ export default {
       }
       this.$store.commit('menuHide')
     },
-    async selectCityHandle(city) {
-      const studios = await this.getStudiosByCity(city)
-      this.$store.commit('studios/updateCurrentStudios', studios.results)
+    selectCityHandle(city) {
+      this.$store.commit('cities/updateCitiesCurrent', city)
       this.$router.push({
         name: 'city',
-        params: { city: this.$toTranslite(city) },
+        params: { city: this.$toTranslite(this.$store.state.cities.current) },
       })
-    },
-    navClickhandle(componentName) {
-      this.$store.dispatch('updateModal', {
-        name: componentName,
-        from: 'Studios',
-      })
-      this.$store.commit('menuHide')
     },
   },
 }

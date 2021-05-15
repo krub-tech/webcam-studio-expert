@@ -1,12 +1,12 @@
 export const state = () => ({
   uniques: null,
-  current: 'Санкт-Петербург',
+  current: { id: 'sankt-peterburg', name: 'Санкт-Петербург' },
 })
 export const mutations = {
   updateCitiesUniques(state, payload) {
     state.uniques = payload
   },
-  updateCitiesCurrent(state, payload) {
-    state.current = payload
+  updateCitiesCurrentById(state, payload) {
+    state.current = state.uniques.find((city) => city.id === payload)
   },
 }

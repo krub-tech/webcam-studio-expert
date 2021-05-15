@@ -1,8 +1,6 @@
-import { dynamicRoutes } from './routes'
-
 export default {
   // Target: https://go.nuxtjs.dev/config-target
-  target: 'static',
+  target: 'server',
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -54,12 +52,6 @@ export default {
 
   server: {
     port: '7070',
-  },
-  generate: {
-    routes: dynamicRoutes,
-  },
-  env: {
-    BASE_API_URL: 'http://78.47.247.176:4545/api',
   },
   router: {
     mode: 'history',

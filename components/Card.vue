@@ -65,8 +65,6 @@
 <script>
 import Like from '@/components/buttons/Like'
 
-import { toCyrillic } from '@/helpers'
-
 export default {
   name: 'Card',
   components: { Like },
@@ -96,7 +94,6 @@ export default {
           },
         })
     },
-    toCyrillic,
   },
 }
 </script>

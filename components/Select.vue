@@ -1,11 +1,6 @@
 <template>
   <div class="select" :class="{ open: isOpenSelect }" @click="toggle">
-    <template v-if="!selectedOption && placeholder">
-      {{ placeholder }}
-    </template>
-    <template v-if="selectedOption">
-      {{ selectedOption }}
-    </template>
+    {{ value }}
     <img src="@/assets/svg/i-arrow.svg" class="arrow" />
     <ul v-show="isOpenSelect" class="options">
       <li
@@ -30,17 +25,9 @@ export default {
       type: Array,
       required: true,
     },
-    placeholder: {
+    value: {
       type: String,
       default: 'Сделайте выбор',
-    },
-    staticPlaceholder: {
-      type: Boolean,
-      default: false,
-    },
-    selected: {
-      type: Array,
-      required: false,
     },
   },
   data() {
@@ -49,9 +36,6 @@ export default {
       selectedOption: null,
     }
   },
-  // mounted() {
-  //   eventBus.$on('resetSelects', this.clearSelected)
-  // },
   methods: {
     openSelect() {
       this.isOpenSelect = true
@@ -72,18 +56,14 @@ export default {
       }
     },
     optionClickHandler(option) {
-      if (!this.staticPlaceholder) this.selectedOption = option
       this.$emit('selectedOption', option)
     },
     isSelected(payload) {
       if (this.selected) {
         return this.selected.includes(payload)
       } else {
-        return this.selectedOption === payload || this.placeholder === payload
+        return this.value === payload
       }
-    },
-    clearSelected() {
-      this.selectedOption = null
     },
   },
 }

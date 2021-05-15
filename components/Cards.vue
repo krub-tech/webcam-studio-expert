@@ -19,9 +19,6 @@
 <script>
 import Card from '@/components/Card'
 
-import { getStudiosByCity } from '@/api/studios'
-import { toCyrillic } from '@/helpers'
-
 export default {
   name: 'Cards',
   components: {
@@ -36,10 +33,7 @@ export default {
   data() {
     return {}
   },
-  methods: {
-    getStudiosByCity,
-    toCyrillic,
-  },
+  methods: {},
 }
 </script>
 

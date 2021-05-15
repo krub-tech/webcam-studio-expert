@@ -4,8 +4,8 @@
       <div v-if="cities" class="nav--city">
         <Select
           class="select--cities"
-          :options="cities"
-          :placeholder="$store.state.cities.current"
+          :options="cities.map((city) => city.name)"
+          :value="$store.state.cities.current.name"
           @selectedOption="selectCityHandle"
         />
       </div>
@@ -14,9 +14,8 @@
           <Select
             class="select--for_models"
             :options="for_models"
-            :placeholder="`Моделям`"
+            :value="`Моделям`"
             static-placeholder
-            @selectedOption="selectOptionHandle"
           />
         </div>
         <router-link class="nav--item nav--item-certificate" to="/certificate">
@@ -31,7 +30,7 @@
 <script>
 import Select from '@/components/Select'
 
-import { getStudiosByCity } from '@/api/studios'
+import { getUniqueCities } from '@/api/cities'
 
 export default {
   components: {
@@ -53,6 +52,10 @@ export default {
       ],
     }
   },
+  async fetch() {
+    const citiesUniques = await this.getUniqueCities()
+    this.$store.commit('cities/updateCitiesUniques', citiesUniques)
+  },
   computed: {
     cities() {
       return this.$store.state.cities.uniques
@@ -60,33 +63,13 @@ export default {
   },
 
   methods: {
-    getStudiosByCity,
-    selectOptionHandle(data) {
-      switch (data) {
-        case 'Каталог студий':
-          this.$router.push('/')
-          break
-        case 'Индивидуальный подбор студии':
-          this.$store.dispatch('updateModal', {
-            name: 'SpecSelection',
-          })
-          break
-        case 'Полезные ссылки':
-          this.$router.push('/links')
-          break
-        case 'Оставить жалобу':
-          this.$store.dispatch('updateModal', { name: 'Claim' })
-          break
-        default:
-          break
-      }
-      this.$store.commit('menuHide')
-    },
+    getUniqueCities,
     selectCityHandle(city) {
-      this.$store.commit('cities/updateCitiesCurrent', city)
+      const cityData = this.cities.find((el) => el.name === city)
+      this.$store.commit('cities/updateCitiesCurrentById', cityData.id)
       this.$router.push({
         name: 'city',
-        params: { city: this.$toTranslite(this.$store.state.cities.current) },
+        params: { city: cityData.id },
       })
     },
   },

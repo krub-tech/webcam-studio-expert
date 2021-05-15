@@ -7,8 +7,6 @@
 </template>
 
 <script>
-import { toArray } from '@/helpers'
-
 export default {
   name: 'Like',
   props: {
@@ -26,14 +24,13 @@ export default {
     this.isLiked = this.isLike()
   },
   methods: {
-    toArray,
     likeClickHandle() {
       if (this.id) {
         if (!localStorage.favoritesIndexes) {
           localStorage.favoritesIndexes = JSON.stringify([this.id])
         } else {
           localStorage.favoritesIndexes = JSON.stringify(
-            this.toArray(JSON.parse(localStorage.favoritesIndexes), this.id)
+            this.$toArray(JSON.parse(localStorage.favoritesIndexes), this.id)
           )
         }
         this.isLiked = this.isLike()

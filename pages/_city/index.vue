@@ -1,9 +1,10 @@
 <template>
   <section class="studios">
     <div class="studios--title">
-      <h1>Вебкам студии г. {{ $store.state.cities.current }}</h1>
+      <h1>Вебкам студии г. {{ $store.state.cities.current.name }}</h1>
       <p>Место для SEO-подстрочника</p>
     </div>
+    <Filt />
     <!-- <aside class="filter-wrapper">
       <button class="filter-btn" @click="filterMobShow = !filterMobShow" />
       <Filt
@@ -19,7 +20,7 @@
       <div class="select-wrapper sort">
         <Select
           :options="sortingTypes"
-          :placeholder="`Сортировка`"
+          :value="ordering"
           @selectedOption="sortingSelect"
         />
       </div>
@@ -32,6 +33,7 @@
 
 <script>
 import Cards from '@/components/Cards'
+import Filt from '@/components/Filt'
 
 import { getStudiosByQuery } from '@/api/studios'
 
@@ -39,14 +41,13 @@ export default {
   name: 'StudiosByCity',
   components: {
     Cards,
+    Filt,
   },
   data() {
     return {
       sortingTypes: ['По умолчанию', 'По названию', 'По процентам'],
       studiosByCityLength: 0,
-      query: {
-        ordering: null,
-      },
+      ordering: 'Сортировка',
     }
   },
   computed: {
@@ -54,29 +55,27 @@ export default {
       return this.$store.state.studios.currents
     },
   },
+
   methods: {
     getStudiosByQuery,
-    async sortingSelect(data) {
+    sortingSelect(data) {
+      let ordering
       switch (data) {
         case 'По умолчанию':
-          this.query.ordering = null
+          ordering = null
           break
         case 'По названию':
-          this.query.ordering = 'name'
+          ordering = 'name'
           break
         case 'По процентам':
-          this.query.ordering = 'min_payout_percentage'
+          ordering = 'min_payout_percentage'
           break
         default:
           break
       }
-      if (this.query.ordering) {
-        const studios = await this.getStudiosByQuery(this.query)
-        this.$store.commit('studios/updateCurrentStudios', studios.results)
-      } else {
-        const studios = await this.getStudiosByQuery({})
-        this.$store.commit('studios/updateCurrentStudios', studios.results)
-      }
+
+      this.ordering = data
+      this.$store.commit('studios/updateOrdering', ordering)
     },
   },
 }

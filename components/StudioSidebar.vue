@@ -11,7 +11,6 @@
 <script>
 import MobileListCard from '@/components/MobileListCard'
 
-import { toCyrillic } from '@/helpers'
 import { getStudiosByCity } from '@/api/studios'
 
 export default {
@@ -27,7 +26,6 @@ export default {
   },
 
   methods: {
-    toCyrillic,
     getStudiosByCity,
   },
 }

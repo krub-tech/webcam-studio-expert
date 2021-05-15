@@ -22,8 +22,8 @@ export default {
   },
   methods: {
     logoClickHandle() {
-      if (this.$route.path !== '/') this.$router.push('/')
-      else return false
+      this.$store.commit('cities/updateCitiesCurrentById', 'sankt-peterburg')
+      this.$router.push({ name: 'city', params: { city: 'sankt-peterburg' } })
     },
   },
 }

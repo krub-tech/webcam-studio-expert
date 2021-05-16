@@ -252,6 +252,9 @@ export default {
       return bool
     },
     filterReset() {
+      for (const key of Object.keys(this.query)) {
+        this.query[key] = []
+      }
       this.$store.commit('studios/filterReset')
     },
   },

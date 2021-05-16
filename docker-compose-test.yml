@@ -16,8 +16,6 @@ services:
 
   front:
     build: .
-    environment:
-      BASE_URL: http://webcam-studio-expert_web/api
     command: npm run start
     image: ${IMAGE_BASE_PATH}/front-nuxt-test:latest
 

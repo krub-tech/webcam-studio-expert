@@ -3,10 +3,7 @@ export default {
   target: 'server',
 
   env: {
-    baseUrl:
-      process.env.NODE_ENV === 'production'
-        ? process.env.BASE_URL
-        : 'http://78.47.247.176:4545/api',
+    baseUrl: process.env.BASE_API_URL,
   },
 
   // Global page headers: https://go.nuxtjs.dev/config-head

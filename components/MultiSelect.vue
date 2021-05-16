@@ -1,7 +1,7 @@
 <template>
   <div class="multiselect">
     <Select
-      :placeholder="placeholder"
+      :value="placeholder"
       :options="options"
       :selected="selected"
       static-placeholder
@@ -59,9 +59,6 @@ export default {
     removeOption(payload) {
       this.selectedOptions.splice(this.getIdx(payload), 1)
       this.$emit('selectedOptions', this.selectedOptions)
-    },
-    clearSelected() {
-      this.selectedOptions = []
     },
   },
 }

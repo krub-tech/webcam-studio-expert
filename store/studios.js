@@ -23,7 +23,7 @@ export const getters = {
     return {
       city: rootState.cities.current.id,
       ordering: state.ordering,
-      // ...state.filter,
+      ...state.filter,
     }
   },
 }

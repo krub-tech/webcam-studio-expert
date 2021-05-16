@@ -20,7 +20,7 @@
           v-for="(studio_type, key) in options.studio_type"
           :key="key"
           :item="studio_type"
-          :parent="query.studio_type"
+          :checked="isChecked('studio_type', key)"
           @mouseup.native="checkboxHandle('studio_type', key)"
         />
       </div>
@@ -33,7 +33,7 @@
             :item="models_age"
             :selector="'models_age'"
             :selected="query.models_age.toString()"
-            @mouseup.native="radioHandle('models_age', key)"
+            @mouseup.native="radioHandle(key, 'models_age')"
           />
         </div>
       </div>
@@ -43,7 +43,7 @@
           v-for="(model_types, key) in options.working_with_model_types"
           :key="key"
           :item="model_types"
-          :parent="query.working_with_model_types"
+          :checked="isChecked('working_with_model_types', key)"
           @mouseup.native="checkboxHandle('working_with_model_types', key)"
         />
       </div>
@@ -54,7 +54,7 @@
           :val="+query.min_payout_percentage"
           :min="30"
           :max="90"
-          @valueChange="rangeHandle($event, 'min_payout_percentage')"
+          @valueChange="radioHandle($event, 'min_payout_percentage')"
         />
       </div>
       <hr />
@@ -64,7 +64,7 @@
           :val="+query.shift_length"
           :min="5"
           :max="12"
-          @valueChange="rangeHandle($event, 'shift_length')"
+          @valueChange="radioHandle($event, 'shift_length')"
         />
       </div>
       <hr />
@@ -74,7 +74,7 @@
           :val="+query.max_shifts_per_week"
           :min="3"
           :max="6"
-          @valueChange="rangeHandle($event, 'max_shifts_per_week')"
+          @valueChange="radioHandle($event, 'max_shifts_per_week')"
         />
       </div>
       <hr />
@@ -108,21 +108,21 @@
         <Checkbox
           :key="'true'"
           :item="'Сертифицирована'"
-          :parent="query.certified"
+          :checked="isChecked('certified', 'true')"
           @mouseup.native="checkboxHandle('certified', 'true')"
         />
         <Checkbox
           v-for="(support_staff, key) in options.support_staff"
           :key="key"
           :item="support_staff"
-          :parent="query.support_staff"
+          :checked="isChecked('support_staff', key)"
           @mouseup.native="checkboxHandle('support_staff', key)"
         />
         <Checkbox
           v-for="(studio_condition, key) in options.conditions"
           :key="key"
           :item="studio_condition"
-          :parent="query.conditions"
+          :checked="isChecked('conditions', key)"
           @mouseup.native="checkboxHandle('conditions', key)"
         />
       </div>
@@ -193,8 +193,8 @@ export default {
   watch: {
     query: {
       handler(newQuery) {
-        const queryToStore = this.queryBuild(newQuery)
-        this.$store.commit('studios/updateFilter', queryToStore)
+        const queryToStore = JSON.stringify(this.queryBuild(newQuery))
+        this.$store.commit('studios/updateFilter', JSON.parse(queryToStore))
       },
       deep: true,
     },
@@ -204,7 +204,7 @@ export default {
       const queryToStore = {}
       for (const [key, value] of Object.entries(query)) {
         if (!value.length) queryToStore[`${key}`] = null
-        else queryToStore[`${key}`] = value
+        else queryToStore[`${key}`] = value.toString()
       }
       return queryToStore
     },
@@ -221,10 +221,7 @@ export default {
     checkboxHandle(selector, payload) {
       this.$toArray(this.query[selector], payload).toString()
     },
-    radioHandle(selector, payload) {
-      this.query[selector] = payload
-    },
-    rangeHandle(payload, selector) {
+    radioHandle(payload, selector) {
       this.query[selector] = payload
     },
     selectHandle(payload, selector) {
@@ -237,6 +234,16 @@ export default {
     },
     nameByKeys(selector) {
       return this.query[selector].map((el) => this.options[selector][el])
+    },
+    isChecked(selector, key) {
+      let bool = false
+      if (this.query[selector]) {
+        this.query[selector].forEach((el) => {
+          if (el !== key) return
+          bool = !bool
+        })
+      }
+      return bool
     },
   },
 }

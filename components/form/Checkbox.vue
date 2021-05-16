@@ -1,6 +1,6 @@
 <template>
   <div class="checkbox">
-    <input type="checkbox" :class="{ active: isChecked($vnode.key) }" />
+    <input type="checkbox" :class="{ active: checked }" />
     <label>
       {{ item }}
     </label>
@@ -15,21 +15,9 @@ export default {
       type: String,
       required: true,
     },
-    parent: {
-      type: Array,
-    },
-  },
-  methods: {
-    isChecked(key) {
-      let bool = false
-      if (this.parent) {
-        this.parent.forEach((el) => {
-          if (el !== key) return
-
-          bool = !bool
-        })
-      }
-      return bool
+    checked: {
+      type: Boolean,
+      default: false,
     },
   },
 }

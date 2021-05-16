@@ -209,8 +209,8 @@ export default {
     queryBuild(query) {
       const queryToStore = {}
       for (const [key, value] of Object.entries(query)) {
-        if (!value.length) queryToStore[`${key}`] = null
-        else queryToStore[`${key}`] = value.toString()
+        if (!value.length) queryToStore[key] = null
+        else queryToStore[key] = value.toString()
       }
       return queryToStore
     },
@@ -255,7 +255,6 @@ export default {
       for (const key of Object.keys(this.query)) {
         this.query[key] = []
       }
-      this.$store.commit('studios/filterReset')
     },
   },
 }

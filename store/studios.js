@@ -22,11 +22,7 @@ export const mutations = {
     state.filter = Object.assign({}, payload)
   },
   filterReset: (state) => {
-    if (state.filter) {
-      for (const key of Object.keys(state.filter)) {
-        state.filter[key] = null
-      }
-    }
+    state.filter = null
   },
 }
 export const getters = {

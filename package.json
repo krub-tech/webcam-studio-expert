@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "nuxt --dotenv .env.development",
     "build": "nuxt build --dotenv .env.production",
-    "start": "nuxt start",
+    "start": "nuxt start --dotenv .env.production",
     "generate": "nuxt generate",
     "lint:js": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
     "lint": "npm run lint:js"

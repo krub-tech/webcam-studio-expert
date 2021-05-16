@@ -1,12 +1,12 @@
 <template>
   <div v-if="options" class="filter">
     <div class="filter--container">
-      <InputSearch
+      <!-- <InputSearch
         :placeholder="query.search.toString()"
         :results="searchResults"
         @value="searchStudio($event)"
       />
-      <hr />
+      <hr /> -->
       <!-- <DistrictsSelect :city="$store.state.cities.currentCity" />
       <MetroSelect :city="$store.state.cities.currentCity" /> -->
       <!-- <hr
@@ -149,7 +149,7 @@ import Radio from '@/components/form/Radio'
 import Range from '@/components/form/Range'
 import Select from '@/components/Select'
 import MultiSelect from '@/components/MultiSelect'
-import InputSearch from '@/components/form/InputSearch'
+// import InputSearch from '@/components/form/InputSearch'
 
 // import DistrictsSelect from '@/components/form/modules/DistrictsSelect'
 // import MetroSelect from '@/components/form/modules/MetroSelect'
@@ -163,7 +163,7 @@ export default {
     Radio,
     Range,
     // MultiRange,
-    InputSearch,
+    // InputSearch,
     // DistrictsSelect,
     // MetroSelect,
   },
@@ -188,6 +188,17 @@ export default {
   computed: {
     options() {
       return this.$store.state.studios.options
+    },
+  },
+  watch: {
+    query: {
+      handler(newQuery) {
+        console.log('watch')
+        const queryToStore = this.queryBuild(newQuery)
+        console.log(queryToStore)
+        this.$store.commit('studios/updateFilter', queryToStore)
+      },
+      deep: true,
     },
   },
   methods: {
@@ -218,34 +229,13 @@ export default {
         }
       }
     },
-    queryBuild() {
-      this.$store.commit('updatePageNumber', 1)
-      let queryString = ''
-      for (const field in this.query) {
-        if (this.query[field].length) {
-          queryString += `&${field}=${this.query[field]}`
-        }
+    queryBuild(query) {
+      const queryToStore = {}
+      for (const [key, value] of Object.entries(query)) {
+        if (value.length > 0) queryToStore[`${key}`] = value
+        else queryToStore[`${key}`] = null
       }
-      this.$store.dispatch('updateFilterQuery', queryString)
-      localStorage.filterQuery = JSON.stringify(this.query)
-    },
-    filtReset() {
-      this.$emit('filtReset')
-      this.$store.commit('updateSearchQuery', '')
-      this.$store.dispatch(
-        'updateCurrentCity',
-        this.$store.state.cities.currentCity
-      )
-      localStorage.selectedDistricts =
-        this.$store.state.cities.selectedDistricts
-      localStorage.selectedMetro = this.$store.state.cities.selectedMetro
-      for (const field in this.query) {
-        if (this.query) {
-          this.query[field] = []
-        }
-      }
-      localStorage.filterQuery = JSON.stringify(this.query)
-      this.$store.dispatch('updateFilterQuery', '')
+      return queryToStore
     },
 
     nameByKeys(selector) {

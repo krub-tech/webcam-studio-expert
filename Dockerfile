@@ -5,6 +5,6 @@ COPY . /app
 
 RUN npm i -g npm \
     && npm i \
-    && npm run build-prod
+    && npm run build
 
 EXPOSE 3000

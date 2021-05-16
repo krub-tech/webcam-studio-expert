@@ -1,0 +1,30 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  IMAGE_BASE_PATH: $CI_REGISTRY/$CI_PROJECT_PATH/$CI_COMMIT_REF_SLUG
+  INSTANCE_NAME: $CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
+
+before_script:
+  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+
+
+test_build:
+  stage: build
+  tags:
+    - swarm-manager-test
+  script:
+    - docker-compose -f docker-compose-test.yml build
+    - docker-compose -f docker-compose-test.yml push
+  only:
+    - nuxt
+
+test_deploy:
+  stage: deploy
+  tags:
+    - swarm-manager-test
+  script:
+    - docker stack deploy --with-registry-auth --compose-file=docker-compose-test.yml --prune ${CI_PROJECT_NAME}
+  only:
+    - nuxt

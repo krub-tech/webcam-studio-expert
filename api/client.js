@@ -1,9 +1,7 @@
 import axios from 'axios'
 
-const baseUrl = 'http://78.47.247.176:4545/api'
-
 export const client = axios.create({
-  baseURL: baseUrl,
+  baseURL: process.env.baseUrl,
 })
 
 export function postFormData(data) {

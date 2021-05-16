@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  web:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+      args:
+        CONFIG_NAME: nginx.test
+    image: ${IMAGE_BASE_PATH}/web-nuxt-test:latest
+    networks:
+      - studio-expert-swarm
+      - defaults
+    ports:
+      - "4546:80"
+
+  front:
+    build: .
+    environment:
+      BASE_URL: '/api'
+    command: npm run start
+    image: ${IMAGE_BASE_PATH}/front-nuxt-test:latest
+
+
+networks:
+  studio-expert-swarm:
+    external: true

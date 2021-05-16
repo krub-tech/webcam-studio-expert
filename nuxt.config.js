@@ -2,6 +2,10 @@ export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: 'server',
 
+  env: {
+    baseUrl: process.env.BASE_API_URL,
+  },
+
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'webcam-expert',
@@ -51,7 +55,8 @@ export default {
   build: {},
 
   server: {
-    port: '7070',
+    port: '3000',
+    host: '0.0.0.0',
   },
   router: {
     mode: 'history',

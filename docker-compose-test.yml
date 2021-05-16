@@ -9,8 +9,8 @@ services:
         CONFIG_NAME: nginx.test
     image: ${IMAGE_BASE_PATH}/web-nuxt-test:latest
     networks:
+      - default
       - studio-expert-swarm
-      - defaults
     ports:
       - "4546:80"
 

@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import Like from '@/components/buttons/like'
+import Like from '@/components/buttons/Like'
 export default {
   name: 'MobileListCard',
   components: {

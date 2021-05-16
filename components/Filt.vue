@@ -127,11 +127,11 @@
         />
       </div>
     </div>
-    <!-- <button class="close-btn" @click="$emit('close')" />
+    <button class="close-btn" @click="$emit('close')" />
     <footer class="filter--footer">
       <div class="filter--footer-top">
         <p>
-          <b>{{ currentStudiosLength }}</b> из {{ allStudioLength }}
+          <b>{{ currentStudiosLength }}</b> из {{ cityStudiosLength }}
         </p>
         <button class="reset" @click="filterReset" />
         <button class="accept" @click="$emit('close')" />
@@ -139,7 +139,7 @@
       <div class="filter--footer-bottom">
         Послать заявку {{ currentStudiosLength }} отобранным
       </div>
-    </footer> -->
+    </footer>
   </div>
 </template>
 
@@ -188,6 +188,12 @@ export default {
   computed: {
     options() {
       return this.$store.state.studios.options
+    },
+    currentStudiosLength() {
+      return this.$store.state.studios.currents?.length
+    },
+    cityStudiosLength() {
+      return this.$store.state.studios.cityStudiosLength
     },
   },
   watch: {
@@ -244,6 +250,9 @@ export default {
         })
       }
       return bool
+    },
+    filterReset() {
+      this.$store.commit('studios/filterReset')
     },
   },
 }

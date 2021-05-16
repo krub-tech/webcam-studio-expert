@@ -23,13 +23,24 @@ export default {
     query() {
       return this.$store.getters['studios/query']
     },
+    cityCurrent() {
+      return this.$store.state.cities.current.id
+    },
   },
   watch: {
     query: {
       async handler(newQuery) {
-        console.log('query change', newQuery)
         const studios = await this.getStudiosByQuery(newQuery)
         this.$store.commit('studios/updateCurrentStudios', studios.results)
+      },
+      deep: true,
+    },
+    cityCurrent: {
+      async handler(newCity) {
+        const cityStudios = await this.getStudiosByQuery({
+          city: newCity,
+        })
+        this.$store.commit('studios/updateCityStudiosLength', cityStudios.count)
       },
       deep: true,
     },

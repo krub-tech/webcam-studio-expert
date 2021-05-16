@@ -15,7 +15,7 @@ export const mutations = {
     state.ordering = payload
   },
   updateFilter(state, payload) {
-    state.filter = payload
+    state.filter = Object.assign({}, payload)
   },
 }
 export const getters = {
@@ -23,7 +23,7 @@ export const getters = {
     return {
       city: rootState.cities.current.id,
       ordering: state.ordering,
-      ...state.filter,
+      // ...state.filter,
     }
   },
 }

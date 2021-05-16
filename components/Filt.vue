@@ -193,15 +193,21 @@ export default {
   watch: {
     query: {
       handler(newQuery) {
-        console.log('watch')
         const queryToStore = this.queryBuild(newQuery)
-        console.log(queryToStore)
         this.$store.commit('studios/updateFilter', queryToStore)
       },
       deep: true,
     },
   },
   methods: {
+    queryBuild(query) {
+      const queryToStore = {}
+      for (const [key, value] of Object.entries(query)) {
+        if (!value.length) queryToStore[`${key}`] = null
+        else queryToStore[`${key}`] = value
+      }
+      return queryToStore
+    },
     searchStudio(name) {
       if (name.length) {
         this.query.search = name
@@ -229,15 +235,6 @@ export default {
         }
       }
     },
-    queryBuild(query) {
-      const queryToStore = {}
-      for (const [key, value] of Object.entries(query)) {
-        if (value.length > 0) queryToStore[`${key}`] = value
-        else queryToStore[`${key}`] = null
-      }
-      return queryToStore
-    },
-
     nameByKeys(selector) {
       return this.query[selector].map((el) => this.options[selector][el])
     },

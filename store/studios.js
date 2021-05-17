@@ -18,8 +18,12 @@ export const mutations = {
   updateOrdering(state, payload) {
     state.ordering = payload
   },
-  updateFilter(state, payload) {
-    state.filter = Object.assign({}, payload)
+  updateFilter(state, { key, data }) {
+    console.log(this.$toArray)
+    state.filter = {
+      ...state.filter,
+      [key]: data,
+    }
   },
   filterReset: (state) => {
     state.filter = null
@@ -30,7 +34,7 @@ export const getters = {
     return {
       city: rootState.cities.current.id,
       ordering: state.ordering,
-      ...state.filter,
+      ...rootState.filter.query,
     }
   },
 }

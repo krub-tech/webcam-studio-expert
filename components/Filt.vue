@@ -225,7 +225,11 @@ export default {
       localStorage.filterQuery = JSON.stringify(this.query)
     },
     checkboxHandle(selector, payload) {
-      this.$toArray(this.query[selector], payload).toString()
+      this.$store.commit('filter/updateFilter', {
+        key: selector,
+        data: payload,
+      })
+      // this.$toArray(this.query[selector], payload).toString()
     },
     radioHandle(payload, selector) {
       this.query[selector] = payload

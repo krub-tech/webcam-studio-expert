@@ -46,8 +46,6 @@ export default {
       'cities/updateCitiesCurrentById',
       this.$route.params.city
     )
-    this.updateCurrentStudios(this.$store.getters.query)
-    this.updateCityStudiosLength(this.$store.state.studios.cityStudiosLength)
   },
   methods: {
     getStudiosByQuery,

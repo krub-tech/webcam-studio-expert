@@ -7,6 +7,7 @@ export const mutations = {
     state.uniques = payload
   },
   updateCitiesCurrentById(state, payload) {
-    state.current = state.uniques.find((city) => city.id === payload)
+    if (state.uniques)
+      state.current = state.uniques.find((city) => city.id === payload)
   },
 }

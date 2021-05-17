@@ -4,18 +4,16 @@
       <h1>Вебкам студии г. {{ $store.state.cities.current.name }}</h1>
       <p>Место для SEO-подстрочника</p>
     </div>
-    <Filt />
-    <!-- <aside class="filter-wrapper">
-      <button class="filter-btn" @click="filterMobShow = !filterMobShow" />
-      <Filt
-        :class="{ open_filter: filterMobShow }"
-        @close="filterMobShow = !filterMobShow"
-      />
-    </aside> -->
-    <div class="studios--count">
-      <p class="studios--count-current">-12</p>
-      /{{ studiosByCityLength }}
-    </div>
+    <aside class="filter-wrapper">
+      <button class="filter-btn" @click="isOpenFilter = true" />
+      <Filt :class="{ isOpenFilter }" @close="isOpenFilter = false" />
+    </aside>
+    <!-- <div class="studios--count">
+      <p class="studios--count-current">
+        {{ $store.state.studios.currents.length }}
+      </p>
+      /{{ $store.state.studios.cityStudiosLength }}
+    </div> -->
     <div class="sort-wrapper">
       <div class="select-wrapper sort">
         <Select
@@ -48,6 +46,7 @@ export default {
       sortingTypes: ['По умолчанию', 'По названию', 'По процентам'],
       studiosByCityLength: 0,
       ordering: 'Сортировка',
+      isOpenFilter: false,
     }
   },
   computed: {
@@ -55,7 +54,6 @@ export default {
       return this.$store.state.studios.currents
     },
   },
-
   methods: {
     getStudiosByQuery,
     sortingSelect(data) {
@@ -124,7 +122,7 @@ export default {
   .filter-wrapper {
     grid-area: filter;
     height: min-content;
-    .filt {
+    .filter {
       width: 100%;
       max-width: 420px;
       position: absolute;
@@ -134,7 +132,7 @@ export default {
       transition: left 500ms;
       background-color: #fbfbfd;
     }
-    .open_filter {
+    .isOpenFilter {
       left: 0;
     }
   }
@@ -249,7 +247,7 @@ export default {
     }
     .filter-wrapper {
       align-items: flex-start;
-      .filt {
+      .filter {
         position: relative;
         left: 0;
 

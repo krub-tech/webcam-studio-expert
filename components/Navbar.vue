@@ -168,20 +168,6 @@ export default {
 }
 
 @media screen and (min-width: 420px) {
-  .slide-up-enter-active,
-  .slide-up-leave-active {
-    position: relative;
-    z-index: -1;
-    top: 0;
-    left: 0;
-    right: 0;
-    transition: top 500ms;
-  }
-  .slide-up-enter,
-  .slide-up-leave-to {
-    z-index: -1;
-    top: -100px;
-  }
   .nav-wrapper {
     justify-content: flex-start;
     height: 60px;

@@ -29,18 +29,14 @@ export default {
   },
   watch: {
     query: {
-      async handler(newQuery) {
-        const studios = await this.getStudiosByQuery(newQuery)
-        this.$store.commit('studios/updateCurrentStudios', studios.results)
+      handler(newQuery) {
+        this.updateCurrentStudios(newQuery)
       },
       deep: true,
     },
     cityCurrent: {
-      async handler(newCity) {
-        const cityStudios = await this.getStudiosByQuery({
-          city: newCity,
-        })
-        this.$store.commit('studios/updateCityStudiosLength', cityStudios.count)
+      handler(newCity) {
+        this.updateCityStudiosLength(newCity)
       },
       deep: true,
     },
@@ -50,12 +46,21 @@ export default {
       'cities/updateCitiesCurrentById',
       this.$route.params.city
     )
+    this.updateCurrentStudios(this.$store.getters.query)
+    this.updateCityStudiosLength(this.$store.state.studios.cityStudiosLength)
   },
   methods: {
     getStudiosByQuery,
     getStudiosOptions,
-    toCyrillic(translit) {
-      return this.$toCyrillic(translit)
+    async updateCurrentStudios(newQuery) {
+      const studios = await this.getStudiosByQuery(newQuery)
+      this.$store.commit('studios/updateCurrentStudios', studios.results)
+    },
+    async updateCityStudiosLength(newCity) {
+      const cityStudios = await this.getStudiosByQuery({
+        city: newCity,
+      })
+      this.$store.commit('studios/updateCityStudiosLength', cityStudios.count)
     },
   },
 }
@@ -64,6 +69,12 @@ export default {
 <style lang="scss">
 .content {
   position: absolute;
-  top: 150px;
+  top: 60px;
+}
+
+@media screen and (min-width: 420px) {
+  .content {
+    top: 150px;
+  }
 }
 </style>

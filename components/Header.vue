@@ -17,8 +17,8 @@
         </div>
       </div>
     </div>
-    <Navbar />
-    <button class="close-btn" />
+    <Navbar v-if="$store.getters.isMenuOpen" />
+    <!-- <button class="close-btn" /> -->
   </header>
 </template>
 

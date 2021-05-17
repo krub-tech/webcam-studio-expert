@@ -181,7 +181,7 @@ import StudioSidebar from '@/components/StudioSidebar'
 
 // import Slider from '@/components/Slider'
 
-import { getStudioById, getStudiosByCity } from '@/api/studios'
+import { getStudioById } from '@/api/studios'
 
 export default {
   name: 'StudioById',
@@ -209,7 +209,6 @@ export default {
   },
   methods: {
     getStudioById,
-    getStudiosByCity,
     toCyrillic(city) {
       return this.$toCyrillic(city)
     },

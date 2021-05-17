@@ -1,12 +1,13 @@
+import { getStudiosByQuery } from '@/api/studios'
+
 export const state = () => ({
   cityStudiosLength: null,
   currents: null,
   options: null,
   ordering: null,
-  filter: null,
 })
 export const mutations = {
-  updateCityStudiosLength(state, payload) {
+  updateAllByCityLength(state, payload) {
     state.cityStudiosLength = payload
   },
   updateCurrentStudios(state, payload) {
@@ -18,19 +19,9 @@ export const mutations = {
   updateOrdering(state, payload) {
     state.ordering = payload
   },
-  updateFilter(state, { key, data }) {
-    console.log(this.$toArray)
-    state.filter = {
-      ...state.filter,
-      [key]: data,
-    }
-  },
-  filterReset: (state) => {
-    state.filter = null
-  },
 }
 export const getters = {
-  query: (state, getters, rootState) => {
+  query: (state, getters, rootState, rootGetters) => {
     return {
       city: rootState.cities.current.id,
       ordering: state.ordering,
@@ -39,4 +30,9 @@ export const getters = {
   },
 }
 
-export const actions = {}
+export const actions = {
+  async updateCurrents(ctx) {
+    const studios = await getStudiosByQuery(ctx.getters.query)
+    ctx.commit('updateCurrentStudios', studios.results)
+  },
+}

@@ -28,12 +28,12 @@ export default {
     },
   },
   watch: {
-    query: {
-      handler(newQuery) {
-        this.updateCurrentStudios(newQuery)
-      },
-      deep: true,
-    },
+    // query: {
+    //   handler(newQuery) {
+    //     this.updateCurrentStudios(newQuery)
+    //   },
+    //   deep: true,
+    // },
     cityCurrent: {
       handler(newCity) {
         this.updateCityStudiosLength(newCity)
@@ -46,19 +46,16 @@ export default {
       'cities/updateCitiesCurrentById',
       this.$route.params.city
     )
+    this.$store.dispatch('studios/updateCurrents')
   },
   methods: {
     getStudiosByQuery,
     getStudiosOptions,
-    async updateCurrentStudios(newQuery) {
-      const studios = await this.getStudiosByQuery(newQuery)
-      this.$store.commit('studios/updateCurrentStudios', studios.results)
-    },
     async updateCityStudiosLength(newCity) {
       const cityStudios = await this.getStudiosByQuery({
         city: newCity,
       })
-      this.$store.commit('studios/updateCityStudiosLength', cityStudios.count)
+      this.$store.commit('studios/updateAllByCityLength', cityStudios.count)
     },
   },
 }

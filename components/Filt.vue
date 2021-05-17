@@ -20,12 +20,12 @@
           v-for="(studio_type, key) in options.studio_type"
           :key="key"
           :item="studio_type"
-          :checked="isChecked('studio_type', key)"
+          :checked="isChecked($store.state.filter.params.studio_type, key)"
           @mouseup.native="checkboxHandle('studio_type', key)"
         />
       </div>
       <hr />
-      <div class="models_age">
+      <!-- <div class="models_age">
         <div class="inner">
           <Radio
             v-for="(models_age, key) in options.models_age"
@@ -125,7 +125,7 @@
           :checked="isChecked('conditions', key)"
           @mouseup.native="checkboxHandle('conditions', key)"
         />
-      </div>
+      </div> -->
     </div>
     <button class="close-btn" @click="$emit('close')" />
     <footer class="filter--footer">
@@ -133,7 +133,7 @@
         <p>
           <b>{{ currentStudiosLength }}</b> из {{ cityStudiosLength }}
         </p>
-        <button class="reset" @click="filterReset" />
+        <button class="reset" @click="$store.dispatch('filter/reset')" />
         <button class="accept" @click="$emit('close')" />
       </div>
       <div class="filter--footer-bottom">
@@ -145,10 +145,10 @@
 
 <script>
 import Checkbox from '@/components/form/Checkbox'
-import Radio from '@/components/form/Radio'
-import Range from '@/components/form/Range'
-import Select from '@/components/Select'
-import MultiSelect from '@/components/MultiSelect'
+// import Radio from '@/components/form/Radio'
+// import Range from '@/components/form/Range'
+// import Select from '@/components/Select'
+// import MultiSelect from '@/components/MultiSelect'
 // import InputSearch from '@/components/form/InputSearch'
 
 // import DistrictsSelect from '@/components/form/modules/DistrictsSelect'
@@ -157,11 +157,11 @@ import MultiSelect from '@/components/MultiSelect'
 export default {
   name: 'Filt',
   components: {
-    Select,
-    MultiSelect,
     Checkbox,
-    Radio,
-    Range,
+    // Select,
+    // MultiSelect,
+    // Radio,
+    // Range,
     // MultiRange,
     // InputSearch,
     // DistrictsSelect,
@@ -196,15 +196,6 @@ export default {
       return this.$store.state.studios.cityStudiosLength
     },
   },
-  watch: {
-    query: {
-      handler(newQuery) {
-        const queryToStore = JSON.stringify(this.queryBuild(newQuery))
-        this.$store.commit('studios/updateFilter', JSON.parse(queryToStore))
-      },
-      deep: true,
-    },
-  },
   methods: {
     queryBuild(query) {
       const queryToStore = {}
@@ -225,7 +216,7 @@ export default {
       localStorage.filterQuery = JSON.stringify(this.query)
     },
     checkboxHandle(selector, payload) {
-      this.$store.commit('filter/updateFilter', {
+      this.$store.dispatch('filter/update', {
         key: selector,
         data: payload,
       })
@@ -245,10 +236,10 @@ export default {
     nameByKeys(selector) {
       return this.query[selector].map((el) => this.options[selector][el])
     },
-    isChecked(selector, key) {
+    isChecked(arr, key) {
       let bool = false
-      if (this.query[selector]) {
-        this.query[selector].forEach((el) => {
+      if (arr) {
+        arr.forEach((el) => {
           if (el !== key) return
           bool = !bool
         })

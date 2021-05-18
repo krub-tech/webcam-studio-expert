@@ -17,8 +17,6 @@ services:
     build: .
     command: npm run start
     image: ${IMAGE_BASE_PATH}/front-nuxt-test:latest
-    networks:
-      - studio-expert-swarm
 
 
 networks:

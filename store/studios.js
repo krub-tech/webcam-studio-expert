@@ -31,6 +31,10 @@ export const getters = {
 
 export const actions = {
   async updateCurrents(ctx) {
+    const studiosAllByCity = await getStudiosByQuery({
+      city: ctx.getters.query.city,
+    })
+    ctx.commit('updateAllByCityLength', studiosAllByCity.count)
     const studios = await getStudiosByQuery(ctx.getters.query)
     ctx.commit('updateCurrentStudios', studios.results)
   },

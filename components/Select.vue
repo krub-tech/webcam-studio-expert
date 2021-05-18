@@ -31,7 +31,7 @@ export default {
     },
     selected: {
       type: Array,
-      required: false,
+      default: null,
     },
   },
   data() {

@@ -39,9 +39,11 @@ export default {
 
 <style lang="scss">
 .cards {
+  height: 100%;
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-between;
   &--container {
     display: grid;
     gap: var(--fr-l);

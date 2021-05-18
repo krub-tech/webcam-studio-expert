@@ -80,54 +80,60 @@
         />
       </div>
       <hr />
-      <!-- <div class="staff_gender form-module">
+      <div class="staff_gender form-module">
         <Select
           :options="Object.values(options.staff_gender)"
           :value="'Пол администраторов'"
+          :selected="staff_gender"
           static-placeholder
           @selectedOption="selectHandle($event, 'staff_gender')"
         />
         <div
-          v-if="query.staff_gender.length && options.staff_gender"
+          v-if="staff_gender.length && options.staff_gender"
           class="selected-options"
         >
-          <div class="badge" @click="query.staff_gender = []">
-            {{ nameByKeys('staff_gender').toString() }}
+          <div
+            class="badge"
+            @click="
+              $store.dispatch('filter/set', { key: 'staff_gender', data: [] })
+            "
+          >
+            {{ staff_gender.toString() }}
           </div>
         </div>
       </div>
-      <hr /> -->
+      <hr />
       <div v-if="options.devices" class="devices form-module">
         <MultiSelect
           :options="Object.values(options.devices)"
           :placeholder="`Камеры`"
-          :selected="query.devices"
+          :selected="devices"
           @selectedOptions="selectHandle($event, 'devices')"
         />
       </div>
       <hr />
-      <!--       <div class="conditions">
+      <div class="conditions">
         <Checkbox
           :key="'true'"
           :item="'Сертифицирована'"
-          :checked="isChecked('certified', 'true')"
-          @mouseup.native="checkboxHandle('certified', 'true')"
+          :checked="isChecked($store.state.filter.params.certified, 'true')"
+          @mouseup.native="checkboxHandle('true', 'certified')"
         />
         <Checkbox
           v-for="(support_staff, key) in options.support_staff"
           :key="key"
           :item="support_staff"
-          :checked="isChecked('support_staff', key)"
-          @mouseup.native="checkboxHandle('support_staff', key)"
+          :checked="isChecked($store.state.filter.params.support_staff, key)"
+          @mouseup.native="checkboxHandle(key, 'support_staff')"
         />
         <Checkbox
           v-for="(studio_condition, key) in options.conditions"
           :key="key"
           :item="studio_condition"
-          :checked="isChecked('conditions', key)"
-          @mouseup.native="checkboxHandle('conditions', key)"
+          :checked="isChecked($store.state.filter.params.conditions, key)"
+          @mouseup.native="checkboxHandle(key, 'conditions')"
         />
-      </div> -->
+      </div>
     </div>
     <button class="close-btn" @click="$emit('close')" />
     <footer class="filter--footer">
@@ -149,10 +155,7 @@
 import Checkbox from '@/components/form/Checkbox'
 import Radio from '@/components/form/Radio'
 import Range from '@/components/form/Range'
-// import Select from '@/components/Select'
-// import MultiSelect from '@/components/MultiSelect'
 // import InputSearch from '@/components/form/InputSearch'
-
 // import DistrictsSelect from '@/components/form/modules/DistrictsSelect'
 // import MetroSelect from '@/components/form/modules/MetroSelect'
 
@@ -160,21 +163,14 @@ export default {
   name: 'Filt',
   components: {
     Checkbox,
-    // Select,
-    // MultiSelect,
     Radio,
     Range,
-    // MultiRange,
     // InputSearch,
     // DistrictsSelect,
     // MetroSelect,
   },
   data() {
-    return {
-      query: {
-        devices: [],
-      },
-    }
+    return {}
   },
   computed: {
     options() {
@@ -186,29 +182,14 @@ export default {
     cityStudiosLength() {
       return this.$store.state.studios.cityStudiosLength
     },
+    staff_gender() {
+      return this.nameByKeys('staff_gender')
+    },
     devices() {
       return this.nameByKeys('devices')
     },
   },
   methods: {
-    queryBuild(query) {
-      const queryToStore = {}
-      Object.entries(query).forEach(([key, value]) => {
-        if (!value.length) queryToStore[key] = null
-        else queryToStore[key] = value.toString()
-      })
-      return queryToStore
-    },
-    searchStudio(name) {
-      if (name.length) {
-        this.query.search = name
-        this.$store.dispatch('updateSearchQuery', `&search=${name}`)
-      } else {
-        this.query.search = ''
-        this.$store.dispatch('updateSearchQuery', '')
-      }
-      localStorage.filterQuery = JSON.stringify(this.query)
-    },
     checkboxHandle(payload, selector) {
       this.$store.dispatch('filter/update', {
         key: selector,
@@ -244,11 +225,6 @@ export default {
         })
       }
       return bool
-    },
-    filterReset() {
-      Object.keys(this.query).forEach((key) => {
-        this.query[key] = []
-      })
     },
   },
 }

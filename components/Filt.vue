@@ -38,20 +38,22 @@
         </div>
       </div>
       <hr />
-      <!--       <div class="working_with_model_types">
+      <div class="working_with_model_types">
         <Checkbox
           v-for="(model_types, key) in options.working_with_model_types"
           :key="key"
           :item="model_types"
-          :checked="isChecked('working_with_model_types', key)"
-          @mouseup.native="checkboxHandle('working_with_model_types', key)"
+          :checked="
+            isChecked($store.state.filter.params.working_with_model_types, key)
+          "
+          @mouseup.native="checkboxHandle(key, 'working_with_model_types')"
         />
       </div>
       <hr />
       <div class="min_payout_percentage">
         <Range
           :label="'Минимальный % выплат'"
-          :val="+query.min_payout_percentage"
+          :val="+$store.state.filter.params.min_payout_percentage"
           :min="30"
           :max="90"
           @valueChange="radioHandle($event, 'min_payout_percentage')"
@@ -61,7 +63,7 @@
       <div class="shift_length">
         <Range
           :label="'Длина смены'"
-          :val="+query.shift_length"
+          :val="+$store.state.filter.params.shift_length"
           :min="5"
           :max="12"
           @valueChange="radioHandle($event, 'shift_length')"
@@ -71,14 +73,14 @@
       <div class="max_shifts_per_week">
         <Range
           :label="'Дней в неделю минимум'"
-          :val="+query.max_shifts_per_week"
+          :val="+$store.state.filter.params.max_shifts_per_week"
           :min="3"
           :max="6"
           @valueChange="radioHandle($event, 'max_shifts_per_week')"
         />
       </div>
       <hr />
-      <div class="staff_gender form-module">
+      <!-- <div class="staff_gender form-module">
         <Select
           :options="Object.values(options.staff_gender)"
           :value="'Пол администраторов'"
@@ -94,17 +96,17 @@
           </div>
         </div>
       </div>
-      <hr />
+      <hr /> -->
       <div v-if="options.devices" class="devices form-module">
         <MultiSelect
           :options="Object.values(options.devices)"
           :placeholder="`Камеры`"
-          :selected="nameByKeys('devices')"
+          :selected="query.devices"
           @selectedOptions="selectHandle($event, 'devices')"
         />
       </div>
       <hr />
-      <div class="conditions">
+      <!--       <div class="conditions">
         <Checkbox
           :key="'true'"
           :item="'Сертифицирована'"
@@ -146,7 +148,7 @@
 <script>
 import Checkbox from '@/components/form/Checkbox'
 import Radio from '@/components/form/Radio'
-// import Range from '@/components/form/Range'
+import Range from '@/components/form/Range'
 // import Select from '@/components/Select'
 // import MultiSelect from '@/components/MultiSelect'
 // import InputSearch from '@/components/form/InputSearch'
@@ -161,7 +163,7 @@ export default {
     // Select,
     // MultiSelect,
     Radio,
-    // Range,
+    Range,
     // MultiRange,
     // InputSearch,
     // DistrictsSelect,
@@ -170,18 +172,7 @@ export default {
   data() {
     return {
       query: {
-        search: [],
-        studio_type: [],
-        models_age: [],
-        working_with_model_types: [],
-        min_payout_percentage: [],
-        shift_length: [],
-        max_shifts_per_week: [],
-        staff_gender: [],
         devices: [],
-        conditions: [],
-        support_staff: [],
-        certified: [],
       },
     }
   },
@@ -222,22 +213,25 @@ export default {
       })
     },
     radioHandle(payload, selector) {
-      // this.query[selector] = payload
       this.$store.dispatch('filter/set', {
         key: selector,
         data: payload,
       })
     },
     selectHandle(payload, selector) {
-      this.query[selector] = []
+      const result = []
       for (const [key, value] of Object.entries(this.options[selector])) {
         if (payload.includes(value)) {
-          this.query[selector].push(key)
+          result.push(key)
         }
       }
+      this.$store.dispatch('filter/set', { key: selector, data: result })
+      this.nameByKeys(selector)
     },
     nameByKeys(selector) {
-      return this.query[selector].map((el) => this.options[selector][el])
+      this.query[selector] = this.$store.state.filter.params[selector].map(
+        (el) => this.options[selector][el]
+      )
     },
     isChecked(arr, key) {
       let bool = false

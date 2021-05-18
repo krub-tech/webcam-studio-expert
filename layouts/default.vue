@@ -28,12 +28,6 @@ export default {
     },
   },
   watch: {
-    // query: {
-    //   handler(newQuery) {
-    //     this.updateCurrentStudios(newQuery)
-    //   },
-    //   deep: true,
-    // },
     cityCurrent: {
       handler(newCity) {
         this.updateCityStudiosLength(newCity)

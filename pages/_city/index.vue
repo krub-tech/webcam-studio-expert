@@ -195,6 +195,7 @@ export default {
 }
 .studios--results {
   grid-area: cont;
+  min-height: 100vh;
 }
 
 .filter-btn {

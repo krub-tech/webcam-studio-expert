@@ -379,7 +379,6 @@ export default {
           content: 'Сбросить всё';
         }
       }
-      )
       .accept {
         display: none;
       }

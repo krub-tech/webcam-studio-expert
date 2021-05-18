@@ -8,7 +8,7 @@
         </button>
         <Logo />
         <div class="header--btns">
-          <Like class="header--btns-favorites" @click.enter="toFavoritesPage" />
+          <Like class="header--btns-favorites" @click="toFavoritesPage" />
           <button class="header--btns-mail" />
           <!-- <button class="header--btns-profile" /> -->
         </div>

@@ -21,7 +21,7 @@
           :key="key"
           :item="studio_type"
           :checked="isChecked($store.state.filter.params.studio_type, key)"
-          @mouseup.enter="checkboxHandle(key, 'studio_type')"
+          @click="checkboxHandle(key, 'studio_type')"
         />
       </div>
       <hr />
@@ -33,7 +33,7 @@
             :item="models_age"
             :selector="'models_age'"
             :selected="$store.state.filter.params.models_age.toString()"
-            @mouseup.enter="radioHandle(key, 'models_age')"
+            @click="radioHandle(key, 'models_age')"
           />
         </div>
       </div>
@@ -46,7 +46,7 @@
           :checked="
             isChecked($store.state.filter.params.working_with_model_types, key)
           "
-          @mouseup.enter="checkboxHandle(key, 'working_with_model_types')"
+          @click="checkboxHandle(key, 'working_with_model_types')"
         />
       </div>
       <hr />

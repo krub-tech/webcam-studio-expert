@@ -21,6 +21,7 @@ module.exports = {
   plugins: ['vue', '@typescript-eslint'],
   rules: {
     'import/prefer-default-export': 'off',
+    'vue/no-deprecated-v-on-native-modifier': 'off',
     'no-param-reassign': 'off',
     'consistent-return': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',

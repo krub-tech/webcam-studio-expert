@@ -44,10 +44,6 @@ export default {
       pageOffset: 0,
     }
   },
-  created() {
-    console.log(process.env)
-    console.log(process.env.baseUrl)
-  },
   mounted() {
     this.$nextTick(function () {
       this.resizeHandle()

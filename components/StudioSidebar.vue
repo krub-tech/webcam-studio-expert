@@ -11,7 +11,7 @@
 <script>
 import MobileListCard from '@/components/MobileListCard'
 
-import { getStudiosByCity } from '@/api/studios'
+// import { getStudiosByCity } from '@/api/studios'
 
 export default {
   name: 'StudioSidebar',
@@ -26,7 +26,7 @@ export default {
   },
 
   methods: {
-    getStudiosByCity,
+    // getStudiosByCity,
   },
 }
 </script>

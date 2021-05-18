@@ -84,7 +84,7 @@ export default {
       return object ? Object.values(object) : []
     },
     toStudio(e, data) {
-      if (e.target.tagName !== 'BUTTON')
+      if (e.target.tagName !== 'BUTTON') {
         this.$router.push({
           name: 'city-name-id',
           params: {
@@ -93,6 +93,7 @@ export default {
             id: data.id,
           },
         })
+      }
     },
   },
 }

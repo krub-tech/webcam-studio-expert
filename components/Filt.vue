@@ -21,7 +21,7 @@
           :key="key"
           :item="studio_type"
           :checked="isChecked($store.state.filter.params.studio_type, key)"
-          @mouseup.native="checkboxHandle(key, 'studio_type')"
+          @mouseup.enter="checkboxHandle(key, 'studio_type')"
         />
       </div>
       <hr />
@@ -33,7 +33,7 @@
             :item="models_age"
             :selector="'models_age'"
             :selected="$store.state.filter.params.models_age.toString()"
-            @mouseup.native="radioHandle(key, 'models_age')"
+            @mouseup.enter="radioHandle(key, 'models_age')"
           />
         </div>
       </div>
@@ -46,7 +46,7 @@
           :checked="
             isChecked($store.state.filter.params.working_with_model_types, key)
           "
-          @mouseup.native="checkboxHandle(key, 'working_with_model_types')"
+          @mouseup.enter="checkboxHandle(key, 'working_with_model_types')"
         />
       </div>
       <hr />
@@ -190,10 +190,10 @@ export default {
   methods: {
     queryBuild(query) {
       const queryToStore = {}
-      for (const [key, value] of Object.entries(query)) {
+      Object.entries(query).forEach(([key, value]) => {
         if (!value.length) queryToStore[key] = null
         else queryToStore[key] = value.toString()
-      }
+      })
       return queryToStore
     },
     searchStudio(name) {
@@ -220,11 +220,11 @@ export default {
     },
     selectHandle(payload, selector) {
       const result = []
-      for (const [key, value] of Object.entries(this.options[selector])) {
+      Object.entries(this.options[selector]).forEach(([key, value]) => {
         if (payload.includes(value)) {
           result.push(key)
         }
-      }
+      })
       this.$store.dispatch('filter/set', { key: selector, data: result })
       this.nameByKeys(selector)
     },
@@ -244,9 +244,9 @@ export default {
       return bool
     },
     filterReset() {
-      for (const key of Object.keys(this.query)) {
+      Object.keys(this.query).forEach((key) => {
         this.query[key] = []
-      }
+      })
     },
   },
 }
@@ -379,6 +379,7 @@ export default {
           content: 'Сбросить всё';
         }
       }
+      )
       .accept {
         display: none;
       }

@@ -1,18 +1,35 @@
 module.exports = {
-  root: true,
   env: {
     browser: true,
     node: true,
-  },
-  parserOptions: {
-    parser: 'babel-eslint',
+    es2021: true,
   },
   extends: [
-    '@nuxtjs',
-    'plugin:prettier/recommended',
+    'eslint:recommended',
+    'airbnb-base',
+    'plugin:vue/vue3-recommended',
     'plugin:nuxt/recommended',
+    'plugin:prettier/recommended',
+    'plugin:@typescript-eslint/recommended',
   ],
-  plugins: [],
-  // add your custom rules here
-  rules: { 'prettier/prettier': ['error', { endOfLine: 'auto' }] },
+  parser: 'vue-eslint-parser',
+  parserOptions: {
+    ecmaVersion: 12,
+    parser: '@typescript-eslint/parser',
+    sourceType: 'module',
+  },
+  plugins: ['vue', '@typescript-eslint'],
+  rules: {
+    'import/prefer-default-export': 'off',
+    'no-param-reassign': 'off',
+    'consistent-return': 'off',
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
+  },
+  settings: {
+    'import/resolver': {
+      nuxt: {
+        extensions: ['.js', '.vue'],
+      },
+    },
+  },
 }

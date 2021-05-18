@@ -1,20 +1,24 @@
 <template>
-    <div class="input-search">
-        <input
-            :id="id"
-            v-model="value"
-            type="text"
-            :placeholder="placeholder"
-            @focus="focusHandle"
-            @input="inputHandle"
-        >
-        <label for="id" />
-        <ul v-if="value && !isChoose" class="results">
-            <li v-for="(result, key) in res" :key="result.id" @click="resultChooseHandle(results[key])">
-                {{ result }}
-            </li>
-        </ul>
-    </div>
+  <div class="input-search">
+    <input
+      :id="id"
+      v-model="value"
+      type="text"
+      :placeholder="placeholder"
+      @focus="focusHandle"
+      @input="inputHandle"
+    />
+    <label for="id" />
+    <ul v-if="value && !isChoose" class="results">
+      <li
+        v-for="(result, key) in res"
+        :key="result.id"
+        @click="resultChooseHandle(results[key])"
+      >
+        {{ result }}
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script>
@@ -41,130 +45,130 @@ export default {
     return {
       value: '',
       isChoose: false,
-    };
+    }
   },
   computed: {
     res() {
       if (this.fieldName && this.results) {
-        return this.results.map((el) => el[this.fieldName]);
+        return this.results.map((el) => el[this.fieldName])
       }
-      return this.results;
+      return this.results
     },
   },
   mounted() {
-    this.$parent.$on('filtReset', this.clearValue);
+    this.$parent.$on('filtReset', this.clearValue)
   },
   methods: {
     focusHandle() {
-      this.value = '';
-      this.inputHandle();
+      this.value = ''
+      this.inputHandle()
     },
     inputHandle() {
-      this.isChoose = false;
-      this.$emit('value', this.value);
+      this.isChoose = false
+      this.$emit('value', this.value)
     },
     resultChooseHandle(result) {
-      this.isChoose = true;
+      this.isChoose = true
       if (this.fieldName) {
-        this.value = result[this.fieldName];
+        this.value = result[this.fieldName]
       } else {
-        this.value = result;
+        this.value = result
       }
-      if (result) this.$emit('choose', result);
+      if (result) this.$emit('choose', result)
     },
     clearValue() {
-      this.value = '';
+      this.value = ''
     },
   },
-};
+}
 </script>
 
 <style lang="scss">
 @mixin input-invalid {
-    border: 1px solid red;
-    margin-bottom: 0;
-    & + label {
-        width: 100%;
-        min-height: 28px;
-        display: flex;
-        justify-content: flex-start;
-        color: red;
-        font-size: 12px;
-    }
-    @content;
+  border: 1px solid red;
+  margin-bottom: 0;
+  & + label {
+    width: 100%;
+    min-height: 28px;
+    display: flex;
+    justify-content: flex-start;
+    color: red;
+    font-size: 12px;
+  }
+  @content;
 }
 
 .input-search {
-    height: 40px;
-    position: relative;
-    input {
-        width: 100%;
-        height: inherit;
-        background-color: var(--white);
-        border: 1px solid #c4c4cd;
-        border-radius: 4px;
-        padding: 10px 12px;
+  height: 40px;
+  position: relative;
+  input {
+    width: 100%;
+    height: inherit;
+    background-color: var(--white);
+    border: 1px solid #c4c4cd;
+    border-radius: 4px;
+    padding: 10px 12px;
 
-        &::placeholder {
-            font-family: "Averta CY";
-            font-size: 1rem;
-        }
-        & + label {
-            display: none;
-        }
+    &::placeholder {
+      font-family: 'Averta CY';
+      font-size: 1rem;
     }
-    &.invalid {
-        input {
-            @include input-invalid;
-        }
+    & + label {
+      display: none;
     }
-    &.invalidMessageFromDB {
-        @include input-invalid;
-        & + label {
-            position: relative;
-        }
+  }
+  &.invalid {
+    input {
+      @include input-invalid;
     }
+  }
+  &.invalidMessageFromDB {
+    @include input-invalid;
+    & + label {
+      position: relative;
+    }
+  }
 }
 .results {
-    max-height: 300px;
-    overflow: auto;
-    scrollbar-width: none;
-    list-style: none;
-    position: absolute;
-    left: 0;
-    right: 0;
-    transform: translateY(100%);
-    border-radius: 0.5rem;
-    bottom: -0.75rem;
-    box-shadow: 0px 0px 100px #e1f0f9;
-    z-index: 1;
-    &::-webkit-scrollbar {
-        width: 1.5rem;
-        &-thumb {
-            border: 0.5rem solid white;
-            border-radius: 2rem;
-            background-color: var(--grey);
-        }
-        &-track {
-            background: white;
-            border-top-right-radius: 0.5rem;
-            border-bottom-right-radius: 0.5rem;
-        }
-        &-button {
-            display: none;
-        }
+  max-height: 300px;
+  overflow: auto;
+  scrollbar-width: none;
+  list-style: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  transform: translateY(100%);
+  border-radius: 0.5rem;
+  bottom: -0.75rem;
+  box-shadow: 0px 0px 100px #e1f0f9;
+  z-index: 1;
+  &::-webkit-scrollbar {
+    width: 1.5rem;
+    &-thumb {
+      border: 0.5rem solid white;
+      border-radius: 2rem;
+      background-color: var(--grey);
     }
-    li {
-        height: 60px;
-        display: flex;
-        align-items: center;
-        background-color: white;
-        padding-left: 16px;
-        cursor: pointer;
-        &:active,
-        &.active {
-            color: #e95ba8;
-        }
+    &-track {
+      background: white;
+      border-top-right-radius: 0.5rem;
+      border-bottom-right-radius: 0.5rem;
     }
+    &-button {
+      display: none;
+    }
+  }
+  li {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    padding-left: 16px;
+    cursor: pointer;
+    &:active,
+    &.active {
+      color: #e95ba8;
+    }
+  }
 }
 </style>

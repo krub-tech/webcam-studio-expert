@@ -26,6 +26,7 @@
 
 <script>
 import Like from '@/components/buttons/Like'
+
 export default {
   name: 'MobileListCard',
   components: {

@@ -1,3 +1,4 @@
+/* eslint no-shadow: ["error", { "allow": ["state", "getters"] }] */
 import { getStudiosByQuery } from '@/api/studios'
 
 export const state = () => ({
@@ -21,13 +22,11 @@ export const mutations = {
   },
 }
 export const getters = {
-  query: (state, getters, rootState, rootGetters) => {
-    return {
-      city: rootState.cities.current.id,
-      ordering: state.ordering,
-      ...rootState.filter.query,
-    }
-  },
+  query: (state, getters, rootState, rootGetters) => ({
+    city: rootState.cities.current.id,
+    ordering: state.ordering,
+    ...rootState.filter.query,
+  }),
 }
 
 export const actions = {

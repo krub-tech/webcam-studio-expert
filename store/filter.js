@@ -1,3 +1,4 @@
+/* eslint no-shadow: ["error", { "allow": ["state", "getters"] }] */
 export const state = () => ({
   params: {
     studio_type: [],
@@ -30,9 +31,9 @@ export const mutations = {
     }
   },
   resetParams(state) {
-    for (const key of Object.keys(state.params)) {
+    Object.keys(state.params).forEach((key) => {
       state.params[key] = []
-    }
+    })
   },
   resetQuery(state) {
     state.query = null
@@ -51,11 +52,11 @@ export const actions = {
     ctx.dispatch('studios/updateCurrents', null, { root: true })
   },
   build(ctx) {
-    for (const [key, value] of Object.entries(ctx.state.params)) {
+    Object.entries(ctx.state.params).forEach(([key, value]) => {
       if (value.length)
         ctx.commit('updateQuery', { key, data: value.toString() })
       else ctx.commit('updateQuery', { key, data: null })
-    }
+    })
   },
   reset(ctx) {
     ctx.commit('resetParams')

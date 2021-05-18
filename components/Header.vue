@@ -8,10 +8,7 @@
         </button>
         <Logo />
         <div class="header--btns">
-          <Like
-            class="header--btns-favorites"
-            @click.native="toFavoritesPage"
-          />
+          <Like class="header--btns-favorites" @click.enter="toFavoritesPage" />
           <button class="header--btns-mail" />
           <!-- <button class="header--btns-profile" /> -->
         </div>
@@ -44,6 +41,10 @@ export default {
       pageOffset: 0,
     }
   },
+  created() {
+    console.log(process.env)
+    console.log(process.env.baseUrl)
+  },
   mounted() {
     this.$nextTick(function () {
       this.resizeHandle()
@@ -55,9 +56,9 @@ export default {
     throttle,
     getFirstFavoritesStudio() {
       if (localStorage.favoritesIndexes) {
-        return JSON.parse(localStorage.favoritesIndexes).find((item, idx) => {
-          return idx === 0
-        })
+        return JSON.parse(localStorage.favoritesIndexes).find(
+          (item, idx) => idx === 0
+        )
       }
     },
     async toFavoritesPage() {

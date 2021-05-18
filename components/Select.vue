@@ -61,9 +61,8 @@ export default {
     isSelected(payload) {
       if (this.selected) {
         return this.selected.includes(payload)
-      } else {
-        return this.value === payload
       }
+      return this.value === payload
     },
   },
 }

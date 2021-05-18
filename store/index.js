@@ -1,3 +1,4 @@
+/* eslint no-shadow: ["error", { "allow": ["state", "getters"] }] */
 export const state = () => ({
   windowWidth: 0,
   isMenuOpen: false,
@@ -14,11 +15,9 @@ export const mutations = {
   },
 }
 export const getters = {
-  isMobile: (state) => {
-    return state.windowWidth < 420
-  },
+  isMobile: (state) => state.windowWidth < 420,
   isMenuOpen: (state, getters) => {
     if (getters.isMobile) return state.isMenuOpen
-    else return true
+    return true
   },
 }

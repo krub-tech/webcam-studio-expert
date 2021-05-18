@@ -20,6 +20,9 @@ export const mutations = {
     if (idx === -1) state.params[key].push(data)
     else state.params[key].splice(idx, 1)
   },
+  setParams(state, { key, data }) {
+    state.params[key] = data
+  },
   updateQuery(state, { key, data }) {
     state.query = {
       ...state.query,
@@ -39,12 +42,20 @@ export const mutations = {
 export const actions = {
   update(ctx, { key, data }) {
     ctx.commit('updateParams', { key, data })
+    ctx.dispatch('build')
+    ctx.dispatch('studios/updateCurrents', null, { root: true })
+  },
+  set(ctx, { key, data }) {
+    ctx.commit('setParams', { key, data })
+    ctx.dispatch('build')
+    ctx.dispatch('studios/updateCurrents', null, { root: true })
+  },
+  build(ctx) {
     for (const [key, value] of Object.entries(ctx.state.params)) {
       if (value.length)
         ctx.commit('updateQuery', { key, data: value.toString() })
       else ctx.commit('updateQuery', { key, data: null })
     }
-    ctx.dispatch('studios/updateCurrents', null, { root: true })
   },
   reset(ctx) {
     ctx.commit('resetParams')

@@ -21,7 +21,7 @@
           :key="key"
           :item="studio_type"
           :checked="isChecked($store.state.filter.params.studio_type, key)"
-          @mouseup.native="checkboxHandle('studio_type', key)"
+          @mouseup.native="checkboxHandle(key, 'studio_type')"
         />
       </div>
       <hr />
@@ -32,7 +32,7 @@
             :key="key"
             :item="models_age"
             :selector="'models_age'"
-            :selected="query.models_age.toString()"
+            :selected="$store.state.filter.params.models_age.toString()"
             @mouseup.native="radioHandle(key, 'models_age')"
           />
         </div>
@@ -145,7 +145,7 @@
 
 <script>
 import Checkbox from '@/components/form/Checkbox'
-// import Radio from '@/components/form/Radio'
+import Radio from '@/components/form/Radio'
 // import Range from '@/components/form/Range'
 // import Select from '@/components/Select'
 // import MultiSelect from '@/components/MultiSelect'
@@ -160,7 +160,7 @@ export default {
     Checkbox,
     // Select,
     // MultiSelect,
-    // Radio,
+    Radio,
     // Range,
     // MultiRange,
     // InputSearch,
@@ -215,15 +215,18 @@ export default {
       }
       localStorage.filterQuery = JSON.stringify(this.query)
     },
-    checkboxHandle(selector, payload) {
+    checkboxHandle(payload, selector) {
       this.$store.dispatch('filter/update', {
         key: selector,
         data: payload,
       })
-      // this.$toArray(this.query[selector], payload).toString()
     },
     radioHandle(payload, selector) {
-      this.query[selector] = payload
+      // this.query[selector] = payload
+      this.$store.dispatch('filter/set', {
+        key: selector,
+        data: payload,
+      })
     },
     selectHandle(payload, selector) {
       this.query[selector] = []

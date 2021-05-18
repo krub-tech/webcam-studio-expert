@@ -16,7 +16,9 @@ export const state = () => ({
 })
 export const mutations = {
   updateParams(state, { key, data }) {
-    this.$toArray(state.params[key], data)
+    const idx = state.params[key].indexOf(data)
+    if (idx === -1) state.params[key].push(data)
+    else state.params[key].splice(idx, 1)
   },
   updateQuery(state, { key, data }) {
     state.query = {
@@ -40,6 +42,7 @@ export const actions = {
     for (const [key, value] of Object.entries(ctx.state.params)) {
       if (value.length)
         ctx.commit('updateQuery', { key, data: value.toString() })
+      else ctx.commit('updateQuery', { key, data: null })
     }
     ctx.dispatch('studios/updateCurrents', null, { root: true })
   },

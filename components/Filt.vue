@@ -25,7 +25,7 @@
         />
       </div>
       <hr />
-      <!-- <div class="models_age">
+      <div class="models_age">
         <div class="inner">
           <Radio
             v-for="(models_age, key) in options.models_age"
@@ -38,7 +38,7 @@
         </div>
       </div>
       <hr />
-      <div class="working_with_model_types">
+      <!--       <div class="working_with_model_types">
         <Checkbox
           v-for="(model_types, key) in options.working_with_model_types"
           :key="key"

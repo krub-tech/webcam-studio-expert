@@ -186,6 +186,9 @@ export default {
     cityStudiosLength() {
       return this.$store.state.studios.cityStudiosLength
     },
+    devices() {
+      return this.nameByKeys('devices')
+    },
   },
   methods: {
     queryBuild(query) {
@@ -226,10 +229,9 @@ export default {
         }
       })
       this.$store.dispatch('filter/set', { key: selector, data: result })
-      this.nameByKeys(selector)
     },
     nameByKeys(selector) {
-      this.query[selector] = this.$store.state.filter.params[selector].map(
+      return this.$store.state.filter.params[selector].map(
         (el) => this.options[selector][el]
       )
     },

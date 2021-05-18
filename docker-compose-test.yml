@@ -10,6 +10,7 @@ services:
     image: ${IMAGE_BASE_PATH}/web-nuxt-test:latest
     networks:
       - studio-expert-swarm
+      - default
     ports:
       - "4546:80"
 

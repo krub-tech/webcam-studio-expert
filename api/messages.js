@@ -1,3 +1,5 @@
-export function getMessageOptions(client) {
-  return client.$get('message/options/')
+import { client } from './client'
+
+export function getMessageOptions() {
+  return client.get('message/options/')
 }

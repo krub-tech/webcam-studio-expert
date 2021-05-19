@@ -1,4 +1,3 @@
-.vscode
 .gitignore
 .dockerignore
 .gitlab-ci.yml

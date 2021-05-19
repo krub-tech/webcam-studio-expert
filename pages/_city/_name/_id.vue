@@ -197,7 +197,7 @@ export default {
     }
   },
   async fetch() {
-    this.studio = await this.getStudioById(this.$axios, this.$route.params.id)
+    this.studio = await this.getStudioById(this.$route.params.id)
   },
   computed: {
     studios() {

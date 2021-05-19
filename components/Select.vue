@@ -29,6 +29,10 @@ export default {
       type: String,
       default: 'Сделайте выбор',
     },
+    selected: {
+      type: Array,
+      default: null,
+    },
   },
   data() {
     return {

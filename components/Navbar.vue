@@ -53,7 +53,7 @@ export default {
     }
   },
   async fetch() {
-    const citiesUniques = await this.getUniqueCities()
+    const citiesUniques = await this.getUniqueCities(this.$axios)
     this.$store.commit('cities/updateCitiesUniques', citiesUniques)
   },
   computed: {

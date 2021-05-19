@@ -62,7 +62,10 @@ export default {
     },
     async toFavoritesPage() {
       const firstFavoritesStudioIdx = this.getFirstFavoritesStudio()
-      const studio = await this.getStudioById(firstFavoritesStudioIdx)
+      const studio = await this.getStudioById(
+        this.$axios,
+        firstFavoritesStudioIdx
+      )
       this.$router.push({
         name: 'city-name-id',
         params: {

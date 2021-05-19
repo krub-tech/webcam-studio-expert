@@ -197,7 +197,7 @@ export default {
     }
   },
   async fetch() {
-    this.studio = await this.getStudioById(this.$axios, this.$route.params.id)
+    this.studio = await getStudioById(this.$axios, this.$route.params.id)
   },
   computed: {
     studios() {
@@ -208,7 +208,6 @@ export default {
     },
   },
   methods: {
-    getStudioById,
     toCyrillic(city) {
       return this.$toCyrillic(city)
     },

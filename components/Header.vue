@@ -45,13 +45,10 @@ export default {
     }
   },
   mounted() {
-    this.$nextTick(function () {
-      this.resizeHandle()
-    })
+    this.$nextTick(() => this.resizeHandle())
     window.addEventListener('resize', this.throttle(this.resizeHandle, 500))
   },
   methods: {
-    getStudioById,
     throttle,
     getFirstFavoritesStudio() {
       if (localStorage.favoritesIndexes) {
@@ -62,10 +59,7 @@ export default {
     },
     async toFavoritesPage() {
       const firstFavoritesStudioIdx = this.getFirstFavoritesStudio()
-      const studio = await this.getStudioById(
-        this.$axios,
-        firstFavoritesStudioIdx
-      )
+      const studio = await getStudioById(this.$axios, firstFavoritesStudioIdx)
       this.$router.push({
         name: 'city-name-id',
         params: {

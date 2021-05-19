@@ -39,8 +39,7 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-    baseURL: 'http://webcam-studio-expert_web/api',
-    browserBaseURL: 'http://78.47.247.176:4546/api',
+    baseUrl: process.env.BASE_API_URL,
   },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa

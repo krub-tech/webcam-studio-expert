@@ -53,7 +53,7 @@ export default {
     }
   },
   async fetch() {
-    const citiesUniques = await this.getUniqueCities(this.$axios)
+    const citiesUniques = await getUniqueCities(this.$axios)
     this.$store.commit('cities/updateCitiesUniques', citiesUniques)
   },
   computed: {
@@ -63,7 +63,6 @@ export default {
   },
 
   methods: {
-    getUniqueCities,
     selectCityHandle(city) {
       const cityData = this.cities.find((el) => el.name === city)
       this.$store.commit('cities/updateCitiesCurrentById', cityData.id)

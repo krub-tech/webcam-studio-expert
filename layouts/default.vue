@@ -16,7 +16,7 @@ export default {
     Header,
   },
   async fetch() {
-    const options = await this.getStudiosOptions()
+    const options = await this.getStudiosOptions(this.$axios)
     this.$store.commit('studios/updateStudiosOptions', options)
   },
   computed: {
@@ -46,7 +46,7 @@ export default {
     getStudiosByQuery,
     getStudiosOptions,
     async updateCityStudiosLength(newCity) {
-      const cityStudios = await this.getStudiosByQuery({
+      const cityStudios = await this.getStudiosByQuery(this.$axios, {
         city: newCity,
       })
       this.$store.commit('studios/updateAllByCityLength', cityStudios.count)

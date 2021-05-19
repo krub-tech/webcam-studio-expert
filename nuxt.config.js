@@ -2,10 +2,6 @@ export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: 'server',
 
-  env: {
-    baseUrl: process.env.BASE_API_URL,
-  },
-
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'webcam-expert',
@@ -22,7 +18,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   // plugins: ['@/plugins/router'],
-  plugins: ['@/plugins/helpers'],
+  plugins: ['@/plugins/helpers', '@/plugins/axios'],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -42,7 +38,10 @@ export default {
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  axios: {
+    baseURL: 'http://webcam-studio-expert_web',
+    browserBaseURL: 'http://78.47.247.176:4546',
+  },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {

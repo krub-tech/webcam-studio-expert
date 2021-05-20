@@ -67,7 +67,7 @@ export default {
     selectCityHandle(city) {
       const cityData = this.cities.find((el) => el.name === city)
       this.$store.commit('cities/updateCitiesCurrentById', cityData.id)
-      this.$store.commit('studios/filterReset')
+      this.$store.dispatch('filter/reset')
       this.$router.push({
         name: 'city',
         params: { city: cityData.id },

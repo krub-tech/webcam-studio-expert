@@ -16,6 +16,10 @@ export const state = () => ({
   query: null,
 })
 export const mutations = {
+  setFilter(state, payload) {
+    console.log('setFilter')
+    state.params = payload
+  },
   updateParams(state, { key, data }) {
     const idx = state.params[key].indexOf(data)
     if (idx === -1) state.params[key].push(data)
@@ -51,16 +55,22 @@ export const actions = {
     ctx.dispatch('build')
     ctx.dispatch('studios/updateCurrents', null, { root: true })
   },
+  change(ctx, payload) {
+    ctx.commit('setFilter', payload)
+    ctx.dispatch('studios/updateCurrents', null, { root: true })
+  },
   build(ctx) {
     Object.entries(ctx.state.params).forEach(([key, value]) => {
       if (value.length)
         ctx.commit('updateQuery', { key, data: value.toString() })
       else ctx.commit('updateQuery', { key, data: null })
     })
+    sessionStorage.filter = JSON.stringify(ctx.state.params)
   },
   reset(ctx) {
     ctx.commit('resetParams')
     ctx.commit('resetQuery')
+    sessionStorage.filter = JSON.stringify(ctx.state.params)
     ctx.dispatch('studios/updateCurrents', null, { root: true })
   },
 }

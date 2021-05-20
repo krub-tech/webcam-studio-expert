@@ -22,7 +22,7 @@ export const mutations = {
   },
 }
 export const getters = {
-  query: (state, getters, rootState, rootGetters) => ({
+  query: (state, getters, rootState) => ({
     city: rootState.cities.current.id,
     ordering: state.ordering,
     ...rootState.filter.query,

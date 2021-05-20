@@ -1,9 +1,9 @@
 <template>
   <div class="cards">
     <main class="cards--container">
-      <Card v-for="studio in studios" :key="studio.name" :data="studio" />
+      <Card v-for="studio in studios" :key="studio.id" :data="studio" />
     </main>
-    <!-- <Pagination /> -->
+    <Pagination />
     <h2>
       <span>SEO-текст</span>
       Вот уже более трех лет мы успешно продвигаем свои услуги на рынке

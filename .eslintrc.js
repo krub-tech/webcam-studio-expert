@@ -25,6 +25,7 @@ module.exports = {
     'no-param-reassign': 'off',
     'consistent-return': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
+    'linebreak-style': 'off',
   },
   settings: {
     'import/resolver': {

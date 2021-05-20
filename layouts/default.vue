@@ -8,47 +8,10 @@
 <script>
 import Header from '@/components/Header'
 
-import { getStudiosByQuery, getStudiosOptions } from '@/api/studios'
-
 export default {
   name: 'StudiosLayout',
   components: {
     Header,
-  },
-  async fetch() {
-    const options = await getStudiosOptions(this.$axios)
-    this.$store.commit('studios/updateStudiosOptions', options)
-  },
-  computed: {
-    query() {
-      return this.$store.getters['studios/query']
-    },
-    cityCurrent() {
-      return this.$store.state.cities.current.id
-    },
-  },
-  watch: {
-    cityCurrent: {
-      handler(newCity) {
-        this.updateCityStudiosLength(newCity)
-      },
-      deep: true,
-    },
-  },
-  mounted() {
-    this.$store.commit(
-      'cities/updateCitiesCurrentById',
-      this.$route.params.city
-    )
-    this.$store.dispatch('studios/updateCurrents')
-  },
-  methods: {
-    async updateCityStudiosLength(newCity) {
-      const cityStudios = await getStudiosByQuery(this.$axios, {
-        city: newCity,
-      })
-      this.$store.commit('studios/updateAllByCityLength', cityStudios.count)
-    },
   },
 }
 </script>

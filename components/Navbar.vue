@@ -1,7 +1,7 @@
 <template>
   <div class="nav-wrapper">
     <nav class="nav">
-      <div v-if="cities" class="nav--city">
+      <div v-if="cities && $store.state.cities.current" class="nav--city">
         <Select
           class="select--cities"
           :options="cities.map((city) => city.name)"
@@ -30,6 +30,7 @@
 <script>
 import Select from '@/components/Select'
 
+import { getStudiosOptions } from '@/api/studios'
 import { getUniqueCities } from '@/api/cities'
 
 export default {
@@ -52,16 +53,22 @@ export default {
       ],
     }
   },
-  async fetch() {
-    const citiesUniques = await getUniqueCities(this.$axios)
-    this.$store.commit('cities/updateCitiesUniques', citiesUniques)
-  },
   computed: {
     cities() {
       return this.$store.state.cities.uniques
     },
   },
-
+  async created() {
+    const options = await getStudiosOptions(this.$axios)
+    this.$store.commit('studios/updateStudiosOptions', options)
+    const citiesUniques = await getUniqueCities(this.$axios)
+    this.$store.commit('cities/updateCitiesUniques', citiesUniques)
+    this.$store.commit(
+      'cities/updateCitiesCurrentById',
+      this.$route.params.city
+    )
+    this.$store.dispatch('studios/updateCurrents')
+  },
   methods: {
     selectCityHandle(city) {
       const cityData = this.cities.find((el) => el.name === city)

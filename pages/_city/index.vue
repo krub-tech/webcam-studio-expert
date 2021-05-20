@@ -1,7 +1,7 @@
 <template>
   <section class="studios">
-    <div class="studios--title">
-      <h1>Вебкам студии г. {{ $store.state.cities.current.name }}</h1>
+    <div v-if="currentCity" class="studios--title">
+      <h1>Вебкам студии г. {{ currentCity }}</h1>
       <p>Место для SEO-подстрочника</p>
     </div>
     <aside class="filter-wrapper">
@@ -33,8 +33,6 @@
 import Cards from '@/components/Cards'
 import Filt from '@/components/Filt'
 
-import { getStudiosByQuery } from '@/api/studios'
-
 export default {
   name: 'StudiosByCity',
   components: {
@@ -52,6 +50,9 @@ export default {
   computed: {
     studios() {
       return this.$store.state.studios.currents
+    },
+    currentCity() {
+      return this.$store.state.cities.current?.name
     },
   },
   methods: {

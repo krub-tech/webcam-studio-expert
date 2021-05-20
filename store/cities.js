@@ -1,7 +1,7 @@
 /* eslint no-shadow: ["error", { "allow": ["state", "getters"] }] */
 export const state = () => ({
   uniques: null,
-  current: { id: 'sankt-peterburg', name: 'Санкт-Петербург' },
+  current: null,
 })
 export const mutations = {
   updateCitiesUniques(state, payload) {

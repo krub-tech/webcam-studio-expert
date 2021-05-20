@@ -17,7 +17,6 @@ export const state = () => ({
 })
 export const mutations = {
   setFilter(state, payload) {
-    console.log('setFilter')
     state.params = payload
   },
   updateParams(state, { key, data }) {
@@ -57,6 +56,7 @@ export const actions = {
   },
   change(ctx, payload) {
     ctx.commit('setFilter', payload)
+    ctx.dispatch('build')
     ctx.dispatch('studios/updateCurrents', null, { root: true })
   },
   build(ctx) {

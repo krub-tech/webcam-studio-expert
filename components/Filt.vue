@@ -189,10 +189,10 @@ export default {
       return this.nameByKeys('devices')
     },
   },
-  // mounted() {
-  //   if (sessionStorage.filter)
-  //     this.$store.dispatch('filter/change', JSON.parse(sessionStorage.filter))
-  // },
+  mounted() {
+    if (sessionStorage.filter)
+      this.$store.dispatch('filter/change', JSON.parse(sessionStorage.filter))
+  },
   methods: {
     checkboxHandle(payload, selector) {
       this.$store.dispatch('filter/update', {

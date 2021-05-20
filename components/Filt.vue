@@ -7,8 +7,8 @@
         @value="searchStudio($event)"
       />
       <hr />
-      <!-- <DistrictsSelect :city="$store.state.cities.currentCity" />
-      <MetroSelect :city="$store.state.cities.currentCity" /> -->
+      <DistrictsSelect :city="$store.state.cities.current" />
+      <MetroSelect :city="$store.state.cities.current" />
       <!-- <hr
         v-if="
           $store.state.cities.districtsByCurrentCity.length ||
@@ -183,7 +183,7 @@ export default {
       return this.$store.state.studios.allByCityLength
     },
     searchResults() {
-      return this.$store.state.studios.currents.map((el) => el.name)
+      return this.$store.state.studios.currents?.map((el) => el.name)
     },
     staff_gender() {
       return this.nameByKeys('staff_gender')

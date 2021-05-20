@@ -1,12 +1,15 @@
-export function getStudiosOptions(client) {
-  return client.$get('user/options/')
-}
+const resource = 'user'
+export default ($axios) => ({
+  getOptions() {
+    return $axios.$get(`${resource}/options/`)
+  },
 
-export function getStudiosByQuery(client, query) {
-  console.log('query', query)
-  return client.$get('user/studios/', { params: query })
-}
+  getByQuery(query) {
+    console.log('query', query)
+    return $axios.$get(`${resource}/studios/`, { params: query })
+  },
 
-export function getStudioById(client, id) {
-  return client.$get(`user/studios/${id}/`)
-}
+  getById(id) {
+    return $axios.$get(`${resource}/studios/${id}/`)
+  },
+})

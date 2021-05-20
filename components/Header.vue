@@ -26,8 +26,6 @@
 import Logo from '@/components/Logo'
 import Like from '@/components/buttons/Like'
 import Navbar from '@/components/Navbar'
-
-import { getStudioById } from '@/api/studios'
 import throttle from 'lodash.throttle'
 
 export default {
@@ -59,7 +57,7 @@ export default {
     },
     async toFavoritesPage() {
       const firstFavoritesStudioIdx = this.getFirstFavoritesStudio()
-      const studio = await getStudioById(this.$axios, firstFavoritesStudioIdx)
+      const studio = await this.$api.studios.getById(firstFavoritesStudioIdx)
       this.$router.push({
         name: 'city-name-id',
         params: {

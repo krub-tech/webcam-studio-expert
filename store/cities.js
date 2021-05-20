@@ -1,6 +1,4 @@
 /* eslint no-shadow: ["error", { "allow": ["state", "getters"] }] */
-import { getDistrictsByCity } from '@/api/cities'
-
 export const state = () => ({
   uniques: null,
   current: null,
@@ -40,7 +38,7 @@ export const actions = {
     ctx.commit('updateDistricts', null)
     ctx.commit('setDistrictsSelected', [])
     ctx.commit('updateCurrentById', payload)
-    const districts = await getDistrictsByCity(this.$axios, payload)
+    const districts = await this.$api.geo.getDistrictsByCity(payload)
     ctx.commit('updateDistricts', districts)
   },
   async updateDistrictsSelected(ctx, payload) {

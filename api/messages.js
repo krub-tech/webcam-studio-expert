@@ -1,3 +1,6 @@
-export function getMessageOptions(client) {
-  return client.$get('message/options/')
-}
+const resource = 'message'
+export default ($axios) => ({
+  getOptions() {
+    return $axios.$get(`${resource}/options/`)
+  },
+})

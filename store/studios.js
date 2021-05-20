@@ -1,6 +1,4 @@
 /* eslint no-shadow: ["error", { "allow": ["state", "getters"] }] */
-import { getStudiosByQuery } from '@/api/studios'
-
 export const state = () => ({
   allByCityLength: null,
   allWithParamsLength: null,
@@ -46,7 +44,7 @@ export const getters = {
 
 export const actions = {
   async updateCurrents(ctx) {
-    const studios = await getStudiosByQuery(this.$axios, ctx.getters.query)
+    const studios = await this.$api.studios.getByQuery(ctx.getters.query)
     ctx.commit('updateAllByCityLength', studios.count_by_city)
     ctx.commit('updateAllWithParamsLength', studios.count)
     ctx.commit('updateCurrentStudios', studios.results)

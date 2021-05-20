@@ -18,7 +18,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   // plugins: ['@/plugins/router'],
-  plugins: ['@/plugins/helpers', '@/plugins/axios'],
+  plugins: ['@/plugins/helpers', '@/plugins/axios', '@/plugins/apiClient'],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,

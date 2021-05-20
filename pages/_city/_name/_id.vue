@@ -181,8 +181,6 @@ import StudioSidebar from '@/components/StudioSidebar'
 
 // import Slider from '@/components/Slider'
 
-import { getStudioById } from '@/api/studios'
-
 export default {
   name: 'StudioById',
   components: {
@@ -196,9 +194,6 @@ export default {
       studio: null,
     }
   },
-  async fetch() {
-    this.studio = await getStudioById(this.$axios, this.$route.params.id)
-  },
   computed: {
     studios() {
       return this.$store.state.studios.currents
@@ -206,6 +201,9 @@ export default {
     studiosOptions() {
       return this.$store.state.studios.options
     },
+  },
+  async created() {
+    this.studio = await this.$api.studios.getById(this.$route.params.id)
   },
   methods: {
     toCyrillic(city) {

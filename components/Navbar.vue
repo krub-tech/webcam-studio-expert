@@ -30,9 +30,6 @@
 <script>
 import Select from '@/components/Select'
 
-import { getStudiosOptions } from '@/api/studios'
-import { getUniqueCities } from '@/api/cities'
-
 export default {
   components: {
     Select,
@@ -59,9 +56,9 @@ export default {
     },
   },
   async created() {
-    const options = await getStudiosOptions(this.$axios)
+    const options = await this.$api.studios.getOptions()
     this.$store.commit('studios/updateStudiosOptions', options)
-    const citiesUniques = await getUniqueCities(this.$axios)
+    const citiesUniques = await this.$api.geo.getCities()
     this.$store.commit('cities/updateCitiesUniques', citiesUniques)
     this.$store.dispatch('cities/updateCurrent', this.$route.params.city)
     this.$store.dispatch('studios/updateCurrents')

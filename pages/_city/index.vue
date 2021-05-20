@@ -12,7 +12,7 @@
       <p class="studios--count-current">
         {{ $store.state.studios.currents.length }}
       </p>
-      /{{ $store.state.studios.cityStudiosLength }}
+      /{{ $store.state.studios.allByCityLength }}
     </div> -->
     <div class="sort-wrapper">
       <div class="select-wrapper sort">

@@ -1,12 +1,12 @@
 <template>
   <div v-if="options" class="filter">
     <div class="filter--container">
-      <!-- <InputSearch
-        :placeholder="query.search.toString()"
+      <InputSearch
+        :placeholder="$store.state.studios.search"
         :results="searchResults"
         @value="searchStudio($event)"
       />
-      <hr /> -->
+      <hr />
       <!-- <DistrictsSelect :city="$store.state.cities.currentCity" />
       <MetroSelect :city="$store.state.cities.currentCity" /> -->
       <!-- <hr
@@ -155,7 +155,7 @@
 import Checkbox from '@/components/form/Checkbox'
 import Radio from '@/components/form/Radio'
 import Range from '@/components/form/Range'
-// import InputSearch from '@/components/form/InputSearch'
+import InputSearch from '@/components/form/InputSearch'
 // import DistrictsSelect from '@/components/form/modules/DistrictsSelect'
 // import MetroSelect from '@/components/form/modules/MetroSelect'
 
@@ -165,7 +165,7 @@ export default {
     Checkbox,
     Radio,
     Range,
-    // InputSearch,
+    InputSearch,
     // DistrictsSelect,
     // MetroSelect,
   },
@@ -177,10 +177,13 @@ export default {
       return this.$store.state.studios.options
     },
     currentStudiosLength() {
-      return this.$store.state.studios.currents?.length
+      return this.$store.state.studios.allWithParamsLength
     },
     cityStudiosLength() {
-      return this.$store.state.studios.cityStudiosLength
+      return this.$store.state.studios.allByCityLength
+    },
+    searchResults() {
+      return this.$store.state.studios.currents.map((el) => el.name)
     },
     staff_gender() {
       return this.nameByKeys('staff_gender')
@@ -194,6 +197,11 @@ export default {
       this.$store.dispatch('filter/change', JSON.parse(sessionStorage.filter))
   },
   methods: {
+    searchStudio(payload) {
+      console.log(payload)
+      this.$store.commit('studios/updateSearchQuery', payload)
+      this.$store.dispatch('studios/updateCurrents')
+    },
     checkboxHandle(payload, selector) {
       this.$store.dispatch('filter/update', {
         key: selector,

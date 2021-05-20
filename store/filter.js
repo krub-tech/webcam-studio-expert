@@ -60,6 +60,7 @@ export const actions = {
     ctx.dispatch('studios/updateCurrents', null, { root: true })
   },
   build(ctx) {
+    ctx.commit('studios/updatePageNumber', 1, { root: true })
     Object.entries(ctx.state.params).forEach(([key, value]) => {
       if (value.length)
         ctx.commit('updateQuery', { key, data: value.toString() })

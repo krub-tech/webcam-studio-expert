@@ -2,14 +2,20 @@
 import { getStudiosByQuery } from '@/api/studios'
 
 export const state = () => ({
-  cityStudiosLength: null,
+  allByCityLength: null,
+  allWithParamsLength: null,
   currents: null,
   options: null,
+  search: null,
   ordering: null,
+  page: 1,
 })
 export const mutations = {
   updateAllByCityLength(state, payload) {
-    state.cityStudiosLength = payload
+    state.allByCityLength = payload
+  },
+  updateAllWithParamsLength(state, payload) {
+    state.allWithParamsLength = payload
   },
   updateCurrentStudios(state, payload) {
     state.currents = payload
@@ -17,13 +23,21 @@ export const mutations = {
   updateStudiosOptions(state, payload) {
     state.options = payload
   },
+  updateSearchQuery(state, payload) {
+    state.search = payload
+  },
   updateOrdering(state, payload) {
     state.ordering = payload
+  },
+  updatePageNumber(state, payload) {
+    state.page = payload
   },
 }
 export const getters = {
   query: (state, getters, rootState) => ({
+    offset: (state.page - 1) * 12,
     city: rootState.cities.current?.id ?? null,
+    search: state.search,
     ordering: state.ordering,
     ...rootState.filter.query,
   }),
@@ -31,11 +45,13 @@ export const getters = {
 
 export const actions = {
   async updateCurrents(ctx) {
-    const studiosAllByCity = await getStudiosByQuery(this.$axios, {
-      city: ctx.getters.query.city,
-    })
-    ctx.commit('updateAllByCityLength', studiosAllByCity.count)
     const studios = await getStudiosByQuery(this.$axios, ctx.getters.query)
+    ctx.commit('updateAllByCityLength', studios.count_by_city)
+    ctx.commit('updateAllWithParamsLength', studios.count)
     ctx.commit('updateCurrentStudios', studios.results)
+  },
+  paginate(ctx, payload) {
+    ctx.commit('updatePageNumber', payload)
+    ctx.dispatch('updateCurrents')
   },
 }

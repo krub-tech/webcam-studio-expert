@@ -1,9 +1,8 @@
 <template>
   <div v-if="pagesLength > 1" class="pagination">
-    <button v-if="pageNumber - paginationPadding - 1 > 0">...</button>
-    <template v-for="paginationNumber in paginationNumbers">
+    <button v-if="pageNumber - 1 > 0">...</button>
+    <div v-for="paginationNumber in paginationNumbers" :key="paginationNumber">
       <button
-        :key="paginationNumber"
         :class="{
           'pagination--btn-active': pageNumber === paginationNumber,
         }"
@@ -11,9 +10,9 @@
       >
         {{ paginationNumber }}
       </button>
-    </template>
+    </div>
     <button
-      v-if="pageNumber + paginationPadding >= pagesLength"
+      v-if="pageNumber + 2 >= pagesLength"
       :class="{
         'pagination--btn-active': pageNumber === pagesLength,
       }"
@@ -28,40 +27,28 @@
 <script>
 export default {
   name: 'Paginate',
-  data() {
-    return {
-      paginationRange: 4,
-    }
-  },
   computed: {
-    currentStudiosLength() {
-      return this.$store.getters.currentStudiosLength
-    },
     pageNumber() {
-      return this.$store.getters.pageNumber
+      return this.$store.state.studios.page
     },
     pagesLength() {
-      return Math.round(
-        this.currentStudiosLength / this.$store.getters.paginationSize
-      )
-    },
-    paginationPadding() {
-      return Math.round(this.paginationRange / 2)
+      return Math.round(this.$store.state.studios.allWithParamsLength / 12)
     },
     paginationNumbers() {
       const paginationNumbers = []
-      const start = this.pageNumber - this.paginationPadding
-      const end = start + this.paginationRange
-      for (let i = start; i <= end; i++) {
-        if (i > 0 && i < this.pagesLength) paginationNumbers.push(i)
+      const start = this.pageNumber - 2
+      const end = start + 4
+      for (let i = start; i <= end; i += 1) {
+        if (i > 0 && i < this.pagesLength) {
+          paginationNumbers.push(i)
+        }
       }
       return paginationNumbers
     },
   },
-  mounted() {},
   methods: {
     paginate(pageNumber) {
-      this.$store.dispatch('paginate', pageNumber)
+      this.$store.dispatch('studios/paginate', pageNumber)
     },
   },
 }
@@ -69,6 +56,8 @@ export default {
 
 <style lang="scss">
 .pagination {
+  display: flex;
+  align-self: center;
   height: var(--fr-2);
   width: max-content;
   background-color: var(--white);

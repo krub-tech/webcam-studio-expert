@@ -199,6 +199,7 @@ export default {
   methods: {
     searchStudio(payload) {
       console.log(payload)
+      this.$store.commit('studios/updatePageNumber', 1)
       this.$store.commit('studios/updateSearchQuery', payload)
       this.$store.dispatch('studios/updateCurrents')
     },

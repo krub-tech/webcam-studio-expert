@@ -11,7 +11,7 @@
       <DistrictsSelect
         v-if="$store.state.cities.districts"
         :districts="districts"
-        :selected="$store.state.cities.districtsSelected"
+        :selected="districtsSelected"
       />
       <!-- <MetroSelect :city="$store.state.cities.current" /> -->
       <!-- <hr
@@ -198,6 +198,11 @@ export default {
     },
     districts() {
       return this.$store.state.cities.districts?.map((el) => el.name)
+    },
+    districtsSelected() {
+      return this.$store.state.cities.districtsSelected.map((el) => {
+        return this.$store.state.cities.districts.find((l) => l.id === el).name
+      })
     },
   },
   mounted() {

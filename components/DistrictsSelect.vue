@@ -24,7 +24,10 @@ export default {
   },
   methods: {
     districtsSelect(payload) {
-      this.$store.dispatch('cities/updateDistrictsSelected', payload)
+      const districtData = this.$store.state.cities.districts.find(
+        (el) => el.name === payload
+      )
+      this.$store.dispatch('cities/updateDistrictsSelected', districtData.id)
     },
   },
 }

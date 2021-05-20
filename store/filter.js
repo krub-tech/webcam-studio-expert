@@ -50,6 +50,7 @@ export const actions = {
     ctx.dispatch('studios/updateCurrents', null, { root: true })
   },
   set(ctx, { key, data }) {
+    console.log(data)
     ctx.commit('setParams', { key, data })
     ctx.dispatch('build')
     ctx.dispatch('studios/updateCurrents', null, { root: true })
@@ -69,6 +70,7 @@ export const actions = {
     sessionStorage.filter = JSON.stringify(ctx.state.params)
   },
   reset(ctx) {
+    ctx.commit('studios/updateSearchQuery', null, { root: true })
     ctx.commit('resetParams')
     ctx.commit('resetQuery')
     sessionStorage.filter = JSON.stringify(ctx.state.params)

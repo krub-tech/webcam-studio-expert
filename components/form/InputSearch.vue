@@ -2,16 +2,15 @@
   <div class="input-search">
     <input
       :id="id"
-      v-model="value"
       type="text"
-      :placeholder="placeholder"
+      :value="value"
       @focus="focusHandle"
-      @input="inputHandle"
+      @input="inputHandle($event.target.value)"
     />
     <label for="id" />
     <ul v-if="value && !isChoose" class="results">
       <li
-        v-for="(result, key) in res"
+        v-for="(result, key) in results"
         :key="result.id"
         @click="resultChooseHandle(results[key])"
       >
@@ -25,16 +24,13 @@
 export default {
   name: 'InputSearch',
   props: {
-    placeholder: {
+    value: {
       type: String,
-      default: 'Введите текст',
+      default: () => '',
     },
     results: {
-      required: true,
-    },
-    fieldName: {
-      type: String,
-      required: false,
+      type: Array,
+      default: () => [],
     },
     id: {
       type: String,
@@ -43,41 +39,22 @@ export default {
   },
   data() {
     return {
-      value: '',
+      input: null,
       isChoose: false,
     }
   },
-  computed: {
-    res() {
-      if (this.fieldName && this.results) {
-        return this.results.map((el) => el[this.fieldName])
-      }
-      return this.results
-    },
-  },
-  mounted() {
-    this.$parent.$on('filtReset', this.clearValue)
-  },
   methods: {
     focusHandle() {
-      this.value = ''
-      this.inputHandle()
+      // this.value = null
+      this.inputHandle(null)
     },
-    inputHandle() {
+    inputHandle(data) {
       this.isChoose = false
-      this.$emit('value', this.value)
+      this.$emit('value', data)
     },
     resultChooseHandle(result) {
       this.isChoose = true
-      if (this.fieldName) {
-        this.value = result[this.fieldName]
-      } else {
-        this.value = result
-      }
       if (result) this.$emit('choose', result)
-    },
-    clearValue() {
-      this.value = ''
     },
   },
 }

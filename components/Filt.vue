@@ -2,13 +2,16 @@
   <div v-if="options" class="filter">
     <div class="filter--container">
       <InputSearch
-        :placeholder="$store.state.studios.search"
+        :value="$store.state.studios.search"
         :results="searchResults"
         @value="searchStudio($event)"
+        @choose="$store.commit('studios/updateSearchQuery', $event)"
       />
       <hr />
-      <DistrictsSelect :city="$store.state.cities.current" />
-      <MetroSelect :city="$store.state.cities.current" />
+      <!-- <DistrictsSelect
+        :districts="$store.state.cities.districts.map((el) => el.name)"
+      /> -->
+      <!-- <MetroSelect :city="$store.state.cities.current" /> -->
       <!-- <hr
         v-if="
           $store.state.cities.districtsByCurrentCity.length ||
@@ -198,7 +201,6 @@ export default {
   },
   methods: {
     searchStudio(payload) {
-      console.log(payload)
       this.$store.commit('studios/updatePageNumber', 1)
       this.$store.commit('studios/updateSearchQuery', payload)
       this.$store.dispatch('studios/updateCurrents')
@@ -216,13 +218,17 @@ export default {
       })
     },
     selectHandle(payload, selector) {
-      const result = []
       Object.entries(this.options[selector]).forEach(([key, value]) => {
         if (payload.includes(value)) {
-          result.push(key)
+          if (selector === 'staff_gender')
+            this.$store.dispatch('filter/set', {
+              key: selector,
+              data: [key],
+            })
+          else
+            this.$store.dispatch('filter/update', { key: selector, data: key })
         }
       })
-      this.$store.dispatch('filter/set', { key: selector, data: result })
     },
     nameByKeys(selector) {
       return this.$store.state.filter.params[selector].map(

@@ -63,10 +63,7 @@ export default {
     this.$store.commit('studios/updateStudiosOptions', options)
     const citiesUniques = await getUniqueCities(this.$axios)
     this.$store.commit('cities/updateCitiesUniques', citiesUniques)
-    this.$store.commit(
-      'cities/updateCitiesCurrentById',
-      this.$route.params.city
-    )
+    this.$store.dispatch('cities/updateCurrent', this.$route.params.city)
     this.$store.dispatch('studios/updateCurrents')
   },
   methods: {

@@ -5,14 +5,14 @@
       :options="options"
       :selected="selected"
       static-placeholder
-      @selectedOption="$emit('selectedOptions', $event)"
+      @selectedOption="$emit('selectedOption', $event)"
     />
     <div v-if="selected.length" class="selected-options">
       <span
         v-for="option in selected"
         :key="option"
         class="badge"
-        @click="$emit('selectedOptions', option)"
+        @click="$emit('selectedOption', option)"
       >
         {{ option }}
       </span>

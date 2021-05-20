@@ -34,9 +34,10 @@ export const mutations = {
   },
 }
 export const getters = {
-  query: (state, getters, rootState) => ({
+  query: (state, getters, rootState, rootGetters) => ({
     offset: (state.page - 1) * 12,
     city: rootState.cities.current?.id ?? null,
+    district: rootGetters['cities/districtsSelected'],
     search: state.search,
     ordering: state.ordering,
     ...rootState.filter.query,

@@ -4,7 +4,7 @@
       :placeholder="'Район'"
       :options="districts"
       :selected="selected"
-      @selectedOptions="districtsSelect"
+      @selectedOption="districtsSelect($event)"
     />
   </div>
 </template>
@@ -16,6 +16,15 @@ export default {
     districts: {
       type: Array,
       default: () => [],
+    },
+    selected: {
+      type: Array,
+      default: () => [],
+    },
+  },
+  methods: {
+    districtsSelect(payload) {
+      this.$store.dispatch('cities/updateDistrictsSelected', payload)
     },
   },
 }

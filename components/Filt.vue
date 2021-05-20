@@ -8,9 +8,11 @@
         @choose="$store.commit('studios/updateSearchQuery', $event)"
       />
       <hr />
-      <!-- <DistrictsSelect
-        :districts="$store.state.cities.districts.map((el) => el.name)"
-      /> -->
+      <DistrictsSelect
+        v-if="$store.state.cities.districts"
+        :districts="districts"
+        :selected="$store.state.cities.districtsSelected"
+      />
       <!-- <MetroSelect :city="$store.state.cities.current" /> -->
       <!-- <hr
         v-if="
@@ -111,7 +113,7 @@
           :options="Object.values(options.devices)"
           :placeholder="`Камеры`"
           :selected="devices"
-          @selectedOptions="selectHandle($event, 'devices')"
+          @selectedOption="selectHandle($event, 'devices')"
         />
       </div>
       <hr />
@@ -193,6 +195,9 @@ export default {
     },
     devices() {
       return this.nameByKeys('devices')
+    },
+    districts() {
+      return this.$store.state.cities.districts?.map((el) => el.name)
     },
   },
   mounted() {

@@ -16,7 +16,7 @@ export default {
     Header,
   },
   async fetch() {
-    const options = await this.getStudiosOptions()
+    const options = await getStudiosOptions(this.$axios)
     this.$store.commit('studios/updateStudiosOptions', options)
   },
   computed: {
@@ -43,10 +43,8 @@ export default {
     this.$store.dispatch('studios/updateCurrents')
   },
   methods: {
-    getStudiosByQuery,
-    getStudiosOptions,
     async updateCityStudiosLength(newCity) {
-      const cityStudios = await this.getStudiosByQuery({
+      const cityStudios = await getStudiosByQuery(this.$axios, {
         city: newCity,
       })
       this.$store.commit('studios/updateAllByCityLength', cityStudios.count)

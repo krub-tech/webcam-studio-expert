@@ -55,7 +55,6 @@ export default {
     },
   },
   methods: {
-    getStudiosByQuery,
     sortingSelect(data) {
       let ordering
       switch (data) {

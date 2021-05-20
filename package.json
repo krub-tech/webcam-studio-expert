@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "nuxt --dotenv .env.development",
-    "build": "nuxt build --dotenv .env.build",
+    "build": "nuxt build",
     "start": "nuxt start --dotenv .env.production",
     "generate": "nuxt generate",
     "lint": "npm run lint:js",
@@ -15,7 +15,6 @@
     "@nuxtjs/axios": "^5.13.1",
     "@nuxtjs/pwa": "^3.3.5",
     "core-js": "^3.9.1",
-    "js-cookie": "^2.2.1",
     "lodash.throttle": "^4.1.1",
     "nuxt": "^2.2.0"
   },

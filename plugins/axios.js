@@ -1,9 +1,9 @@
-import Cookie from 'js-cookie'
-
-export default ({ $axios, store }, inject) => {
+export default ({ $axios }) => {
   $axios.onRequest((config) => {
+    // Django CSRF configuration
     if (config.method !== 'get') {
-      config.headers['X-CSRFTOKEN'] = Cookie.get('csrftoken')
+      config.xsrfCookieName = 'csrftoken'
+      config.xsrfHeaderName = 'X-CSRFToken'
     }
   })
 }

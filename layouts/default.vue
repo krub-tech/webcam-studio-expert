@@ -15,10 +15,6 @@ export default {
   components: {
     Header,
   },
-  async fetch() {
-    const options = await getStudiosOptions(this.$axios)
-    this.$store.commit('studios/updateStudiosOptions', options)
-  },
   computed: {
     query() {
       return this.$store.getters['studios/query']
@@ -34,6 +30,10 @@ export default {
       },
       deep: true,
     },
+  },
+  async created() {
+    const options = await getStudiosOptions(this.$axios)
+    this.$store.commit('studios/updateStudiosOptions', options)
   },
   mounted() {
     this.$store.commit(

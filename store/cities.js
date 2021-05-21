@@ -5,25 +5,6 @@ export const state = () => ({
   districts: null,
   districtsSelected: [],
 })
-export const mutations = {
-  updateCitiesUniques(state, payload) {
-    state.uniques = payload
-  },
-  updateCurrentById(state, payload) {
-    if (state.uniques) state.current = state.uniques.find((city) => city.id === payload)
-  },
-  updateDistricts(state, payload) {
-    state.districts = payload
-  },
-  updateDistrictsSelected(state, payload) {
-    const idx = state.districtsSelected.indexOf(payload)
-    if (idx === -1) state.districtsSelected.push(payload)
-    else state.districtsSelected.splice(idx, 1)
-  },
-  setDistrictsSelected(state, payload) {
-    state.districtsSelected = payload
-  },
-}
 
 export const getters = {
   districtsSelected: (state) => {
@@ -43,5 +24,25 @@ export const actions = {
   async updateDistrictsSelected(ctx, payload) {
     ctx.commit('updateDistrictsSelected', payload)
     ctx.dispatch('studios/updateCurrents', null, { root: true })
+  },
+}
+
+export const mutations = {
+  updateCitiesUniques(state, payload) {
+    state.uniques = payload
+  },
+  updateCurrentById(state, payload) {
+    if (state.uniques) state.current = state.uniques.find((city) => city.id === payload)
+  },
+  updateDistricts(state, payload) {
+    state.districts = payload
+  },
+  updateDistrictsSelected(state, payload) {
+    const idx = state.districtsSelected.indexOf(payload)
+    if (idx === -1) state.districtsSelected.push(payload)
+    else state.districtsSelected.splice(idx, 1)
+  },
+  setDistrictsSelected(state, payload) {
+    state.districtsSelected = payload
   },
 }

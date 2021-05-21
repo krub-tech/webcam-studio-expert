@@ -8,29 +8,7 @@ export const state = () => ({
   ordering: null,
   page: 1,
 })
-export const mutations = {
-  updateAllByCityLength(state, payload) {
-    state.allByCityLength = payload
-  },
-  updateAllWithParamsLength(state, payload) {
-    state.allWithParamsLength = payload
-  },
-  updateCurrentStudios(state, payload) {
-    state.currents = payload
-  },
-  updateStudiosOptions(state, payload) {
-    state.options = payload
-  },
-  updateSearchQuery(state, payload) {
-    state.search = payload
-  },
-  updateOrdering(state, payload) {
-    state.ordering = payload
-  },
-  updatePageNumber(state, payload) {
-    state.page = payload
-  },
-}
+
 export const getters = {
   query: (state, getters, rootState, rootGetters) => ({
     offset: (state.page - 1) * 12,
@@ -52,5 +30,29 @@ export const actions = {
   paginate(ctx, payload) {
     ctx.commit('updatePageNumber', payload)
     ctx.dispatch('updateCurrents')
+  },
+}
+
+export const mutations = {
+  updateAllByCityLength(state, payload) {
+    state.allByCityLength = payload
+  },
+  updateAllWithParamsLength(state, payload) {
+    state.allWithParamsLength = payload
+  },
+  updateCurrentStudios(state, payload) {
+    state.currents = payload
+  },
+  updateStudiosOptions(state, payload) {
+    state.options = payload
+  },
+  updateSearchQuery(state, payload) {
+    state.search = payload
+  },
+  updateOrdering(state, payload) {
+    state.ordering = payload
+  },
+  updatePageNumber(state, payload) {
+    state.page = payload
   },
 }

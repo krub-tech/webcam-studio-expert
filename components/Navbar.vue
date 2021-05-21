@@ -55,11 +55,7 @@ export default {
       return this.$store.state.cities.uniques
     },
   },
-  async created() {
-    const options = await this.$api.studios.getOptions()
-    this.$store.commit('studios/updateStudiosOptions', options)
-    const citiesUniques = await this.$api.geo.getCities()
-    this.$store.commit('cities/updateCitiesUniques', citiesUniques)
+  created() {
     this.$store.dispatch('cities/updateCurrent', this.$route.params.city)
     this.$store.dispatch('studios/updateCurrents')
   },

@@ -16,7 +16,7 @@ services:
 
   front:
     build: .
-    command: sh -c "npm run build && npm run start"
+    command: npm run start
     image: ${IMAGE_BASE_PATH}/front-nuxt-test:latest
 
 

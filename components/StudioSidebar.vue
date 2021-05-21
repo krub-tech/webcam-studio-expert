@@ -1,10 +1,6 @@
 <template>
   <div>
-    <MobileListCard
-      v-for="studio in studios"
-      :key="studio.id"
-      :studio="studio"
-    />
+    <MobileListCard v-for="studio in studios" :key="studio.id" :studio="studio" />
   </div>
 </template>
 

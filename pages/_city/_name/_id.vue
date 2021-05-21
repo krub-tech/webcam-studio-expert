@@ -50,14 +50,10 @@
             </p>
           </template>
           <p class="studio--min_payout_percentage">
-            {{ studio.min_payout_percentage }}-{{
-              studio.max_payout_percentage
-            }}%
+            {{ studio.min_payout_percentage }}-{{ studio.max_payout_percentage }}%
           </p>
           <template v-if="studio.certified">
-            <p class="studio--certificate">
-              Студия<a href="#">сертифицирована</a>
-            </p>
+            <p class="studio--certificate">Студия<a href="#">сертифицирована</a></p>
           </template>
         </div>
       </div>
@@ -91,9 +87,7 @@
             Есть тренеры
           </p>
           <p
-            v-if="
-              studio.support_staff.find((el) => el === 'operator_translator')
-            "
+            v-if="studio.support_staff.find((el) => el === 'operator_translator')"
             class="studio--condition"
           >
             Есть операторы
@@ -161,14 +155,8 @@
           <a :href="`tel:${studio.phone}`">{{ studio.phone }}</a>
         </p>
         <div>
-          <a
-            :href="`https://wa.me/${studio.phone}`"
-            class="studio--btn-whtsp"
-          />
-          <a
-            :href="`viber://add?number=${studio.phone}`"
-            class="studio--btn-viber"
-          />
+          <a :href="`https://wa.me/${studio.phone}`" class="studio--btn-whtsp" />
+          <a :href="`viber://add?number=${studio.phone}`" class="studio--btn-viber" />
         </div>
       </div>
     </main>
@@ -189,11 +177,13 @@ export default {
     // Slider,
     // Aside,
   },
-  data() {
-    return {
-      studio: {},
-    }
+  async asyncData(context) {
+    const studio = await context.$api.studios.getById(context.route.params.id)
+    return { studio }
   },
+  data: () => ({
+    studio: {},
+  }),
   computed: {
     studios() {
       return this.$store.state.studios.currents
@@ -201,9 +191,6 @@ export default {
     studiosOptions() {
       return this.$store.state.studios.options
     },
-  },
-  async created() {
-    this.studio = await this.$api.studios.getById(this.$route.params.id)
   },
   methods: {
     toCyrillic(city) {

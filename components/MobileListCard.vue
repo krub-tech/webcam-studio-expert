@@ -1,8 +1,5 @@
 <template>
-  <article
-    class="studio--mobile-list-card"
-    @click="toStudio($event, studio.id)"
-  >
+  <article class="studio--mobile-list-card" @click="toStudio($event, studio.id)">
     <div class="title">
       <p class="name">
         {{ studio.name }}

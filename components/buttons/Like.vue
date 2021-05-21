@@ -1,9 +1,5 @@
 <template>
-  <button
-    class="like"
-    :class="{ liked: isLiked }"
-    @click.prevent="likeClickHandle"
-  />
+  <button class="like" :class="{ liked: isLiked }" @click.prevent="likeClickHandle" />
 </template>
 
 <script>

@@ -48,9 +48,7 @@
           v-for="(model_types, key) in options.working_with_model_types"
           :key="key"
           :item="model_types"
-          :checked="
-            isChecked($store.state.filter.params.working_with_model_types, key)
-          "
+          :checked="isChecked($store.state.filter.params.working_with_model_types, key)"
           @mouseup.native="checkboxHandle(key, 'working_with_model_types')"
         />
       </div>
@@ -99,9 +97,7 @@
         >
           <div
             class="badge"
-            @click="
-              $store.dispatch('filter/set', { key: 'staff_gender', data: [] })
-            "
+            @click="$store.dispatch('filter/set', { key: 'staff_gender', data: [] })"
           >
             {{ staff_gender.toString() }}
           </div>
@@ -235,8 +231,7 @@ export default {
               key: selector,
               data: [key],
             })
-          else
-            this.$store.dispatch('filter/update', { key: selector, data: key })
+          else this.$store.dispatch('filter/update', { key: selector, data: key })
         }
       })
     },

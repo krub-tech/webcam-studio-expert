@@ -1,12 +1,7 @@
 <template>
   <div class="logo">
-    <img
-      :src="require(`../assets/svg/${logo}.svg`)"
-      alt="webcam studio expert"
-    />
-    <p class="logo--title" @click="logoClickHandle">
-      webcam studio <i>expert</i>
-    </p>
+    <img :src="require(`../assets/svg/${logo}.svg`)" alt="webcam studio expert" />
+    <p class="logo--title" @click="logoClickHandle">webcam studio <i>expert</i></p>
     <p class="logo--desc">Каталог и сертификация вебкам-студий</p>
   </div>
 </template>

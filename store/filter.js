@@ -63,8 +63,7 @@ export const actions = {
   build(ctx) {
     ctx.commit('studios/updatePageNumber', 1, { root: true })
     Object.entries(ctx.state.params).forEach(([key, value]) => {
-      if (value.length)
-        ctx.commit('updateQuery', { key, data: value.toString() })
+      if (value.length) ctx.commit('updateQuery', { key, data: value.toString() })
       else ctx.commit('updateQuery', { key, data: null })
     })
     sessionStorage.filter = JSON.stringify(ctx.state.params)

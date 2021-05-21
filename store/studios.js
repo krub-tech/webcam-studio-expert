@@ -2,7 +2,7 @@
 export const state = () => ({
   allByCityLength: null,
   allWithParamsLength: null,
-  currents: null,
+  currents: [],
   options: null,
   search: null,
   ordering: null,

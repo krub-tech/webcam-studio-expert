@@ -60,7 +60,7 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    optimizeCss: false,
+    optimizeCss: true,
     filenames: {
       app: ({ isDev }) => (isDev ? '[name].js' : 'js/[contenthash].js'),
       chunk: ({ isDev }) => (isDev ? '[name].js' : 'js/[contenthash].js'),
@@ -84,11 +84,6 @@ export default {
         },
       },
     }),
-    splitChunks: {
-      layouts: true,
-      pages: true,
-      commons: true,
-    },
     optimization: {
       minimize: !isDev,
     },

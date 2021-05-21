@@ -1,3 +1,6 @@
+/* eslint no-shadow: ["error", { "allow": ["isDev"] }] */
+const isDev = process.env.NODE_ENV !== 'production'
+
 export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: 'server',
@@ -56,7 +59,46 @@ export default {
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {},
+  build: {
+    optimizeCss: false,
+    filenames: {
+      app: ({ isDev }) => (isDev ? '[name].js' : 'js/[contenthash].js'),
+      chunk: ({ isDev }) => (isDev ? '[name].js' : 'js/[contenthash].js'),
+      css: ({ isDev }) => (isDev ? '[name].css' : 'css/[contenthash].css'),
+      img: ({ isDev }) => (isDev ? '[path][name].[ext]' : 'img/[contenthash:7].[ext]'),
+      font: ({ isDev }) =>
+        isDev ? '[path][name].[ext]' : 'fonts/[contenthash:7].[ext]',
+    },
+    ...(!isDev && {
+      html: {
+        minify: {
+          collapseBooleanAttributes: true,
+          decodeEntities: true,
+          minifyCSS: true,
+          minifyJS: true,
+          processConditionalComments: true,
+          removeEmptyAttributes: true,
+          removeRedundantAttributes: true,
+          trimCustomFragments: true,
+          useShortDoctype: true,
+        },
+      },
+    }),
+    splitChunks: {
+      layouts: true,
+      pages: true,
+      commons: true,
+    },
+    optimization: {
+      minimize: !isDev,
+    },
+    ...(!isDev && {
+      extractCSS: {
+        ignoreOrder: true,
+      },
+    }),
+    transpile: ['vue-lazy-hydration', 'intersection-observer'],
+  },
 
   server: {
     port: '3000',

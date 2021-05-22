@@ -26,8 +26,11 @@ export const actions = {
     ctx.commit('setDistrictsSelected', [])
     ctx.commit('setMetroSelected', [])
     ctx.commit('updateCurrentById', payload)
-    const districts = await this.$api.geo.getDistrictsByCity(payload)
-    const metro = await this.$api.geo.getMetroStationsByCity(payload)
+
+    const [districts, metro] = await Promise.all([
+      this.$api.geo.getDistrictsByCity(payload),
+      this.$api.geo.getMetroStationsByCity(payload),
+    ])
     ctx.commit('setDistricts', districts)
     ctx.commit('setMetro', metro)
   },

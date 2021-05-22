@@ -2,9 +2,9 @@
 export const state = () => ({
   uniques: null,
   current: null,
-  districts: null,
+  districts: [],
   districtsSelected: [],
-  metro: null,
+  metro: [],
   metroSelected: [],
 })
 
@@ -21,15 +21,13 @@ export const getters = {
 
 export const actions = {
   async updateCurrent(ctx, payload) {
-    ctx.commit('setDistricts', null)
-    ctx.commit('setMetro', null)
+    ctx.commit('setDistricts', [])
+    ctx.commit('setMetro', [])
     ctx.commit('setDistrictsSelected', [])
     ctx.commit('setMetroSelected', [])
     ctx.commit('updateCurrentById', payload)
     const districts = await this.$api.geo.getDistrictsByCity(payload)
     const metro = await this.$api.geo.getMetroStationsByCity(payload)
-    console.log('metro', metro)
-
     ctx.commit('setDistricts', districts)
     ctx.commit('setMetro', metro)
   },
@@ -37,8 +35,17 @@ export const actions = {
     ctx.commit('updateDistrictsSelected', payload)
     ctx.dispatch('studios/updateCurrents', null, { root: true })
   },
+  setDistrictsSelected(ctx, payload) {
+    ctx.commit('setDistrictsSelected', payload)
+    ctx.dispatch('studios/updateCurrents', null, { root: true })
+  },
   updateMetroSelected(ctx, payload) {
     ctx.commit('updateMetroSelected', payload)
+    ctx.dispatch('studios/updateCurrents', null, { root: true })
+    sessionStorage.metro = JSON.stringify(ctx.state.metroSelected)
+  },
+  setMetroSelected(ctx, payload) {
+    ctx.commit('setMetroSelected', payload)
     ctx.dispatch('studios/updateCurrents', null, { root: true })
   },
 }
@@ -57,6 +64,7 @@ export const mutations = {
     const idx = state.districtsSelected.indexOf(payload)
     if (idx === -1) state.districtsSelected.push(payload)
     else state.districtsSelected.splice(idx, 1)
+    sessionStorage.districts = JSON.stringify(state.districtsSelected)
   },
   setDistrictsSelected(state, payload) {
     state.districtsSelected = payload
@@ -68,6 +76,7 @@ export const mutations = {
     const idx = state.metroSelected.indexOf(payload)
     if (idx === -1) state.metroSelected.push(payload)
     else state.metroSelected.splice(idx, 1)
+    sessionStorage.metro = JSON.stringify(state.metroSelected)
   },
   setMetroSelected(state, payload) {
     state.metroSelected = payload

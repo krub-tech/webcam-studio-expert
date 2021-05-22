@@ -1,10 +1,10 @@
 <template>
-  <div class="city-metro form-module">
+  <div v-if="metro.length" class="city-metro form-module">
     <MultiSelect
       :placeholder="'Метро'"
       :options="metro"
       :selected="selected"
-      @selectedOption="metroSelect($event)"
+      @selectedOption="$emit('metroSelect', $event)"
     />
   </div>
 </template>
@@ -25,15 +25,6 @@ export default {
     selected: {
       type: Array,
       default: () => [],
-    },
-  },
-
-  methods: {
-    metroSelect(payload) {
-      const metroData = this.$store.state.cities.metro.find(
-        (el) => el.station_name === payload
-      )
-      this.$store.dispatch('cities/updateMetroSelected', metroData.id)
     },
   },
 }

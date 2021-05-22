@@ -9,21 +9,18 @@
       />
       <hr />
       <DistrictsSelect
-        v-if="$store.state.cities.districts"
         :districts="districts"
         :selected="districtsSelected"
+        @districtSelect="districtSelectHandle"
       />
       <MetroSelect
-        v-if="$store.state.cities.metro"
         :metro="metro"
         :selected="metroSelected"
+        @metroSelect="metroSelectHandle"
       />
-      <!-- <hr
-        v-if="
-          $store.state.cities.districtsByCurrentCity.length ||
-          $store.state.cities.metroByCurrentCity.length
-        "
-      /> -->
+      <hr
+        v-if="$store.state.cities.districts.length || $store.state.cities.metro.length"
+      />
       <div class="studio_type">
         <Checkbox
           v-for="(studio_type, key) in options.studio_type"
@@ -146,7 +143,7 @@
         <p>
           <b>{{ currentStudiosLength }}</b> из {{ cityStudiosLength }}
         </p>
-        <button class="reset" @click="$store.dispatch('filter/reset')" />
+        <button class="reset" @click="filterReset" />
         <button class="accept" @click="$emit('close')" />
       </div>
       <div class="filter--footer-bottom">
@@ -201,7 +198,7 @@ export default {
     },
     districtsSelected() {
       return this.$store.state.cities.districtsSelected.map((el) => {
-        return this.$store.state.cities.districts.find((l) => l.id === el).name
+        return this.$store.state.cities.districts.find((l) => l.id === el)?.name
       })
     },
     metro() {
@@ -209,13 +206,14 @@ export default {
     },
     metroSelected() {
       return this.$store.state.cities.metroSelected.map((el) => {
-        return this.$store.state.cities.metro.find((l) => l.id === el).station_name
+        return this.$store.state.cities.metro.find((l) => l.id === el)?.station_name
       })
     },
   },
   mounted() {
-    if (sessionStorage.filter)
+    if (sessionStorage.filter) {
       this.$store.dispatch('filter/change', JSON.parse(sessionStorage.filter))
+    }
   },
   methods: {
     searchStudio(payload) {
@@ -247,6 +245,18 @@ export default {
         }
       })
     },
+    districtSelectHandle(payload) {
+      const districtData = this.$store.state.cities.districts.find(
+        (el) => el.name === payload
+      )
+      this.$store.dispatch('cities/updateDistrictsSelected', districtData.id)
+    },
+    metroSelectHandle(payload) {
+      const metroData = this.$store.state.cities.metro.find(
+        (el) => el.station_name === payload
+      )
+      this.$store.dispatch('cities/updateMetroSelected', metroData.id)
+    },
     nameByKeys(selector) {
       return this.$store.state.filter.params[selector].map(
         (el) => this.options[selector][el]
@@ -261,6 +271,13 @@ export default {
         })
       }
       return bool
+    },
+    filterReset() {
+      this.$store.commit('cities/setDistrictsSelected', [])
+      sessionStorage.districts = JSON.stringify([])
+      this.$store.commit('cities/setMetroSelected', [])
+      sessionStorage.metro = JSON.stringify([])
+      this.$store.dispatch('filter/reset')
     },
   },
 }

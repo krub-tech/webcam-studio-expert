@@ -58,6 +58,15 @@ export default {
   created() {
     this.$store.dispatch('cities/updateCurrent', this.$route.params.city)
     this.$store.dispatch('studios/updateCurrents')
+    if (sessionStorage.districts) {
+      this.$store.dispatch(
+        'cities/setDistrictsSelected',
+        JSON.parse(sessionStorage.districts)
+      )
+    }
+    if (sessionStorage.metro) {
+      this.$store.dispatch('cities/setMetroSelected', JSON.parse(sessionStorage.metro))
+    }
   },
   methods: {
     selectCityHandle(city) {

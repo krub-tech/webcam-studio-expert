@@ -13,7 +13,11 @@
         :districts="districts"
         :selected="districtsSelected"
       />
-      <MetroSelect :metro="metro" :selected="metroSelected" />
+      <MetroSelect
+        v-if="$store.state.cities.metro"
+        :metro="metro"
+        :selected="metroSelected"
+      />
       <!-- <hr
         v-if="
           $store.state.cities.districtsByCurrentCity.length ||

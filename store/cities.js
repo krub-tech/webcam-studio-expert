@@ -22,12 +22,14 @@ export const getters = {
 export const actions = {
   async updateCurrent(ctx, payload) {
     ctx.commit('setDistricts', null)
+    ctx.commit('setMetro', null)
     ctx.commit('setDistrictsSelected', [])
+    ctx.commit('setMetroSelected', [])
     ctx.commit('updateCurrentById', payload)
     const districts = await this.$api.geo.getDistrictsByCity(payload)
     const metro = await this.$api.geo.getMetroStationsByCity(payload)
     ctx.commit('setDistricts', districts)
-    ctx.commit('updateMetro', metro)
+    ctx.commit('setMetro', metro)
   },
   updateDistrictsSelected(ctx, payload) {
     ctx.commit('updateDistrictsSelected', payload)
@@ -57,12 +59,15 @@ export const mutations = {
   setDistrictsSelected(state, payload) {
     state.districtsSelected = payload
   },
-  updateMetro(state, payload) {
+  setMetro(state, payload) {
     state.metro = payload
   },
   updateMetroSelected(state, payload) {
     const idx = state.metroSelected.indexOf(payload)
     if (idx === -1) state.metroSelected.push(payload)
     else state.metroSelected.splice(idx, 1)
+  },
+  setMetroSelected(state, payload) {
+    state.metroSelected = payload
   },
 }

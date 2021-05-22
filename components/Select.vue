@@ -84,8 +84,7 @@ export default {
   .options {
     max-height: 300px;
     overflow-y: auto;
-    overflow-x: none;
-    scrollbar-width: none;
+    overflow-x: hidden;
     list-style: none;
     position: absolute;
     bottom: 0;

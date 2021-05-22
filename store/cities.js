@@ -10,12 +10,12 @@ export const state = () => ({
 
 export const getters = {
   districtsSelected: (state) => {
-    if (!state.metroSelected.length) return null
-    return state.metroSelected.toString()
-  },
-  metroSelected: (state) => {
     if (!state.districtsSelected.length) return null
     return state.districtsSelected.toString()
+  },
+  metroSelected: (state) => {
+    if (!state.metroSelected.length) return null
+    return state.metroSelected.toString()
   },
 }
 

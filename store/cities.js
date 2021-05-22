@@ -28,6 +28,8 @@ export const actions = {
     ctx.commit('updateCurrentById', payload)
     const districts = await this.$api.geo.getDistrictsByCity(payload)
     const metro = await this.$api.geo.getMetroStationsByCity(payload)
+    console.log('metro', metro)
+
     ctx.commit('setDistricts', districts)
     ctx.commit('setMetro', metro)
   },

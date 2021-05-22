@@ -31,7 +31,7 @@ export default {
   methods: {
     metroSelect(payload) {
       const metroData = this.$store.state.cities.metro.find(
-        (el) => el.line_name === payload
+        (el) => el.station_name === payload
       )
       this.$store.dispatch('cities/updateMetroSelected', metroData.id)
     },

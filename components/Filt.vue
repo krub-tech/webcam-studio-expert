@@ -205,11 +205,11 @@ export default {
       })
     },
     metro() {
-      return [...new Set(this.$store.state.cities.metro?.map((el) => el.line_name))]
+      return [...new Set(this.$store.state.cities.metro?.map((el) => el.station_name))]
     },
     metroSelected() {
       return this.$store.state.cities.metroSelected.map((el) => {
-        return this.$store.state.cities.metro.find((l) => l.id === el).line_name
+        return this.$store.state.cities.metro.find((l) => l.id === el).station_name
       })
     },
   },

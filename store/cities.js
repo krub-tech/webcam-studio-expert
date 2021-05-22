@@ -4,10 +4,16 @@ export const state = () => ({
   current: null,
   districts: null,
   districtsSelected: [],
+  metro: null,
+  metroSelected: [],
 })
 
 export const getters = {
   districtsSelected: (state) => {
+    if (!state.metroSelected.length) return null
+    return state.metroSelected.toString()
+  },
+  metroSelected: (state) => {
     if (!state.districtsSelected.length) return null
     return state.districtsSelected.toString()
   },
@@ -15,14 +21,20 @@ export const getters = {
 
 export const actions = {
   async updateCurrent(ctx, payload) {
-    ctx.commit('updateDistricts', null)
+    ctx.commit('setDistricts', null)
     ctx.commit('setDistrictsSelected', [])
     ctx.commit('updateCurrentById', payload)
     const districts = await this.$api.geo.getDistrictsByCity(payload)
-    ctx.commit('updateDistricts', districts)
+    const metro = await this.$api.geo.getMetroStationsByCity(payload)
+    ctx.commit('setDistricts', districts)
+    ctx.commit('updateMetro', metro)
   },
-  async updateDistrictsSelected(ctx, payload) {
+  updateDistrictsSelected(ctx, payload) {
     ctx.commit('updateDistrictsSelected', payload)
+    ctx.dispatch('studios/updateCurrents', null, { root: true })
+  },
+  updateMetroSelected(ctx, payload) {
+    ctx.commit('updateMetroSelected', payload)
     ctx.dispatch('studios/updateCurrents', null, { root: true })
   },
 }
@@ -34,7 +46,7 @@ export const mutations = {
   updateCurrentById(state, payload) {
     if (state.uniques) state.current = state.uniques.find((city) => city.id === payload)
   },
-  updateDistricts(state, payload) {
+  setDistricts(state, payload) {
     state.districts = payload
   },
   updateDistrictsSelected(state, payload) {
@@ -44,5 +56,13 @@ export const mutations = {
   },
   setDistrictsSelected(state, payload) {
     state.districtsSelected = payload
+  },
+  updateMetro(state, payload) {
+    state.metro = payload
+  },
+  updateMetroSelected(state, payload) {
+    const idx = state.metroSelected.indexOf(payload)
+    if (idx === -1) state.metroSelected.push(payload)
+    else state.metroSelected.splice(idx, 1)
   },
 }

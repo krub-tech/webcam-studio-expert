@@ -14,6 +14,7 @@ export const getters = {
     offset: (state.page - 1) * 12,
     city: rootState.cities.current?.id ?? null,
     district: rootGetters['cities/districtsSelected'],
+    metro: rootGetters['cities/metroSelected'],
     search: state.search,
     ordering: state.ordering,
     ...rootState.filter.query,

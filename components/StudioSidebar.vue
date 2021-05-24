@@ -6,6 +6,7 @@
       class="studio--mobile-list-card"
       @click="
         toStudio($event, {
+          city: studio.city.id,
           name: studio.name.split(' ').join('-').toLowerCase(),
           id: studio.id,
         })
@@ -54,7 +55,7 @@ export default {
         this.$router.push({
           name: 'city-name-id',
           params: {
-            city: this.$store.state.cities.current.id,
+            city: data.city,
             name: data.name,
             id: data.id,
           },

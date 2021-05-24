@@ -95,10 +95,10 @@ export default {
     transpile: ['vue-lazy-hydration', 'intersection-observer'],
   },
 
-  server: {
-    port: '3000',
-    host: '0.0.0.0',
-  },
+  // server: {
+  //   port: '3000',
+  //   host: '0.0.0.0',
+  // },
 
   router: {
     mode: 'history',

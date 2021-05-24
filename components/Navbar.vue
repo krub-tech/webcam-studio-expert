@@ -77,6 +77,7 @@ export default {
         name: 'city',
         params: { city: cityData.id },
       })
+      this.$store.commit('menuClose')
     },
   },
 }

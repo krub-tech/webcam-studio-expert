@@ -67,7 +67,6 @@ export const mutations = {
     } else {
       let idx = null
       state.favorites.forEach((el) => {
-        console.log('=')
         if (+el.id === +payload.id) {
           idx = el.id
         }

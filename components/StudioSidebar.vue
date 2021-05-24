@@ -1,18 +1,45 @@
 <template>
-  <div>
-    <MobileListCard v-for="studio in studios" :key="studio.id" :studio="studio" />
-  </div>
+  <aside>
+    <article
+      v-for="studio in studios"
+      :key="studio.id"
+      class="studio--mobile-list-card"
+      @click="
+        toStudio($event, {
+          name: studio.name.split(' ').join('-').toLowerCase(),
+          id: studio.id,
+        })
+      "
+    >
+      <div class="title">
+        <p class="name">
+          {{ studio.name }}
+        </p>
+        <p class="percent">
+          {{ studio.min_payout_percentage }}-{{ studio.max_payout_percentage }}%
+        </p>
+      </div>
+      <div class="desc">
+        <p class="address">
+          {{ studio.address }}
+        </p>
+        <Like :id="studio.id" />
+      </div>
+
+      <div v-if="studio.certified" class="certificate">
+        <a href="#">Сертифицирована</a>
+      </div>
+    </article>
+  </aside>
 </template>
 
 <script>
-import MobileListCard from '@/components/MobileListCard'
-
-// import { getStudiosByCity } from '@/api/studios'
+import Like from '@/components/buttons/Like'
 
 export default {
   name: 'StudioSidebar',
   components: {
-    MobileListCard,
+    Like,
   },
   props: {
     studios: {
@@ -22,7 +49,18 @@ export default {
   },
 
   methods: {
-    // getStudiosByCity,
+    toStudio(e, data) {
+      if (e.target.tagName !== 'BUTTON') {
+        this.$router.push({
+          name: 'city-name-id',
+          params: {
+            city: this.$store.state.cities.current.id,
+            name: data.name,
+            id: data.id,
+          },
+        })
+      }
+    },
   },
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <section class="studio-wrapper">
-    <StudioSidebar :studios="studios" />
+    <StudioSidebar v-if="!$store.getters.isMobile" :studios="studios" />
     <Studio :studio="studio" />
   </section>
 </template>

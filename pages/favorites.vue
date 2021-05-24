@@ -1,7 +1,7 @@
 <template>
   <div class="studio-wrapper">
     <StudioSidebar :studios="studios" />
-    <Studio :studio="studio" />
+    <Studio v-if="!$store.getters.isMobile" :studio="studio" />
   </div>
 </template>
 

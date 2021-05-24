@@ -2,7 +2,7 @@
   <header class="header-wrapper">
     <div class="header">
       <div class="header--top">
-        <button class="header--burger">
+        <button class="header--burger" @click="$store.dispatch('menuToggle')">
           <span class="header--burger-icon" />
           <span class="header--burger-text">Меню</span>
         </button>
@@ -51,10 +51,8 @@ export default {
       }
     },
     async toFavoritesPage() {
-      // const firstFavoritesStudioIdx = this.getFirstFavoritesStudio()
-      // const studio = await this.$api.studios.getById(firstFavoritesStudioIdx)
       this.$router.push({
-        name: 'city-favorites',
+        name: 'favorites',
       })
     },
     resizeHandle() {

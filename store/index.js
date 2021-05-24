@@ -18,9 +18,12 @@ export const actions = {
       this.$api.studios.getOptions(),
       this.$api.geo.getCities(),
     ])
-
     ctx.commit('studios/updateStudiosOptions', options)
     ctx.commit('cities/updateCitiesUniques', cities)
+  },
+  menuToggle(ctx) {
+    if (ctx.state.isMenuOpen) ctx.commit('menuClose')
+    else ctx.commit('menuOpen')
   },
 }
 

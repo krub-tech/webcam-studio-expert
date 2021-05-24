@@ -121,7 +121,7 @@
       </template>
     </div>
     <div class="studio--slider">
-      <!-- <Slider :data="slides" /> -->
+      <Slider :data="slides" />
     </div>
     <h5 class="studio--remark">
       Мы первые в Питере по количеству игрушек и предметов гардероба
@@ -173,6 +173,14 @@ export default {
   computed: {
     studiosOptions() {
       return this.$store.state.studios.options
+    },
+    slides() {
+      const result = []
+      for (let i = 0; i < 5; i += 1) {
+        const fieldName = `image_${i}`
+        if (this.studio[fieldName]) result.push(this.studio[fieldName])
+      }
+      return result
     },
   },
 }

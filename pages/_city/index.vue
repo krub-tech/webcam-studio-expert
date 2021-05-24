@@ -55,6 +55,10 @@ export default {
       return this.$store.state.cities.current?.name
     },
   },
+  mounted() {
+    if (localStorage.favorites)
+      this.$store.commit('studios/setFavorites', JSON.parse(localStorage.favorites))
+  },
   methods: {
     sortingSelect(data) {
       let ordering

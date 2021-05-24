@@ -7,6 +7,7 @@ export const state = () => ({
   search: null,
   ordering: null,
   page: 1,
+  favorites: [],
 })
 
 export const getters = {
@@ -32,6 +33,10 @@ export const actions = {
     ctx.commit('updatePageNumber', payload)
     ctx.dispatch('updateCurrents')
   },
+  async toFavorites(ctx, id) {
+    const response = await this.$api.studios.getById(id)
+    ctx.commit('addStudioToFavorites', response)
+  },
 }
 
 export const mutations = {
@@ -55,5 +60,25 @@ export const mutations = {
   },
   updatePageNumber(state, payload) {
     state.page = payload
+  },
+  addStudioToFavorites(state, payload) {
+    if (!state.favorites.length) {
+      state.favorites.push(payload)
+    } else {
+      let idx = null
+      state.favorites.forEach((el) => {
+        console.log('=')
+        if (+el.id === +payload.id) {
+          idx = el.id
+        }
+      })
+      if (idx != null) {
+        state.favorites = state.favorites.filter((el) => +el.id !== +idx)
+      } else state.favorites.push(payload)
+    }
+    localStorage.favorites = JSON.stringify(state.favorites)
+  },
+  setFavorites(state, payload) {
+    state.favorites = payload
   },
 }

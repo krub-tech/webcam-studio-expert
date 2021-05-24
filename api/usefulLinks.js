@@ -5,7 +5,7 @@ export default ($axios) => ({
   },
 
   getByCategory(category) {
-    return $axios.$get(`${resource}/links/${category}`)
+    return $axios.$get(`${resource}/links/`, { params: category })
   },
 
   getCountByCategory() {

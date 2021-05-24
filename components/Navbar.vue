@@ -16,12 +16,13 @@
             :options="for_models"
             :value="`Моделям`"
             static-placeholder
+            @selectedOption="forModelsClickHandle"
           />
         </div>
-        <router-link class="nav--item nav--item-certificate" to="/certificate">
+        <nuxt-link class="nav--item nav--item-certificate" to="/certificate">
           Сертификация
-        </router-link>
-        <a href="/" class="nav--item" to="/proposal">Добавить студию</a>
+        </nuxt-link>
+        <a href="#" class="nav--item" to="/proposal">Добавить студию</a>
       </div>
     </nav>
   </div>
@@ -64,6 +65,27 @@ export default {
         name: 'city',
         params: { city: cityData.id },
       })
+      this.$store.commit('menuClose')
+    },
+    forModelsClickHandle(data) {
+      switch (data) {
+        case 'Каталог студий':
+          this.$router.push('/')
+          break
+        case 'Индивидуальный подбор студии':
+          this.$store.dispatch('updateModal', {
+            name: 'SpecSelection',
+          })
+          break
+        case 'Полезные ссылки':
+          this.$router.push('/links')
+          break
+        case 'Оставить жалобу':
+          this.$store.dispatch('updateModal', { name: 'Claim' })
+          break
+        default:
+          break
+      }
       this.$store.commit('menuClose')
     },
   },

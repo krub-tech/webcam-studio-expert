@@ -8,7 +8,10 @@
         </button>
         <Logo />
         <div class="header--btns">
-          <Like class="header--btns-favorites" @click.native="toFavoritesPage" />
+          <Like
+            class="header--btns-favorites"
+            @click.native="toFavoritesPage"
+          />
           <button class="header--btns-mail" />
           <!-- <button class="header--btns-profile" /> -->
         </div>
@@ -20,13 +23,13 @@
 </template>
 
 <script>
-import Logo from '@/components/Logo'
-import Like from '@/components/buttons/Like'
-import Navbar from '@/components/Navbar'
-import throttle from 'lodash.throttle'
+import Logo from "@/components/Logo";
+import Like from "@/components/buttons/Like";
+import Navbar from "@/components/Navbar";
+import throttle from "lodash.throttle";
 
 export default {
-  name: 'Header',
+  name: "Header",
   components: {
     Logo,
     Like,
@@ -37,40 +40,45 @@ export default {
       scroll: 0,
       scrollCount: 0,
       pageOffset: 0,
-    }
+    };
   },
   mounted() {
-    this.$nextTick(() => this.resizeHandle())
-    window.addEventListener('resize', this.throttle(this.resizeHandle, 500))
-    this.$store.dispatch('cities/updateCurrent', this.$route.params.city)
-    this.$store.dispatch('studios/updateCurrents')
+    this.$nextTick(() => this.resizeHandle());
+    window.addEventListener("resize", this.throttle(this.resizeHandle, 500));
+    this.$store.dispatch("cities/updateCurrent", this.$route.params.city);
+    this.$store.dispatch("studios/updateCurrents");
     if (sessionStorage.districts) {
       this.$store.dispatch(
-        'cities/setDistrictsSelected',
+        "cities/setDistrictsSelected",
         JSON.parse(sessionStorage.districts)
-      )
+      );
     }
     if (sessionStorage.metro) {
-      this.$store.dispatch('cities/setMetroSelected', JSON.parse(sessionStorage.metro))
+      this.$store.dispatch(
+        "cities/setMetroSelected",
+        JSON.parse(sessionStorage.metro)
+      );
     }
   },
   methods: {
     throttle,
     getFirstFavoritesStudio() {
       if (localStorage.favoritesIndexes) {
-        return JSON.parse(localStorage.favoritesIndexes).find((item, idx) => idx === 0)
+        return JSON.parse(localStorage.favoritesIndexes).find(
+          (item, idx) => idx === 0
+        );
       }
     },
-    async toFavoritesPage() {
+    toFavoritesPage() {
       this.$router.push({
-        name: 'favorites',
-      })
+        name: "favorites",
+      });
     },
     resizeHandle() {
-      this.$store.commit('updateWindowWidth', window.innerWidth)
+      this.$store.commit("updateWindowWidth", window.innerWidth);
     },
   },
-}
+};
 </script>
 
 <style lang="scss">
@@ -93,7 +101,7 @@ export default {
   box-shadow: 0px 5px 20px 0px rgba(#5b5b83, 0.04);
   &.bg_gradient {
     &::before {
-      content: '';
+      content: "";
       width: 100vw;
       height: 100vh;
       position: absolute;
@@ -117,13 +125,13 @@ export default {
     padding: 0 var(--fr);
   }
   &--burger {
-    font: normal 1rem 'Averta CY';
+    font: normal 1rem "Averta CY";
     display: flex;
     align-items: center;
     &-icon {
       @include icon;
       display: inline-block;
-      background-image: url('~@/assets/svg/i-burger.svg');
+      background-image: url("~@/assets/svg/i-burger.svg");
     }
     &-text {
       display: none;
@@ -142,22 +150,22 @@ export default {
 
     &-favorites {
       display: inline-block;
-      background-image: url('~@/assets/svg/i-heart-dark.svg') !important;
+      background-image: url("~@/assets/svg/i-heart-dark.svg") !important;
       &.like {
         min-width: 20px;
         min-height: 20px;
       }
       &.liked {
-        background-image: url('~@/assets/svg/i-heart-fill.svg') !important;
+        background-image: url("~@/assets/svg/i-heart-fill.svg") !important;
       }
     }
     &-mail {
       @include icon;
-      background-image: url('~@/assets/svg/i-mail.svg');
+      background-image: url("~@/assets/svg/i-mail.svg");
     }
     &-profile {
       @include icon;
-      background-image: url('~@/assets/svg/i-profile.svg');
+      background-image: url("~@/assets/svg/i-profile.svg");
     }
   }
 }

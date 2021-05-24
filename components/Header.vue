@@ -51,15 +51,10 @@ export default {
       }
     },
     async toFavoritesPage() {
-      const firstFavoritesStudioIdx = this.getFirstFavoritesStudio()
-      const studio = await this.$api.studios.getById(firstFavoritesStudioIdx)
+      // const firstFavoritesStudioIdx = this.getFirstFavoritesStudio()
+      // const studio = await this.$api.studios.getById(firstFavoritesStudioIdx)
       this.$router.push({
-        name: 'city-name-id',
-        params: {
-          city: this.$route.params.city,
-          name: studio.name,
-          id: firstFavoritesStudioIdx,
-        },
+        name: 'city-favorites',
       })
     },
     resizeHandle() {

@@ -24,7 +24,7 @@
       </div>
     </div>
     <div class="studios--results">
-      <Cards :studios="studios" />
+      <Cards :studios="studios" :length="$store.state.studios.allWithParamsLength" />
     </div>
   </section>
 </template>

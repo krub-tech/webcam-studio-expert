@@ -17,7 +17,7 @@ export default {
   },
   methods: {
     logoClickHandle() {
-      this.$store.commit('cities/updateCitiesCurrentById', 'sankt-peterburg')
+      this.$store.dispatch('cities/updateCurrent', 'sankt-peterburg')
       this.$router.push({ name: 'city', params: { city: 'sankt-peterburg' } })
     },
   },

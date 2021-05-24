@@ -20,14 +20,23 @@ export default {
     this.isLiked = this.isLike()
   },
   methods: {
-    likeClickHandle() {
+    async likeClickHandle() {
       if (this.id) {
-        if (!localStorage.favoritesIndexes) {
-          localStorage.favoritesIndexes = JSON.stringify([this.id])
+        const studio = await this.$api.studios.getById(this.id)
+        if (!localStorage.favorites) {
+          localStorage.favorites = JSON.stringify([studio])
         } else {
-          localStorage.favoritesIndexes = JSON.stringify(
-            this.$toArray(JSON.parse(localStorage.favoritesIndexes), this.id)
-          )
+          const favorites = JSON.parse(localStorage.favorites)
+          favorites.forEach((value, idx) => {
+            if (value.id !== this.id) {
+              favorites.push(studio)
+            } else if (value.id === this.id) {
+              console.log(value.id === this.id)
+              favorites.splice(idx, 1)
+            }
+            console.log(favorites)
+          })
+          localStorage.favorites = JSON.stringify(favorites)
         }
         this.isLiked = this.isLike()
       } else return false
@@ -35,9 +44,9 @@ export default {
     isLike() {
       let result = false
       if (this.id) {
-        if (localStorage.favoritesIndexes) {
-          JSON.parse(localStorage.favoritesIndexes).forEach((id) => {
-            if (this.id === id) result = true
+        if (localStorage.favorites) {
+          JSON.parse(localStorage.favorites).forEach((el) => {
+            if (this.id === el.id) result = true
           })
         }
       }

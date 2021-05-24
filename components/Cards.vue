@@ -3,7 +3,7 @@
     <main class="cards--container">
       <Card v-for="studio in studios" :key="studio.id" :data="studio" />
     </main>
-    <Pagination />
+    <Pagination :length="length" />
     <h2>
       <span>SEO-текст</span>
       Вот уже более трех лет мы успешно продвигаем свои услуги на рынке
@@ -23,6 +23,10 @@ export default {
     studios: {
       type: Array,
       default: () => [],
+    },
+    length: {
+      type: Number,
+      default: 0,
     },
   },
   data() {

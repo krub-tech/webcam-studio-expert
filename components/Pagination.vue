@@ -27,12 +27,18 @@
 <script>
 export default {
   name: 'Paginate',
+  props: {
+    length: {
+      type: Number,
+      default: 0,
+    },
+  },
   computed: {
     pageNumber() {
       return this.$store.state.studios.page
     },
     pagesLength() {
-      return Math.round(this.$store.state.studios.allWithParamsLength / 12)
+      return Math.round(this.length / 12)
     },
     paginationNumbers() {
       const paginationNumbers = []

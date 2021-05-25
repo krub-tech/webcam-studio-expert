@@ -78,7 +78,10 @@ export default {
           })
           break
         case 'Полезные ссылки':
-          this.$router.push('/links')
+          this.$router.push({
+            name: 'links-category',
+            params: { category: this.$store.state.links.category },
+          })
           break
         case 'Оставить жалобу':
           this.$store.dispatch('updateModal', { name: 'Claim' })

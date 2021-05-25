@@ -18,7 +18,7 @@ export default {
 
 <style lang="scss">
 .content {
-  position: absolute;
+  position: relative;
   top: 60px;
 }
 

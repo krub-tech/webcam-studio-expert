@@ -56,6 +56,13 @@ export default {
     this.$store.dispatch('links/get', this.$store.state.links.category)
   },
   methods: {
+    linkCategoryClickHandle(category) {
+      this.$store.dispatch('links/get', category)
+      this.$router.push({
+        name: 'links-category',
+        params: { category: this.$store.state.links.category },
+      })
+    },
     linkClickHandle(link) {
       window.open(link)
     },

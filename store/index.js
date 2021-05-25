@@ -22,8 +22,6 @@ export const actions = {
     ])
     ctx.commit('studios/updateStudiosOptions', options)
     ctx.commit('cities/updateCitiesUniques', cities)
-
-    console.log(studios)
     ctx.commit('studios/updateCurrentStudios', studios.results)
   },
   menuToggle(ctx) {

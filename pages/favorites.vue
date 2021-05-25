@@ -15,12 +15,21 @@ export default {
     }
   },
   mounted() {
-    if (localStorage.favorites) {
-      const studios = JSON.parse(localStorage.favorites)
-      const [studio] = studios
-      this.studio = studio
-      this.studios = studios
-    }
+    this.getFavorites()
+  },
+  // updated() {
+  //   this.getFavorites()
+  // },
+  methods: {
+    getFavorites() {
+      if (localStorage.favorites) {
+        this.$store.commit('studios/setFavorites', JSON.parse(localStorage.favorites))
+        const studios = JSON.parse(localStorage.favorites)
+        const [studio] = studios
+        this.studio = studio
+        this.studios = studios
+      }
+    },
   },
 }
 </script>

@@ -78,6 +78,7 @@ export default {
 
       this.ordering = data
       this.$store.commit('studios/updateOrdering', ordering)
+      this.$store.dispatch('studios/updateCurrents')
     },
   },
 }

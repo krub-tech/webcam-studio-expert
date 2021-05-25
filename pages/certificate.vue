@@ -103,23 +103,6 @@
 <script>
 export default {
   name: 'Certificate',
-  data() {
-    return {
-      slides: [],
-    }
-  },
-  mounted() {
-    this.getSlides()
-  },
-  methods: {
-    getSlides() {
-      for (let i = 1; i <= 6; i += 1) {
-        fetch(`https://picsum.photos/200/300?random=${i}`).then((response) =>
-          this.slides.push(response.url)
-        )
-      }
-    },
-  },
 }
 </script>
 

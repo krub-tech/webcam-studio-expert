@@ -1,31 +1,41 @@
 <template>
-  <main v-if="usefulLinks" class="links--category-list">
-    <div class="links--category-title">
-      <button class="btn-back" @click="$router.go(-1)" />
-      <h1 class="links--category">
-        {{ usefulLinksOptions[$route.params.category] }}
-      </h1>
-    </div>
-    <article
-      v-for="article in usefulLinks"
-      :key="article.id"
-      class="link"
-      @click="linkClickHandle(article.link)"
-    >
-      <img :src="article.image" :alt="article.title" />
-      <div class="link--title">
-        <p class="link--title-name">
-          {{ article.title }}
+  <section class="links">
+    <h1>Полезные ссылки для вебкам-моделей</h1>
+    <aside class="links--nav">
+      <ul v-if="usefulLinksOptions">
+        <li
+          v-for="link in usefulLinksCount"
+          :key="link.category"
+          :count="link.count"
+          :class="{ active: isCurrent(link.category) }"
+          @click="linkCategoryClickHandle(link.category)"
+        >
+          {{ usefulLinksOptions.categories[link.category] }}
+        </li>
+      </ul>
+    </aside>
+    <main v-if="usefulLinks" class="links--list">
+      <article
+        v-for="article in usefulLinks"
+        :key="article.id"
+        class="link"
+        @click="linkClickHandle(article.link)"
+      >
+        <img :src="article.image" :alt="article.title" />
+        <div class="link--title">
+          <p class="link--title-name">
+            {{ article.title }}
+          </p>
+          <p class="link--title-followers">
+            {{ article.sub_title }}
+          </p>
+        </div>
+        <p class="link--desc">
+          {{ article.description }}
         </p>
-        <p class="link--title-followers">
-          {{ article.sub_title }}
-        </p>
-      </div>
-      <p class="link--desc">
-        {{ article.description }}
-      </p>
-    </article>
-  </main>
+      </article>
+    </main>
+  </section>
 </template>
 
 <script>
@@ -38,6 +48,9 @@ export default {
     usefulLinksOptions() {
       return this.$store.state.links?.options
     },
+    usefulLinksCount() {
+      return this.$store.state.links?.count
+    },
   },
   mounted() {
     this.$store.dispatch('links/get', this.$store.state.links.category)
@@ -45,6 +58,9 @@ export default {
   methods: {
     linkClickHandle(link) {
       window.open(link)
+    },
+    isCurrent(link) {
+      return this.$store.state.links?.category === link
     },
   },
 }

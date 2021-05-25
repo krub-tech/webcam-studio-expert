@@ -3,6 +3,7 @@ export const state = () => ({
   category: 'telegram_channels',
   options: [],
   currents: [],
+  count: 0,
 })
 
 export const actions = {
@@ -12,6 +13,8 @@ export const actions = {
     ctx.commit('setOptions', options)
     const links = await this.$api.usefulLinks.getByCategory({ category })
     ctx.commit('setLinks', links.results)
+    const count = await this.$api.usefulLinks.getCountByCategory()
+    ctx.commit('setCount', count)
   },
 }
 
@@ -24,5 +27,8 @@ export const mutations = {
   },
   setLinks(state, payload) {
     state.currents = payload
+  },
+  setCount(state, payload) {
+    state.count = payload
   },
 }

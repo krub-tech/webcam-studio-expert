@@ -143,8 +143,6 @@ export default {
 }
 
 .certificate-page {
-  // height: calc(100vh - 448px);
-
   .slider {
     height: 200px;
     margin-bottom: 40px;

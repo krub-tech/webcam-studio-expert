@@ -46,7 +46,6 @@ export default {
       'cities/updateCurrent',
       this.$route.params.city || 'sankt-peterburg'
     )
-    this.$store.dispatch('studios/updateCurrents')
     if (sessionStorage.districts) {
       this.$store.dispatch(
         'cities/setDistrictsSelected',

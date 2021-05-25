@@ -30,15 +30,8 @@
 </template>
 
 <script>
-import Cards from '@/components/Cards'
-import Filt from '@/components/Filt'
-
 export default {
   name: 'StudiosByCity',
-  components: {
-    Cards,
-    Filt,
-  },
   data() {
     return {
       sortingTypes: ['По умолчанию', 'По названию', 'По процентам'],

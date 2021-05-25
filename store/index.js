@@ -14,12 +14,17 @@ export const getters = {
 
 export const actions = {
   async nuxtServerInit(ctx) {
-    const [options, cities] = await Promise.all([
+    ctx.commit('cities/updateCurrentById', 'sankt-peterburg')
+    const [studios, options, cities] = await Promise.all([
+      this.$api.studios.getByQuery(ctx.getters['studios/query']),
       this.$api.studios.getOptions(),
       this.$api.geo.getCities(),
     ])
     ctx.commit('studios/updateStudiosOptions', options)
     ctx.commit('cities/updateCitiesUniques', cities)
+
+    console.log(studios)
+    ctx.commit('studios/updateCurrentStudios', studios.results)
   },
   menuToggle(ctx) {
     if (ctx.state.isMenuOpen) ctx.commit('menuClose')

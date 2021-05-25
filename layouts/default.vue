@@ -2,6 +2,12 @@
   <div class="page-body">
     <Header />
     <Nuxt class="content" />
+    <div v-if="$store.state.modals.current" class="modal-wrapper">
+      <div class="modal-wrapper--inner">
+        <component :is="modal" />
+        <button class="close-btn" @click="closeModal" />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -13,13 +19,99 @@ export default {
   components: {
     Header,
   },
+  computed: {
+    modal() {
+      return () => import(`@/components/modals/${this.$store.state.modals.current}.vue`)
+    },
+  },
+  mounted() {
+    this.$el.addEventListener('mousedown', this.notModalClick)
+  },
+  methods: {
+    closeModal() {
+      this.$store.commit('modals/setCurrent', null)
+    },
+    notModalClick(e) {
+      if (e.target.classList.value.includes('modal-wrapper--inner')) {
+        this.closeModal()
+      }
+    },
+  },
 }
 </script>
 
 <style lang="scss">
+#__nuxt {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#__layout {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+// .page-body {
+
+// }
+
 .content {
   position: relative;
   top: 60px;
+}
+
+.modal-wrapper {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  bottom: 0;
+  overflow: auto;
+  z-index: 2;
+}
+.modal-wrapper--inner {
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  padding: 80px 0;
+  overflow: hidden;
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: -1;
+    background: linear-gradient(90deg, #c45792 0%, #7f53c4 100%);
+    opacity: 0.6;
+  }
+  & > *:not(button) {
+    width: 350px;
+    height: max-content;
+    background-color: #fbfbfd;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 28px;
+    overflow: auto;
+  }
+  .close-btn {
+    position: absolute;
+    top: 55px;
+    right: 50%;
+    transform: translateX(200px);
+    &:active {
+      transform: translateX(200px);
+    }
+  }
 }
 
 @media screen and (min-width: 420px) {

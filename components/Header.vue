@@ -9,7 +9,10 @@
         <Logo />
         <div class="header--btns">
           <Like class="header--btns-favorites" @click.native="toFavoritesPage" />
-          <button class="header--btns-mail" />
+          <button
+            class="header--btns-mail"
+            @click="$store.commit('modals/setCurrent', 'Feedback')"
+          />
           <!-- <button class="header--btns-profile" /> -->
         </div>
       </div>

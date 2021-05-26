@@ -5,4 +5,14 @@ export default ({ app }, inject) => {
     else array.splice(idx, 1)
     return array
   })
+  inject('isChecked', (arr, key) => {
+    let bool = false
+    if (arr) {
+      arr.forEach((el) => {
+        if (el !== key) return
+        bool = !bool
+      })
+    }
+    return bool
+  })
 }

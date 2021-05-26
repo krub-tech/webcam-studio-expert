@@ -3,7 +3,7 @@
     <h1>Обратная связь</h1>
     <input
       id="feedback_name"
-      v-model="formData.name"
+      name="name"
       type="text"
       class="modal--name"
       placeholder="Ваше имя"
@@ -11,76 +11,59 @@
     <label for="feedback_name" />
     <input
       id="feedback_phone"
-      v-model="formData.phone"
+      name="phone"
       type="text"
       class="modal--phone"
       placeholder="Телефон"
-      @input="phoneInput($event.target)"
     />
     <label for="feedback_phone" />
-    <div v-if="formData" class="modal--answer_to">
+    <div class="modal--answer_to">
       <p class="label">Если предпочитаете письменно:</p>
       <Checkbox
         v-for="answer in ['whatsapp', 'viber', 'telegram']"
         :key="answer"
         :item="answer"
-        :parent="formData.answer_to"
-        @mouseup.native="checkboxHandle(answer)"
+        :checked="$isChecked(answer_to, answer)"
+        @mouseup.native="answerToHandler(answer)"
       />
     </div>
 
-    <textarea v-model="formData.message" placeholder="Опишите ситуацию" />
+    <textarea name="message" placeholder="Опишите ситуацию" />
 
     <input
       id="photos"
       type="file"
+      name="photos"
       class="modal--photos"
       multiple
       @input="filesInputHandle($event)"
     />
     <label for="photos"><p>Загрузить фото или файлы</p></label>
     <div class="modal--photos-files">
-      <span
+      <!-- <span
         v-for="image in formData.photos"
         :key="image.name"
         class="badge"
         @click="removePhoto(image.name)"
         >{{ image.name }}</span
-      >
+      > -->
     </div>
 
     <p class="modal--agree">
       Нажимая “Отправить”, Вы соглашаетесь с
-      <a
-        href="#"
-        @click.prevent="
-          $store.dispatch('updateModal', {
-            name: 'Terms',
-            from: 'Feedback',
-          })
-        "
-        >пользовательским соглашением</a
-      >
+      <a href="#">пользовательским соглашением</a>
       и
-      <a
-        href="#"
-        @click.prevent="
-          $store.dispatch('updateModal', {
-            name: 'Privacy',
-            from: 'Feedback',
-          })
-        "
-      >
-        политикой конфиденциальности</a
-      >
+      <a href="#"> политикой конфиденциальности</a>
     </p>
 
-    <button class="modal--submit" @click.prevent="submitHandle">Отправить</button>
+    <button class="modal--submit" @click.prevent="submit">Отправить</button>
   </form>
 </template>
 
 <script>
 import Checkbox from '@/components/form/Checkbox'
+
+import { postFormData } from '@/api/misc'
 
 export default {
   name: 'Feedback',
@@ -89,52 +72,33 @@ export default {
   },
   data() {
     return {
-      formData: {
-        message_type: 'feedback',
-        message: null,
-        name: null,
-        phone: null,
-        answer_to: [],
-      },
+      answer_to: [],
     }
   },
-  // beforeDestroy() {
-  //   for (const [key, value] of Object.entries(this.formData)) {
-  //     if (typeof value === 'string' && value !== 'feedback') {
-  //       this.$store.commit('assignFormDataField', {
-  //         type: 'feedback',
-  //         field: key,
-  //         event: null,
-  //       })
-  //     }
-  //     if (typeof value !== 'string') {
-  //       this.$store.commit('assignFormDataField', {
-  //         type: 'feedback',
-  //         field: key,
-  //         event: [],
-  //       })
-  //     }
-  //   }
-  // },
-  // methods: {
-  //   phoneInput,
-  //   checkboxHandle(e) {
-  //     this.$store.commit('pushFormDataField', {
-  //       type: 'feedback',
-  //       field: 'answer_to',
-  //       event: e,
-  //     })
-  //   },
-  //   filesInputHandle(e) {
-  //     this.$store.dispatch('filesInputHandle', {
-  //       type: 'feedback',
-  //       el: this.$el,
-  //       event: e,
-  //     })
-  //   },
-  //   submitHandle() {
-  //     this.$store.dispatch('submitHandle', 'feedback')
-  //   },
-  // },
+  methods: {
+    postFormData,
+    answerToHandler(answer) {
+      this.$toArray(this.answer_to, answer)
+    },
+    filesInputHandle(e) {
+      console.log(e.target.files)
+      this.$store.dispatch('modals/filesInputHandle', {
+        el: this.$el,
+        event: e,
+      })
+    },
+    submit() {
+      const formData = new FormData(this.$el)
+      // formData.append('message_type', 'feedback')
+      // this.answer_to.forEach((el) => {
+      //   formData.append('answer_to', el)
+      // })
+      this.$store.commit('modals/setAnswerTo', this.answer_to)
+      this.$store.dispatch('modals/submit', {
+        message_type: 'feedback',
+        form: this.$el,
+      })
+    },
+  },
 }
 </script>

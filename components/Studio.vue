@@ -123,8 +123,8 @@
     <div class="studio--slider">
       <Slider :data="slides" />
     </div>
-    <h5 class="studio--remark">
-      Мы первые в Питере по количеству игрушек и предметов гардероба
+    <h5 v-if="studio.advantages" class="studio--remark">
+      {{ studio.advantages }}
     </h5>
     <div v-if="studio.bonuses_for_models" class="studio--bonus">
       <h4>Бонусы</h4>
@@ -133,7 +133,10 @@
       </p>
     </div>
     <div class="studio--desc">
-      {{ studio.description }}
+      <h4>Описание студии</h4>
+      <p>
+        {{ studio.description }}
+      </p>
     </div>
     <div class="studio--interview">
       <div class="studio--btn-like">
@@ -254,6 +257,10 @@ export default {
   margin: 0 var(--fr-l);
   p {
     display: inline-block;
+  }
+  h4 {
+    font-size: 1.125rem;
+    // margin-bottom: 2rem;
   }
 }
 .studio--title {
@@ -448,18 +455,18 @@ export default {
   padding-bottom: 40px;
   border-bottom: 1px solid #eeeef6;
   margin-bottom: 40px;
+  white-space: pre-wrap;
   p {
     font-weight: normal;
     font-size: 1rem;
     @include line-height;
   }
-  h4 {
-    font-size: 1.125rem;
-    margin-bottom: 2rem;
-  }
 }
 .studio--desc {
-  @include line-height;
+  white-space: pre-wrap;
+  p {
+    @include line-height;
+  }
 }
 
 .studio--ul {

@@ -1,7 +1,5 @@
 /* eslint no-shadow: ["error", { "allow": ["state", "getters"] }] */
 
-import { postFormData } from '@/api/misc'
-
 export const state = () => ({
   current: null,
   answer_to: [],
@@ -57,10 +55,7 @@ export const actions = {
       if (idx < 5) formData.append(`file_${idx + 1}`, el)
       else return false
     })
-    const request = await postFormData(this.$axios, {
-      query: 'message/input/',
-      formData,
-    })
+    const request = await this.$api.messages.createFeedback(formData)
     console.log(request)
   },
 }

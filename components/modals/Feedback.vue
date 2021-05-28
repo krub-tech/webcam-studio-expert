@@ -63,8 +63,6 @@
 <script>
 import Checkbox from '@/components/form/Checkbox'
 
-import { postFormData } from '@/api/misc'
-
 export default {
   name: 'Feedback',
   components: {
@@ -76,7 +74,6 @@ export default {
     }
   },
   methods: {
-    postFormData,
     answerToHandler(answer) {
       this.$toArray(this.answer_to, answer)
     },

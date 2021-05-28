@@ -63,7 +63,14 @@ export const actions = {
       })
 
     try {
-      const request = await this.$api.messages.messageInput(formData)
+      let request
+      if (payload.message_type === 'feedback' || payload.message_type === 'complaint') {
+        request = await this.$api.messages.messageInput(formData)
+      }
+      if (payload.message_type === 'certification') {
+        formData.append('studio', 1)
+        request = await this.$api.messages.messageRequest(formData)
+      }
       console.log(request)
       ctx.dispatch('resetForm', payload.form)
     } catch (error) {
@@ -79,8 +86,8 @@ export const actions = {
     console.log(form)
     ctx.commit('setAnswerTo', [])
     ctx.commit('setPhotos', [])
-    form.querySelector('.modal--photos-files').innerHTML = ''
     form.reset()
+    form.querySelector('.modal--photos-files').innerHTML = ''
   },
   errorsHandler(ctx, errors) {
     console.log(errors)

@@ -19,7 +19,7 @@
     />
     <label for="certification_phone" />
     <div class="modal--answer_to">
-      <p>Если предпочитаете письменно:</p>
+      <p class="label">Если предпочитаете письменно:</p>
       <Checkbox
         v-for="answer in ['whatsapp', 'viber', 'telegram']"
         :key="answer"
@@ -63,11 +63,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss">
-.certification {
-  // p {
-  //   margin-bottom: 12px;
-  // }
-}
-</style>

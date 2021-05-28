@@ -48,6 +48,7 @@ export const actions = {
   },
   async submit(ctx, payload) {
     const formData = new FormData(payload.form)
+
     formData.append('message_type', payload.message_type)
     ctx.state.answer_to.forEach((el) => {
       formData.append('answer_to', el)
@@ -63,26 +64,34 @@ export const actions = {
         el.classList.remove('invalid')
         el.nextElementSibling.innerText = ''
       })
+
     try {
       const request = await this.$api.messages.createFeedback(formData)
       console.log(request)
-      ctx.commit('setAnswerTo', [])
-      ctx.commit('setPhotos', [])
-      payload.form.querySelector('.modal--photos-files').innerHTML = ''
-      payload.form.reset()
+      ctx.dispatch('resetForm', payload.from)
     } catch (error) {
       console.log('errors', error.response.data)
-      Object.entries(error.response.data).forEach((el) => {
-        const key = el[0]
-        const value = el[1]
-        const invalidElem = document.getElementsByName(key)
-
-        invalidElem[0].nextElementSibling.innerText = value
-        invalidElem[0].classList.add('invalid')
-      })
-      console.log(payload.form.files)
+      ctx.dispatch('errorsHandler', error.response.data)
     }
+
     payload.form.files = null
+  },
+  resetForm(ctx, form) {
+    ctx.commit('setAnswerTo', [])
+    ctx.commit('setPhotos', [])
+    form.querySelector('.modal--photos-files').innerHTML = ''
+    form.reset()
+  },
+  errorsHandler(ctx, errors) {
+    console.log(errors)
+    Object.entries(errors).forEach((el) => {
+      const key = el[0]
+      const value = el[1]
+      const invalidElem = document.getElementsByName(key)
+
+      invalidElem[0].nextElementSibling.innerText = value
+      invalidElem[0].classList.add('invalid')
+    })
   },
 }
 

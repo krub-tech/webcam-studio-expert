@@ -65,15 +65,18 @@ export const actions = {
     try {
       const request = await this.$api.messages.messageInput(formData)
       console.log(request)
-      ctx.dispatch('resetForm', payload.from)
+      ctx.dispatch('resetForm', payload.form)
     } catch (error) {
-      console.log('errors', error.response.data)
-      ctx.dispatch('errorsHandler', error.response.data)
+      if (error.response?.status === 400) {
+        console.log('errors', error.response.data)
+        ctx.dispatch('errorsHandler', error.response.data)
+      }
     }
 
     payload.form.files = null
   },
   resetForm(ctx, form) {
+    console.log(form)
     ctx.commit('setAnswerTo', [])
     ctx.commit('setPhotos', [])
     form.querySelector('.modal--photos-files').innerHTML = ''

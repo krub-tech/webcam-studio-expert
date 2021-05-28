@@ -330,13 +330,7 @@ button {
       width: 100%;
       height: 28px;
       display: flex;
-      // align-items: center;
       justify-content: flex-end;
-      color: red;
-      font-size: 12px;
-      line-height: 1.8;
-      margin-bottom: 0;
-      position: relative;
     }
   }
   input[type='file'] {
@@ -421,18 +415,7 @@ button {
       line-height: 1.8;
       margin-bottom: 0;
       position: relative;
-      &::before {
-        content: 'Обязательное поле';
-        position: absolute;
-        right: 0;
-        color: red;
-        font-size: 12px;
-      }
-      &.mail {
-        &::before {
-          content: 'Некорректный email';
-        }
-      }
+
     }
   }
   

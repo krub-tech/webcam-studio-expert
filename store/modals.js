@@ -21,7 +21,7 @@ export const actions = {
     const photos = []
     Object.values(data.event.target.files).forEach((value) => {
       let preview
-
+      console.log(data.event.target.files)
       if (value.type?.match('image')) {
         preview = document.createElement('img')
         ctx.dispatch('previewImg', { preview, file: value })
@@ -40,6 +40,7 @@ export const actions = {
       previewWrapper.addEventListener('click', () => {
         photos.splice(photos.indexOf(value), 1)
         previewWrapper.remove()
+        if (!photos.length) data.event.target.files = null
         ctx.commit('setPhotos', [...photos])
       })
     })
@@ -55,17 +56,15 @@ export const actions = {
       if (idx < 5) formData.append(`file_${idx + 1}`, el)
       else return false
     })
-<<<<<<< HEAD
+
     const invalids = payload.form.querySelectorAll('.invalid')
     if (invalids)
       invalids.forEach((el) => {
-        el.innerText = ''
+        el.classList.remove('invalid')
+        el.nextElementSibling.innerText = ''
       })
     try {
-      const request = await postFormData(this.$axios, {
-        query: 'message/input/',
-        formData,
-      })
+      const request = await this.$api.messages.createFeedback(formData)
       console.log(request)
       ctx.commit('setAnswerTo', [])
       ctx.commit('setPhotos', [])
@@ -79,13 +78,11 @@ export const actions = {
         const invalidElem = document.getElementsByName(key)
 
         invalidElem[0].nextElementSibling.innerText = value
-        invalidElem[0].nextElementSibling.classList.add('invalid')
+        invalidElem[0].classList.add('invalid')
       })
+      console.log(payload.form.files)
     }
-=======
-    const request = await this.$api.messages.createFeedback(formData)
-    console.log(request)
->>>>>>> b55c36f8a174466fccdf970389d2ba2f49fb2b41
+    payload.form.files = null
   },
 }
 

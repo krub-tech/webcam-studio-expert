@@ -1,7 +1,5 @@
 /* eslint no-shadow: ["error", { "allow": ["state", "getters"] }] */
 
-import { postFormData } from '@/api/misc'
-
 export const state = () => ({
   current: null,
   answer_to: [],
@@ -57,6 +55,7 @@ export const actions = {
       if (idx < 5) formData.append(`file_${idx + 1}`, el)
       else return false
     })
+<<<<<<< HEAD
     const invalids = payload.form.querySelectorAll('.invalid')
     if (invalids)
       invalids.forEach((el) => {
@@ -83,6 +82,10 @@ export const actions = {
         invalidElem[0].nextElementSibling.classList.add('invalid')
       })
     }
+=======
+    const request = await this.$api.messages.createFeedback(formData)
+    console.log(request)
+>>>>>>> b55c36f8a174466fccdf970389d2ba2f49fb2b41
   },
 }
 

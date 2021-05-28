@@ -59,7 +59,7 @@
     </div>
     <div v-if="studio.metro && studio.metro.length" class="studio--metro">
       <p v-for="metro in studio.metro" :key="metro.id">
-        {{ metro.name }} <b>{{ metro.distance }} м.</b>
+        {{ metro.station_name }} <b>{{ metro.distance }} м.</b>
       </p>
     </div>
     <div class="studio--conditions">

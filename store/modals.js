@@ -42,10 +42,10 @@ export const actions = {
       previewWrapper.addEventListener('click', () => {
         photos.splice(photos.indexOf(value), 1)
         previewWrapper.remove()
-        ctx.commit('setPhotos', { ...photos })
+        ctx.commit('setPhotos', [...photos])
       })
     })
-    ctx.commit('setPhotos', { ...photos })
+    ctx.commit('setPhotos', [...photos])
   },
   async submit(ctx, payload) {
     const formData = new FormData(payload.form)
@@ -57,11 +57,32 @@ export const actions = {
       if (idx < 5) formData.append(`file_${idx + 1}`, el)
       else return false
     })
-    const request = await postFormData(this.$axios, {
-      query: 'message/input/',
-      formData,
-    })
-    console.log(request)
+    const invalids = payload.form.querySelectorAll('.invalid')
+    if (invalids)
+      invalids.forEach((el) => {
+        el.innerText = ''
+      })
+    try {
+      const request = await postFormData(this.$axios, {
+        query: 'message/input/',
+        formData,
+      })
+      console.log(request)
+      ctx.commit('setAnswerTo', [])
+      ctx.commit('setPhotos', [])
+      payload.form.querySelector('.modal--photos-files').innerHTML = ''
+      payload.form.reset()
+    } catch (error) {
+      console.log('errors', error.response.data)
+      Object.entries(error.response.data).forEach((el) => {
+        const key = el[0]
+        const value = el[1]
+        const invalidElem = document.getElementsByName(key)
+
+        invalidElem[0].nextElementSibling.innerText = value
+        invalidElem[0].nextElementSibling.classList.add('invalid')
+      })
+    }
   },
 }
 
@@ -71,6 +92,9 @@ export const mutations = {
   },
   setAnswerTo(state, payload) {
     state.answer_to = payload
+  },
+  updateAnswerTo(state, payload) {
+    this.$toArray(state.answer_to, payload)
   },
   setPhotos(state, payload) {
     state.photos = payload

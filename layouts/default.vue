@@ -4,7 +4,7 @@
     <Nuxt class="content" />
     <div v-if="$store.state.modals.current" class="modal-wrapper">
       <div class="modal-wrapper--inner">
-        <component :is="modal" />
+        <component :is="component" />
         <button class="close-btn" @click="closeModal" />
       </div>
     </div>
@@ -19,9 +19,19 @@ export default {
   components: {
     Header,
   },
+  data() {
+    return {
+      component: null,
+    }
+  },
   computed: {
     modal() {
-      return () => import(`@/components/modals/${this.$store.state.modals.current}.vue`)
+      return this.$store.state.modals.current
+    },
+  },
+  watch: {
+    modal() {
+      this.component = () => import(`@/components/modals/${this.modal}.vue`)
     },
   },
   mounted() {

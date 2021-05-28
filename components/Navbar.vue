@@ -84,7 +84,7 @@ export default {
           })
           break
         case 'Оставить жалобу':
-          this.$store.dispatch('updateModal', { name: 'Claim' })
+          this.$store.commit('modals/setCurrent', 'Claim')
           break
         default:
           break

@@ -1,22 +1,23 @@
 <template>
-  <form class="feedback modal">
-    <h1>Обратная связь</h1>
+  <form class="claim modal">
+    <h1>Оставить жалобу</h1>
+    <p>Мы сможем помочь в этих случаях, а вот в этих, к сожалению, нет.</p>
     <input
-      id="feedback_name"
+      id="claim_name"
       name="name"
       type="text"
       class="modal--name"
       placeholder="Ваше имя"
     />
-    <label for="feedback_name" />
+    <label for="claim_name" />
     <input
-      id="feedback_phone"
+      id="claim_phone"
       name="phone"
       type="text"
       class="modal--phone"
       placeholder="Телефон"
     />
-    <label for="feedback_phone" />
+    <label for="claim_phone" />
     <div class="modal--answer_to">
       <p class="label">Если предпочитаете письменно:</p>
       <Checkbox
@@ -37,12 +38,14 @@
     />
     <label for="photos"><p>Загрузить фото или файлы</p></label>
     <div class="modal--photos-files"></div>
+
     <p class="modal--agree">
       Нажимая “Отправить”, Вы соглашаетесь с
       <a href="#">пользовательским соглашением</a>
       и
       <a href="#"> политикой конфиденциальности</a>
     </p>
+
     <button class="modal--submit" @click.prevent="submit">Отправить</button>
   </form>
 </template>
@@ -51,7 +54,7 @@
 import Checkbox from '@/components/form/Checkbox'
 
 export default {
-  name: 'Feedback',
+  name: 'Claim',
   components: {
     Checkbox,
   },
@@ -67,7 +70,7 @@ export default {
     },
     submit() {
       this.$store.dispatch('modals/submit', {
-        message_type: 'feedback',
+        message_type: 'complaint',
         form: this.$el,
       })
     },

@@ -10,7 +10,12 @@
       <div class="certificate-page--title">
         <button class="btn-back" @click="$router.go(-1)" />
         <h1>Сертификация веб-студии</h1>
-        <button class="certificate-page--btn-proposal-header">Оставить заявку</button>
+        <button
+          class="certificate-page--btn-proposal-header"
+          @click="$store.commit('modals/setCurrent', 'Certification')"
+        >
+          Оставить заявку
+        </button>
       </div>
       <section class="certificate-page--text">
         <h2>
@@ -80,7 +85,7 @@
       </section>
       <button
         class="certificate-page--btn-proposal-footer"
-        @click="$store.dispatch('updateModal', { name: 'Certification' })"
+        @click="$store.commit('modals/setCurrent', 'Certification')"
       >
         Оставить заявку
       </button>

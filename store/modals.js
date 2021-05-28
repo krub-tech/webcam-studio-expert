@@ -18,7 +18,6 @@ export const actions = {
   },
   filesInputHandle(ctx, data) {
     const previews = data.el.querySelector('.modal--photos-files')
-    const photos = []
     Object.values(data.event.target.files).forEach((value) => {
       let preview
       console.log(data.event.target.files)
@@ -35,16 +34,14 @@ export const actions = {
       previewWrapper.appendChild(preview)
       previews.appendChild(previewWrapper)
 
-      photos.push(value)
+      ctx.commit('updatePhotos', value)
 
       previewWrapper.addEventListener('click', () => {
-        photos.splice(photos.indexOf(value), 1)
         previewWrapper.remove()
-        if (!photos.length) data.event.target.files = null
-        ctx.commit('setPhotos', [...photos])
+        if (!ctx.photos?.length) data.event.target.files = null
+        ctx.commit('updatePhotos', value)
       })
     })
-    ctx.commit('setPhotos', [...photos])
   },
   async submit(ctx, payload) {
     const formData = new FormData(payload.form)
@@ -66,7 +63,7 @@ export const actions = {
       })
 
     try {
-      const request = await this.$api.messages.createFeedback(formData)
+      const request = await this.$api.messages.messageInput(formData)
       console.log(request)
       ctx.dispatch('resetForm', payload.from)
     } catch (error) {
@@ -107,5 +104,8 @@ export const mutations = {
   },
   setPhotos(state, payload) {
     state.photos = payload
+  },
+  updatePhotos(state, payload) {
+    this.$toArray(state.photos, payload)
   },
 }

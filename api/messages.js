@@ -4,7 +4,7 @@ export default ($axios) => ({
     return $axios.$get(`${resource}/options/`)
   },
 
-  createFeedback(data) {
+  messageInput(data) {
     return $axios.$post(`${resource}/input/`, data)
   },
 })

@@ -4,6 +4,7 @@
       :id="id"
       type="text"
       :value="value"
+      :placeholder="placeholder"
       @focus="focusHandle"
       @input="inputHandle($event.target.value)"
     />
@@ -11,7 +12,7 @@
     <ul v-if="value && !isChoose" class="results">
       <li
         v-for="(result, key) in results"
-        :key="result.id"
+        :key="key"
         @click="resultChooseHandle(results[key])"
       >
         {{ result }}
@@ -36,6 +37,10 @@ export default {
       type: String,
       default: '',
     },
+    placeholder: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {
@@ -45,7 +50,6 @@ export default {
   },
   methods: {
     focusHandle() {
-      // this.value = null
       this.inputHandle(null)
     },
     inputHandle(data) {
@@ -96,13 +100,7 @@ export default {
   }
   &.invalid {
     input {
-      @include input-invalid;
-    }
-  }
-  &.invalidMessageFromDB {
-    @include input-invalid;
-    & + label {
-      position: relative;
+      border: 1px solid red;
     }
   }
 }

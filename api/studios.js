@@ -12,4 +12,8 @@ export default ($axios) => ({
   getById(id) {
     return $axios.$get(`${resource}/studios/${id}/`)
   },
+
+  postToDB(data) {
+    return $axios.$post(`${resource}/studios/`, data)
+  },
 })

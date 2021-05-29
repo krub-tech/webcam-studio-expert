@@ -22,7 +22,13 @@
         <nuxt-link class="nav--item nav--item-certificate" to="/certificate">
           Сертификация
         </nuxt-link>
-        <a href="#" class="nav--item" to="/proposal">Добавить студию</a>
+        <a
+          href="#"
+          class="nav--item"
+          to="/proposal"
+          @click="$store.commit('modals/setCurrent', 'Proposal')"
+          >Добавить студию</a
+        >
       </div>
     </nav>
   </div>

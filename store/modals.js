@@ -2,8 +2,10 @@
 
 export const state = () => ({
   current: null,
+  options: null,
   answer_to: [],
   photos: [],
+  address: '',
 })
 
 export const actions = {
@@ -18,9 +20,8 @@ export const actions = {
   },
   filesInputHandle(ctx, data) {
     const previews = data.el.querySelector('.modal--photos-files')
-    Object.values(data.event.target.files).forEach((value) => {
+    Object.values(data.files).forEach((value) => {
       let preview
-      console.log(data.event.target.files)
       if (value.type?.match('image')) {
         preview = document.createElement('img')
         ctx.dispatch('previewImg', { preview, file: value })
@@ -38,9 +39,27 @@ export const actions = {
 
       previewWrapper.addEventListener('click', () => {
         previewWrapper.remove()
-        if (!ctx.photos?.length) data.event.target.files = null
+        if (!ctx.photos?.length) data.files = null
         ctx.commit('updatePhotos', value)
       })
+    })
+  },
+  resetForm(ctx, form) {
+    console.log(form)
+    ctx.commit('setAnswerTo', [])
+    ctx.commit('setPhotos', [])
+    form.reset()
+    form.querySelector('.modal--photos-files').innerHTML = ''
+  },
+  errorsHandler(ctx, errors) {
+    Object.entries(errors).forEach((el) => {
+      const key = el[0]
+      const value = el[1]
+      const invalidElem = document.getElementsByName(key)
+      if (invalidElem[0]) {
+        invalidElem[0].nextElementSibling.innerText = value
+        invalidElem[0].classList.add('invalid')
+      }
     })
   },
   async submit(ctx, payload) {
@@ -59,7 +78,7 @@ export const actions = {
     if (invalids)
       invalids.forEach((el) => {
         el.classList.remove('invalid')
-        el.nextElementSibling.innerText = ''
+        if (el?.nextElementSibling) el.nextElementSibling.innerText = ''
       })
 
     try {
@@ -70,6 +89,9 @@ export const actions = {
       if (payload.message_type === 'certification') {
         formData.append('studio', 1)
         request = await this.$api.messages.messageRequest(formData)
+      }
+      if (payload.message_type === 'proposal') {
+        request = await this.$api.studios.postToDB(formData)
       }
       console.log(request)
       ctx.dispatch('resetForm', payload.form)
@@ -82,29 +104,14 @@ export const actions = {
 
     payload.form.files = null
   },
-  resetForm(ctx, form) {
-    console.log(form)
-    ctx.commit('setAnswerTo', [])
-    ctx.commit('setPhotos', [])
-    form.reset()
-    form.querySelector('.modal--photos-files').innerHTML = ''
-  },
-  errorsHandler(ctx, errors) {
-    console.log(errors)
-    Object.entries(errors).forEach((el) => {
-      const key = el[0]
-      const value = el[1]
-      const invalidElem = document.getElementsByName(key)
-
-      invalidElem[0].nextElementSibling.innerText = value
-      invalidElem[0].classList.add('invalid')
-    })
-  },
 }
 
 export const mutations = {
   setCurrent(state, payload) {
     state.current = payload
+  },
+  setOptions(state, payload) {
+    state.options = payload
   },
   setAnswerTo(state, payload) {
     state.answer_to = payload
@@ -117,5 +124,8 @@ export const mutations = {
   },
   updatePhotos(state, payload) {
     this.$toArray(state.photos, payload)
+  },
+  setAddress(state, payload) {
+    state.address = payload
   },
 }

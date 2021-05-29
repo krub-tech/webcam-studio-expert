@@ -1,14 +1,12 @@
 <template>
   <div class="input-search">
     <input
-      :id="id"
       type="text"
       :value="value"
       :placeholder="placeholder"
       @focus="focusHandle"
       @input="inputHandle($event.target.value)"
     />
-    <label for="id" />
     <ul v-if="value && !isChoose" class="results">
       <li
         v-for="(result, key) in results"
@@ -32,10 +30,6 @@ export default {
     results: {
       type: Array,
       default: () => [],
-    },
-    id: {
-      type: String,
-      default: '',
     },
     placeholder: {
       type: String,

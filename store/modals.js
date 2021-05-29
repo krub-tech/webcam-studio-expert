@@ -5,7 +5,9 @@ export const state = () => ({
   options: null,
   answer_to: [],
   photos: [],
-  address: '',
+  errMsgElems: [],
+
+  address: null,
 })
 
 export const actions = {
@@ -55,10 +57,13 @@ export const actions = {
     Object.entries(errors).forEach((el) => {
       const key = el[0]
       const value = el[1]
-      const invalidElem = document.getElementsByName(key)
-      if (invalidElem[0]) {
-        invalidElem[0].nextElementSibling.innerText = value
-        invalidElem[0].classList.add('invalid')
+      const invalidElem = document.getElementById(key)
+
+      if (invalidElem) {
+        const errMsgElem = document.querySelector(`.for-${key}`)
+        ctx.commit('updateErrMsgElems', key)
+        invalidElem.classList.add('invalid')
+        errMsgElem.innerText = value
       }
     })
   },
@@ -74,11 +79,15 @@ export const actions = {
       else return false
     })
 
-    const invalids = payload.form.querySelectorAll('.invalid')
-    if (invalids)
-      invalids.forEach((el) => {
-        el.classList.remove('invalid')
-        if (el?.nextElementSibling) el.nextElementSibling.innerText = ''
+    if (ctx.state.errMsgElems?.length)
+      ctx.state.errMsgElems.forEach((key) => {
+        const invalidElem = document.getElementById(key)
+
+        if (invalidElem) {
+          const errMsgElem = document.querySelector(`.for-${key}`)
+          invalidElem.classList.remove('invalid')
+          errMsgElem.innerText = ''
+        }
       })
 
     try {
@@ -91,8 +100,16 @@ export const actions = {
         request = await this.$api.messages.messageRequest(formData)
       }
       if (payload.message_type === 'proposal') {
+        if (ctx.state.address)
+          formData.append('address_json', JSON.stringify(ctx.state.address))
+        formData.delete('message_type')
+        formData.forEach((value, key) => {
+          console.log(key)
+          console.log(value)
+        })
         request = await this.$api.studios.postToDB(formData)
       }
+
       console.log(request)
       ctx.dispatch('resetForm', payload.form)
     } catch (error) {
@@ -127,5 +144,8 @@ export const mutations = {
   },
   setAddress(state, payload) {
     state.address = payload
+  },
+  updateErrMsgElems(state, payload) {
+    this.$toArray(state.errMsgElems, payload)
   },
 }

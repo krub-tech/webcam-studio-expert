@@ -9,7 +9,7 @@
       class="modal--name"
       placeholder="Ваше имя"
     />
-    <label for="claim_name" />
+    <i />
     <input
       id="claim_phone"
       name="phone"
@@ -17,7 +17,7 @@
       class="modal--phone"
       placeholder="Телефон"
     />
-    <label for="claim_phone" />
+    <i />
     <div class="modal--answer_to">
       <p class="label">Если предпочитаете письменно:</p>
       <Checkbox

@@ -8,7 +8,7 @@
       class="modal--name"
       placeholder="Ваше имя"
     />
-    <label for="feedback_name" />
+    <i />
     <input
       id="feedback_phone"
       name="phone"
@@ -16,7 +16,7 @@
       class="modal--phone"
       placeholder="Телефон"
     />
-    <label for="feedback_phone" />
+    <i />
     <div class="modal--answer_to">
       <p class="label">Если предпочитаете письменно:</p>
       <Checkbox

@@ -2,45 +2,41 @@
   <form class="proposal modal">
     <h1>Добавление студии</h1>
     <input
-      id="proposal-name"
+      id="name"
       name="name"
       type="text"
       class="modal--name"
       placeholder="Название студии"
     />
-    <label for="proposal-name" />
+    <i class="for-name" />
 
-    <div class="proposal--avatar file-input" @click="filesInputHandle($event)">
-      Загрузить логотип
-    </div>
-    <input id="proposal--avatar" type="file" name="avatar" />
-    <label for="proposal--avatar"></label>
-
+    <input id="avatar" name="avatar" type="file" />
+    <label for="avatar"><p>Загрузить логотип</p></label>
+    <i class="for-avatar" />
     <!-- <div class="modal--avatar-file badge">
         {{ formData.avatar.name }}
       </div> -->
     <InputSearch
-      id="proposal--address_json"
+      id="address_json"
       class="proposal--address_json"
-      name="address_json"
       :value="searchInput"
-      :results="searchResults"
+      :results="searchValues"
       :placeholder="'Адрес студии'"
-      @value="addressInput($event)"
-      @choose="searchInput = $event"
+      @value="cityInputHandle($event)"
+      @choose="chooseAddress($event)"
     />
-    <label for="proposal--address_json"></label>
+    <i class="for-address_json" />
     <hr />
     <div class="modal--description">
       <textarea id="proposal-description" placeholder="Полное описание Вашей студии" />
     </div>
-    <hr />
+    <!-- <hr /> -->
     <input id="proposal-all-photos" type="file" class="modal--photos" multiple />
     <label for="proposal-all-photos" class="proposal--image_1"
       ><p>Загрузить все фото студии</p></label
     >
-    <hr />
-    <template v-if="options">
+    <!-- <hr /> -->
+    <!-- <template v-if="options">
       <Select
         :options="Object.values(options.staff_gender)"
         :value="'Пол администраторов'"
@@ -91,13 +87,12 @@
       <a href="#">пользовательским соглашением</a>
       и
       <a href="#"> политикой конфиденциальности</a>
-    </p>
+    </p> -->
     <button class="modal--submit" @click.prevent="submit">Отправить</button>
   </form>
 </template>
 
 <script>
-/* eslint-disable no-debugger */
 import InputSearch from '@/components/form/InputSearch'
 
 export default {
@@ -131,15 +126,14 @@ export default {
     options() {
       return this.$store.state.modals.options
     },
+    searchValues() {
+      return this.searchResults?.map((el) => el.value)
+    },
   },
 
   methods: {
-    async addressInput(e) {
-      this.searchInput = e
-      const results = await this.cityInputHandle(e)
-      this.searchResults = results.map((el) => el.value)
-    },
     async cityInputHandle(query) {
+      this.searchInput = query
       const url = 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address'
       const token = 'ebb7483e04f9347fbc8d4a58d296891c05f79772'
       const options = {
@@ -154,21 +148,19 @@ export default {
       }
       const response = await fetch(url, options)
       const results = await response.json()
-      return results.suggestions
+      console.log(results.suggestions)
+      this.searchResults = results.suggestions
     },
-    filesInputHandle(e) {
-      const selector = Object.values(e.target.classList).find((el) =>
-        el.includes('proposal')
-      )
-      const input = document.getElementById(selector)
-      input.click()
-
-      input.addEventListener('change', this.sendFilesToStore(input))
-
-      // this.$store.dispatch('modals/filesInputHandle', {
-      //   el: this.$el,
-      //   event: e,
-      // })
+    chooseAddress(adr) {
+      this.searchInput = adr
+      const suggestion = this.searchResults.find((el) => el.value === adr)
+      this.$store.commit('modals/setAddress', suggestion.data)
+    },
+    filesInputHandle(files) {
+      this.$store.dispatch('modals/filesInputHandle', {
+        el: this.$el,
+        files,
+      })
     },
     sendFilesToStore(input) {
       console.log(input.files)
@@ -192,6 +184,16 @@ export default {
 .modal {
   hr {
     margin: 0;
+  }
+  #proposal--avatar {
+    & + label {
+      p {
+        &::after {
+          left: 56px;
+          top: 10px;
+        }
+      }
+    }
   }
 }
 </style>

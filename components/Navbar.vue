@@ -86,7 +86,7 @@ export default {
         case 'Полезные ссылки':
           this.$router.push({
             name: 'links-category',
-            params: { category: this.$store.state.links.category },
+            params: { category: 'telegram_channels' },
           })
           break
         case 'Оставить жалобу':

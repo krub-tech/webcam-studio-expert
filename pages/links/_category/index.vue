@@ -4,34 +4,34 @@
     <aside class="links--nav">
       <ul v-if="usefulLinksOptions">
         <li
-          v-for="link in usefulLinksCount"
-          :key="link.category"
-          :count="link.count"
-          :class="{ active: isCurrent(link.category) }"
-          @click="linkCategoryClickHandle(link.category)"
+          v-for="el in countByCategories"
+          :key="el.category"
+          :count="el.count"
+          :class="{ active: isCurrent(el.category) }"
+          @click="linkCategoryClickHandle(el.category)"
         >
-          {{ usefulLinksOptions.categories[link.category] }}
+          {{ usefulLinksOptions.categories[el.category] }}
         </li>
       </ul>
     </aside>
-    <main v-if="usefulLinks" class="links--list">
+    <main v-if="links" class="links--list">
       <article
-        v-for="article in usefulLinks"
-        :key="article.id"
+        v-for="link in links"
+        :key="link.id"
         class="link"
-        @click="linkClickHandle(article.link)"
+        @click="linkClickHandle(link.link)"
       >
-        <img :src="article.image" :alt="article.title" />
+        <img :src="link.image" :alt="link.title" />
         <div class="link--title">
           <p class="link--title-name">
-            {{ article.title }}
+            {{ link.title }}
           </p>
           <p class="link--title-followers">
-            {{ article.sub_title }}
+            {{ link.sub_title }}
           </p>
         </div>
         <p class="link--desc">
-          {{ article.description }}
+          {{ link.description }}
         </p>
       </article>
     </main>
@@ -41,33 +41,36 @@
 <script>
 export default {
   name: 'Links',
+
+  async asyncData({ $api, route }) {
+    const [links, countByCategories] = await Promise.all([
+      $api.usefulLinks.getByCategory({ category: route.params.category }),
+      $api.usefulLinks.getCountByCategory(),
+    ])
+    return { links, countByCategories }
+  },
+  data: () => ({
+    links: [],
+    countByCategories: {},
+  }),
+
   computed: {
-    usefulLinks() {
-      return this.$store.state.links?.currents
+    currentCategory() {
+      return this.$route.params.category
     },
     usefulLinksOptions() {
       return this.$store.state.links?.options
     },
-    usefulLinksCount() {
-      return this.$store.state.links?.count
-    },
-  },
-  mounted() {
-    this.$store.dispatch('links/get', this.$store.state.links.category)
   },
   methods: {
+    isCurrent(category) {
+      return this.currentCategory === category
+    },
     linkCategoryClickHandle(category) {
-      this.$store.dispatch('links/get', category)
-      this.$router.push({
-        name: 'links-category',
-        params: { category: this.$store.state.links.category },
-      })
+      this.$router.push({ name: 'links-category', params: { category } })
     },
     linkClickHandle(link) {
       window.open(link)
-    },
-    isCurrent(link) {
-      return this.$store.state.links?.category === link
     },
   },
 }

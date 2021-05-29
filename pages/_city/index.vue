@@ -40,6 +40,12 @@ export default {
       isOpenFilter: false,
     }
   },
+  async fetch() {
+    const studios = await this.$api.studios.getByQuery(
+      this.$store.getters['studios/query']
+    )
+    this.$store.commit('studios/updateCurrentStudios', studios.results)
+  },
   computed: {
     studios() {
       return this.$store.state.studios.currents

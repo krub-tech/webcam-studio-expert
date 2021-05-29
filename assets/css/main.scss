@@ -367,8 +367,12 @@ button {
     font-size: 12px;
     line-height: 1.6;
   }
-  input.invalid  {
+  input.invalid,
+  textarea.invalid  {
     border: 1px solid red;
+    & + label {
+      border: 1px solid red;
+    }
   }
   .invalid {
     margin-bottom: 0;
@@ -424,10 +428,11 @@ button {
     & + label {
       margin-bottom: 0;
     }
-    &-files {
+    &-files,
+    &-file {
       display: flex;
       flex-wrap: wrap;
-      margin-top: 8px;
+      margin-top: 16px;
       .preview-wrapper {
         margin-right: 16px;
         margin-bottom: 16px;
@@ -439,6 +444,7 @@ button {
           border-radius: 8px;
         }
         &::after {
+          cursor: pointer;
           content: '';
           position: absolute;
           top: -15px;

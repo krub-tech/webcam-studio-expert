@@ -36,7 +36,7 @@
       @input="filesInputHandle($event)"
     />
     <label for="photos"><p>Загрузить фото или файлы</p></label>
-    <div class="modal--photos-files"></div>
+    <div class="modal--photos-files" />
     <p class="modal--agree">
       Нажимая “Отправить”, Вы соглашаетесь с
       <a href="#">пользовательским соглашением</a>

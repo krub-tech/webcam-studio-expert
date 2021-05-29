@@ -9,13 +9,10 @@
       placeholder="Название студии"
     />
     <i class="for-name" />
-
-    <input id="avatar" name="avatar" type="file" />
+    <input id="avatar" type="file" @input.prevent="avatarInputHandle" />
     <label for="avatar"><p>Загрузить логотип</p></label>
-    <i class="for-avatar" />
-    <!-- <div class="modal--avatar-file badge">
-        {{ formData.avatar.name }}
-      </div> -->
+    <div v-show="formData.avatar" class="modal--photos-file" />
+    <i v-if="!formData.avatar" class="for-avatar" />
     <InputSearch
       id="address_json"
       class="proposal--address_json"
@@ -27,14 +24,27 @@
     />
     <i class="for-address_json" />
     <hr />
-    <div class="modal--description">
-      <textarea id="proposal-description" placeholder="Полное описание Вашей студии" />
-    </div>
+
+    <textarea
+      id="description"
+      name="description"
+      placeholder="Полное описание Вашей студии"
+    />
+    <i class="for-description" />
+
     <!-- <hr /> -->
-    <input id="proposal-all-photos" type="file" class="modal--photos" multiple />
-    <label for="proposal-all-photos" class="proposal--image_1"
-      ><p>Загрузить все фото студии</p></label
-    >
+    <input
+      id="image_1"
+      type="file"
+      class="modal--photos"
+      multiple
+      @input="filesInputHandle($event)"
+    />
+    <label for="image_1" class="proposal--image_1">
+      <p>Загрузить все фото студии</p>
+    </label>
+    <div v-show="$store.state.modals.photos.length" class="modal--photos-files" />
+    <i class="for-image_1" />
     <!-- <hr /> -->
     <!-- <template v-if="options">
       <Select
@@ -50,44 +60,55 @@
       id="proposal-advantages"
       placeholder="Кратко о главных плюсах Вашей студии по сравнению с другими"
     />
-    <hr />
+    <hr />-->
     <input
-      id="proposal-site"
+      id="site"
+      name="site"
       type="text"
       class="modal--site"
       placeholder="Сайт студии"
     />
-    <label for="proposal-site" />
+    <i class="for-site" />
     <input
-      id="proposal-email"
+      id="email"
+      name="email"
       type="text"
       class="modal--email"
       placeholder="Email представителя"
     />
-    <label for="proposal-email" />
+    <i class="for-email" />
     <input
-      id="proposal-phone"
+      id="phone"
+      name="phone"
       type="tel"
       class="modal--phone"
       placeholder="Телефон представителя"
     />
-    <label for="proposal-phone" />
+    <i class="for-phone" />
     <input
-      id="proposal-whatsapp"
+      id="whatsapp"
+      name="whatsapp"
       type="text"
       class="modal-whatsapp"
       placeholder="whatsapp"
     />
-    <label for="proposal-whatsapp" />
-    <input id="proposal-viber" type="text" class="modal-viber" placeholder="viber" />
-    <label for="proposal-viber" />
-    <input id="proposal-telegram" type="text" placeholder="telegram" />
+    <i class="for-whatsapp" />
+    <input
+      id="viber"
+      name="viber"
+      type="text"
+      class="modal-viber"
+      placeholder="viber"
+    />
+    <i class="for-whatsapp" />
+    <input id="telegram" name="telegram" type="text" placeholder="telegram" />
+    <i class="for-telegram" />
     <p class="modal--agree">
       Нажимая “Отправить”, Вы соглашаетесь с
       <a href="#">пользовательским соглашением</a>
       и
       <a href="#"> политикой конфиденциальности</a>
-    </p> -->
+    </p>
     <button class="modal--submit" @click.prevent="submit">Отправить</button>
   </form>
 </template>
@@ -102,7 +123,10 @@ export default {
   },
   data() {
     return {
-      formData: {},
+      formData: {
+        avatar: null,
+        address_json: null,
+      },
       requiredFields: [
         'type',
         'studio_type',
@@ -148,32 +172,40 @@ export default {
       }
       const response = await fetch(url, options)
       const results = await response.json()
-      console.log(results.suggestions)
       this.searchResults = results.suggestions
     },
     chooseAddress(adr) {
       this.searchInput = adr
       const suggestion = this.searchResults.find((el) => el.value === adr)
-      this.$store.commit('modals/setAddress', suggestion.data)
+      this.formData.address_json = JSON.stringify(suggestion.data)
     },
-    filesInputHandle(files) {
-      this.$store.dispatch('modals/filesInputHandle', {
-        el: this.$el,
-        files,
+    avatarInputHandle(e) {
+      const file = e.target.files[0]
+      this.formData.avatar = file
+      const preview = document.createElement('img')
+      this.$previewImg({ preview, file })
+      const previewWrapper = document.createElement('div')
+      previewWrapper.classList.add('preview-wrapper')
+      previewWrapper.appendChild(preview)
+      const previews = this.$el.querySelector('.modal--photos-file')
+      previews.appendChild(previewWrapper)
+      previewWrapper.addEventListener('click', () => {
+        previewWrapper.remove()
+        this.formData.avatar = null
+        e.target.value = ''
       })
     },
-    sendFilesToStore(input) {
-      console.log(input.files)
-      if (input.files.length) console.log(input.files)
-      // this.$store.dispatch('modals/filesInputHandle', {
-      //   el: this.$el,
-      //   files,
-      // })
+    filesInputHandle(e) {
+      this.$store.dispatch('modals/filesInputHandle', {
+        el: this.$el,
+        input: e.target,
+      })
     },
     submit() {
       this.$store.dispatch('modals/submit', {
         message_type: 'proposal',
         form: this.$el,
+        data: this.formData,
       })
     },
   },

@@ -15,4 +15,13 @@ export default ({ app }, inject) => {
     }
     return bool
   })
+  inject('previewImg', (data) => {
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      data.preview.src = reader.result
+    }
+    if (data.file) {
+      reader.readAsDataURL(data.file)
+    }
+  })
 }

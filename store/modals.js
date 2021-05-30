@@ -62,16 +62,18 @@ export const actions = {
     })
     ctx.commit('setErrMsgElems', keys)
   },
+  filesToFormData(ctx, payload) {
+    ctx.state.photos.forEach((el, idx) => {
+      if (idx < 5) payload.formData.append(`${payload.key}_${idx + 1}`, el)
+      else return false
+    })
+  },
   async submit(ctx, payload) {
     const formData = new FormData(payload.form)
 
     formData.append('message_type', payload.message_type)
     ctx.state.answer_to.forEach((el) => {
       formData.append('answer_to', el)
-    })
-    ctx.state.photos.forEach((el, idx) => {
-      if (idx < 5) formData.append(`file_${idx + 1}`, el)
-      else return false
     })
 
     if (ctx.state.errMsgElems?.length) {
@@ -81,22 +83,26 @@ export const actions = {
         if (invalidElem) {
           const errMsgElem = document.querySelector(`.for-${key}`)
           invalidElem.classList.remove('invalid')
-          console.log(errMsgElem)
           if (errMsgElem) errMsgElem.innerText = ''
         }
       })
-    }
+    } // dispatch clearErrs
 
     try {
       let request
+
+      // switch?
       if (payload.message_type === 'feedback' || payload.message_type === 'complaint') {
+        ctx.dispatch('filesToFormData', { key: 'file', formData })
         request = await this.$api.messages.messageInput(formData)
       }
       if (payload.message_type === 'certification') {
+        ctx.dispatch('filesToFormData', { key: 'file', formData })
         formData.append('studio', 1)
         request = await this.$api.messages.messageRequest(formData)
       }
       if (payload.message_type === 'proposal') {
+        ctx.dispatch('filesToFormData', { key: 'image', formData })
         Object.entries(payload.data).forEach((value) => {
           if (value[1]) formData.append(value[0], value[1])
         })

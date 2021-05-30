@@ -25,6 +25,36 @@
     <i class="for-address_json" />
     <hr />
 
+    <div class="studio_type">
+      <Checkbox
+        v-for="(studio_type, key) in options.studio_type"
+        :key="key"
+        :item="studio_type"
+        :checked="$isChecked(formData.studio_type, key)"
+        @mouseup.native="checkboxHandle(key, 'studio_type')"
+      />
+    </div>
+    <i />
+    <hr />
+    <div class="staff_gender form-module">
+      <Select
+        :options="Object.values(options.staff_gender)"
+        :value="'Пол администраторов'"
+        :selected="[options.staff_gender[formData.staff_gender]]"
+        static-placeholder
+        @selectedOption="selectHandle($event, 'staff_gender')"
+      />
+      <div
+        v-if="formData.staff_gender.length && options.staff_gender"
+        class="selected-options"
+      >
+        <div class="badge" @click="formData.staff_gender = []">
+          {{ options.staff_gender[formData.staff_gender] }}
+        </div>
+      </div>
+    </div>
+    <hr />
+
     <textarea
       id="description"
       name="description"
@@ -115,17 +145,22 @@
 
 <script>
 import InputSearch from '@/components/form/InputSearch'
+import Checkbox from '@/components/form/Checkbox'
 
 export default {
   name: 'Proposal',
   components: {
     InputSearch,
+    Checkbox,
   },
   data() {
     return {
       formData: {
+        type: 'studio',
         avatar: null,
         address_json: null,
+        studio_type: [],
+        staff_gender: [],
       },
       requiredFields: [
         'type',
@@ -195,6 +230,18 @@ export default {
         e.target.value = ''
       })
     },
+    checkboxHandle(payload, selector) {
+      this.$toArray(this.formData[selector], payload)
+    },
+    selectHandle(payload, selector) {
+      Object.entries(this.options[selector]).forEach(([key, value]) => {
+        if (payload.includes(value)) {
+          if (selector === 'staff_gender') {
+            this.formData[selector] = [key]
+          } else this.$toArray(this.formData[selector], payload)
+        }
+      })
+    },
     filesInputHandle(e) {
       this.$store.dispatch('modals/filesInputHandle', {
         el: this.$el,
@@ -215,7 +262,7 @@ export default {
 <style lang="scss">
 .modal {
   hr {
-    margin: 0;
+    margin-top: 0;
   }
   #proposal--avatar {
     & + label {
@@ -226,6 +273,9 @@ export default {
         }
       }
     }
+  }
+  .checkbox input[type='checkbox'] + label {
+    margin-bottom: 0;
   }
 }
 </style>

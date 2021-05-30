@@ -62,7 +62,7 @@ export default {
     filesInputHandle(e) {
       this.$store.dispatch('modals/filesInputHandle', {
         el: this.$el,
-        files: e.target.files,
+        input: e.target,
       })
     },
     submit() {

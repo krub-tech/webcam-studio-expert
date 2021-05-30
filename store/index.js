@@ -16,15 +16,17 @@ export const actions = {
   async nuxtServerInit(ctx) {
     ctx.commit('cities/updateCurrentById', 'sankt-peterburg')
 
-    const [usefulLinksOptions, studiosOptions, cities] = await Promise.all([
-      this.$api.usefulLinks.getOptions(),
-      this.$api.studios.getOptions(),
-      this.$api.geo.getCities(),
-      this.$api.messages.getOptions(),
-    ])
+    const [usefulLinksOptions, studiosOptions, cities, messageOptions] =
+      await Promise.all([
+        this.$api.usefulLinks.getOptions(),
+        this.$api.studios.getOptions(),
+        this.$api.geo.getCities(),
+        this.$api.messages.getOptions(),
+      ])
     ctx.commit('links/setOptions', usefulLinksOptions)
     ctx.commit('studios/updateStudiosOptions', studiosOptions)
     ctx.commit('cities/updateCitiesUniques', cities)
+    ctx.commit('modals/setOptions', messageOptions)
   },
   menuToggle(ctx) {
     if (ctx.state.isMenuOpen) ctx.commit('menuClose')

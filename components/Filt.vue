@@ -26,7 +26,7 @@
           v-for="(studio_type, key) in options.studio_type"
           :key="key"
           :item="studio_type"
-          :checked="isChecked($store.state.filter.params.studio_type, key)"
+          :checked="$isChecked($store.state.filter.params.studio_type, key)"
           @mouseup.native="checkboxHandle(key, 'studio_type')"
         />
       </div>
@@ -49,7 +49,9 @@
           v-for="(model_types, key) in options.working_with_model_types"
           :key="key"
           :item="model_types"
-          :checked="isChecked($store.state.filter.params.working_with_model_types, key)"
+          :checked="
+            $isChecked($store.state.filter.params.working_with_model_types, key)
+          "
           @mouseup.native="checkboxHandle(key, 'working_with_model_types')"
         />
       </div>
@@ -118,21 +120,21 @@
         <Checkbox
           :key="'true'"
           :item="'Сертифицирована'"
-          :checked="isChecked($store.state.filter.params.certified, 'true')"
+          :checked="$isChecked($store.state.filter.params.certified, 'true')"
           @mouseup.native="checkboxHandle('true', 'certified')"
         />
         <Checkbox
           v-for="(support_staff, key) in options.support_staff"
           :key="key"
           :item="support_staff"
-          :checked="isChecked($store.state.filter.params.support_staff, key)"
+          :checked="$isChecked($store.state.filter.params.support_staff, key)"
           @mouseup.native="checkboxHandle(key, 'support_staff')"
         />
         <Checkbox
           v-for="(studio_condition, key) in options.conditions"
           :key="key"
           :item="studio_condition"
-          :checked="isChecked($store.state.filter.params.conditions, key)"
+          :checked="$isChecked($store.state.filter.params.conditions, key)"
           @mouseup.native="checkboxHandle(key, 'conditions')"
         />
       </div>
@@ -261,16 +263,6 @@ export default {
       return this.$store.state.filter.params[selector].map(
         (el) => this.options[selector][el]
       )
-    },
-    isChecked(arr, key) {
-      let bool = false
-      if (arr) {
-        arr.forEach((el) => {
-          if (el !== key) return
-          bool = !bool
-        })
-      }
-      return bool
     },
     filterReset() {
       this.$store.commit('cities/setDistrictsSelected', [])

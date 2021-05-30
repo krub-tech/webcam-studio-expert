@@ -12,7 +12,7 @@
     <input id="avatar" type="file" @input.prevent="avatarInputHandle" />
     <label for="avatar"><p>Загрузить логотип</p></label>
     <div v-show="formData.avatar" class="modal--photos-file" />
-    <i v-if="!formData.avatar" class="for-avatar" />
+    <i v-show="!formData.avatar" class="for-avatar" />
     <InputSearch
       id="address_json"
       class="proposal--address_json"
@@ -23,7 +23,7 @@
       @choose="chooseAddress($event)"
     />
     <i class="for-address_json" />
-    <hr />
+    <hr style="width: 50%" />
 
     <div class="studio_type">
       <Checkbox
@@ -34,8 +34,59 @@
         @mouseup.native="checkboxHandle(key, 'studio_type')"
       />
     </div>
-    <i />
+    <hr class="hr-second" />
+    <div class="models_age">
+      <Checkbox
+        v-for="(models_age, key) in options.models_age"
+        :key="key"
+        :item="models_age"
+        :checked="$isChecked(formData.models_age, key)"
+        @mouseup.native="checkboxHandle(key, 'models_age')"
+      />
+    </div>
+    <hr class="hr-second" />
+    <div class="model_type">
+      <Checkbox
+        v-for="(model_type, key) in options.working_with_model_types"
+        :key="key"
+        :item="model_type"
+        :checked="$isChecked(formData.model_type, key)"
+        @mouseup.native="checkboxHandle(key, 'model_type')"
+      />
+    </div>
+    <hr class="hr-second" />
+
+    <div class="min_payout_percentage">
+      <Range
+        :label="'Минимальный % выплат'"
+        :val="+formData.min_payout_percentage"
+        :min="30"
+        :max="90"
+        @valueChange="radioHandle($event, 'min_payout_percentage')"
+      />
+    </div>
     <hr />
+    <div class="shift_length">
+      <Range
+        :label="'Длина смены'"
+        :val="+formData.shift_length"
+        :min="5"
+        :max="12"
+        @valueChange="radioHandle($event, 'shift_length')"
+      />
+    </div>
+    <hr />
+    <div class="max_shifts_per_week">
+      <Range
+        :label="'Дней в неделю минимум'"
+        :val="+formData.max_shifts_per_week"
+        :min="3"
+        :max="6"
+        @valueChange="radioHandle($event, 'max_shifts_per_week')"
+      />
+    </div>
+    <hr />
+
     <div class="staff_gender form-module">
       <Select
         :options="Object.values(options.staff_gender)"
@@ -55,14 +106,35 @@
     </div>
     <hr />
 
+    <div v-if="options.devices" class="devices form-module">
+      <MultiSelect
+        :options="Object.values(options.devices)"
+        :placeholder="`Камеры`"
+        :selected="selectedDevices"
+        @selectedOption="selectHandle($event, 'devices')"
+      />
+    </div>
+    <hr />
+
+    <div class="conditions">
+      <Checkbox
+        v-for="(studio_condition, key) in options.conditions"
+        :key="key"
+        :item="studio_condition"
+        :checked="$isChecked(formData.conditions, key)"
+        @mouseup.native="checkboxHandle(key, 'conditions')"
+      />
+    </div>
+    <hr class="hr-second" />
+
     <textarea
       id="description"
       name="description"
       placeholder="Полное описание Вашей студии"
     />
     <i class="for-description" />
+    <hr style="width: 50%" />
 
-    <!-- <hr /> -->
     <input
       id="image_1"
       type="file"
@@ -75,22 +147,34 @@
     </label>
     <div v-show="$store.state.modals.photos.length" class="modal--photos-files" />
     <i class="for-image_1" />
-    <!-- <hr /> -->
-    <!-- <template v-if="options">
-      <Select
-        :options="Object.values(options.staff_gender)"
-        :value="'Пол администраторов'"
-        static-placeholder
+    <hr style="width: 50%" />
+
+    <div v-if="options.work_with_sites" class="work_with_sites form-module">
+      <MultiSelect
+        :options="Object.values(options.work_with_sites)"
+        :placeholder="`Сайты с которыми работаете`"
+        :selected="selectedSites"
+        @selectedOption="selectHandle($event, 'work_with_sites')"
       />
-    </template>
-    <hr />
-    <textarea id="proposal-bonusesForModels" placeholder="Бонусы для моделей" />
-    <hr />
+    </div>
+    <hr style="width: 50%" />
+
     <textarea
-      id="proposal-advantages"
+      id="bonuses_for_models"
+      name="bonuses_for_models"
+      placeholder="Бонусы для моделей"
+    />
+    <i class="for-bonuses_for_models" />
+    <hr style="width: 50%" />
+
+    <textarea
+      id="advantages"
+      name="advantages"
       placeholder="Кратко о главных плюсах Вашей студии по сравнению с другими"
     />
-    <hr />-->
+    <i class="for-advantages" />
+    <hr style="width: 50%" />
+
     <input
       id="site"
       name="site"
@@ -146,12 +230,14 @@
 <script>
 import InputSearch from '@/components/form/InputSearch'
 import Checkbox from '@/components/form/Checkbox'
+import Range from '@/components/form/Range'
 
 export default {
   name: 'Proposal',
   components: {
     InputSearch,
     Checkbox,
+    Range,
   },
   data() {
     return {
@@ -160,7 +246,16 @@ export default {
         avatar: null,
         address_json: null,
         studio_type: [],
+        models_age: [],
+        model_type: [],
+        min_payout_percentage: null,
+        shift_length: null,
+        max_shifts_per_week: null,
         staff_gender: [],
+        devices: [],
+        conditions: [],
+        support_staff: [],
+        work_with_sites: [],
       },
       requiredFields: [
         'type',
@@ -183,14 +278,24 @@ export default {
   },
   computed: {
     options() {
-      return this.$store.state.modals.options
+      return this.$store.state.studios.options
     },
     searchValues() {
       return this.searchResults?.map((el) => el.value)
     },
+    selectedDevices() {
+      return this.nameByKeys('devices')
+    },
+    selectedSites() {
+      return this.nameByKeys('work_with_sites')
+    },
   },
-
   methods: {
+    nameByKeys(selector) {
+      return Object.values(this.formData[selector]).map((el) => {
+        return this.options[selector][el]
+      })
+    },
     async cityInputHandle(query) {
       this.searchInput = query
       const url = 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address'
@@ -238,9 +343,23 @@ export default {
         if (payload.includes(value)) {
           if (selector === 'staff_gender') {
             this.formData[selector] = [key]
-          } else this.$toArray(this.formData[selector], payload)
+          } else {
+            let k
+            Object.entries(this.options[selector]).forEach((el) => {
+              if (el[1] !== payload) {
+                return false
+              }
+              const a = el[0]
+              k = a
+            })
+            console.log(k)
+            this.$toArray(this.formData[selector], k)
+          }
         }
       })
+    },
+    radioHandle(payload, selector) {
+      this.formData[selector] = payload
     },
     filesInputHandle(e) {
       this.$store.dispatch('modals/filesInputHandle', {
@@ -262,7 +381,11 @@ export default {
 <style lang="scss">
 .modal {
   hr {
+    width: 100%;
     margin-top: 0;
+    &.hr-second {
+      margin-top: 20px;
+    }
   }
   #proposal--avatar {
     & + label {
@@ -274,8 +397,18 @@ export default {
       }
     }
   }
-  .checkbox input[type='checkbox'] + label {
-    margin-bottom: 0;
+  .min_payout_percentage,
+  .shift_length,
+  .max_shifts_per_week {
+    & + hr {
+      margin-top: 42px;
+    }
+  }
+  textarea {
+    margin: 0;
+  }
+  #advantages {
+    height: 100px;
   }
 }
 </style>

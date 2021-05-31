@@ -103,8 +103,14 @@ export const actions = {
       }
       if (payload.message_type === 'proposal') {
         ctx.dispatch('filesToFormData', { key: 'image', formData })
+
         Object.entries(payload.data).forEach((value) => {
-          if (value[1]) formData.append(value[0], value[1])
+          const key = value[0]
+          const val = value[1]
+          if (val?.length && typeof val !== 'string') {
+            val.forEach((l) => formData.append(key, l))
+          } else if (typeof val === 'string' || key === 'avatar')
+            formData.append(key, val)
         })
         formData.forEach((value, key) => {
           console.log(key)

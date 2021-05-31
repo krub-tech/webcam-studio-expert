@@ -30,7 +30,7 @@ export default {
       default: 'Сделайте выбор',
     },
     selected: {
-      type: Array,
+      type: [Array, String],
       default: null,
     },
   },

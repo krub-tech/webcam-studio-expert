@@ -91,12 +91,12 @@
       <Select
         :options="Object.values(options.staff_gender)"
         :value="'Пол администраторов'"
-        :selected="[options.staff_gender[formData.staff_gender]]"
+        :selected="options.staff_gender[formData.staff_gender]"
         static-placeholder
         @selectedOption="selectHandle($event, 'staff_gender')"
       />
       <div
-        v-if="formData.staff_gender.length && options.staff_gender"
+        v-if="formData.staff_gender && options.staff_gender"
         class="selected-options"
       >
         <div class="badge" @click="formData.staff_gender = []">
@@ -251,7 +251,7 @@ export default {
         min_payout_percentage: null,
         shift_length: null,
         max_shifts_per_week: null,
-        staff_gender: [],
+        staff_gender: null,
         devices: [],
         conditions: [],
         support_staff: [],

@@ -3,21 +3,21 @@
     <h1>Оставить жалобу</h1>
     <p>Мы сможем помочь в этих случаях, а вот в этих, к сожалению, нет.</p>
     <input
-      id="claim_name"
+      id="name"
       name="name"
       type="text"
       class="modal--name"
       placeholder="Ваше имя"
     />
-    <i />
+    <i class="for-name" />
     <input
-      id="claim_phone"
+      id="phone"
       name="phone"
       type="text"
       class="modal--phone"
       placeholder="Телефон"
     />
-    <i />
+    <i class="for-phone" />
     <div class="modal--answer_to">
       <p class="label">Если предпочитаете письменно:</p>
       <Checkbox
@@ -28,7 +28,9 @@
         @mouseup.native="answerToHandler(answer)"
       />
     </div>
+    <i />
     <textarea name="message" placeholder="Опишите ситуацию" />
+    <i />
     <input
       id="photos"
       type="file"

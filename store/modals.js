@@ -40,7 +40,6 @@ export const actions = {
     })
   },
   resetForm(ctx, form) {
-    console.log(form)
     ctx.commit('setAnswerTo', [])
     ctx.commit('setPhotos', [])
     form.reset()

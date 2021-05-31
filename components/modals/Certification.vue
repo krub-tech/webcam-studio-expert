@@ -2,21 +2,21 @@
   <form class="certification modal">
     <h1>Запись на сертификацию</h1>
     <input
-      id="certification_name"
+      id="name"
       name="name"
       type="text"
       class="modal--name"
       placeholder="Ваше имя"
     />
-    <i />
+    <i class="for-name" />
     <input
-      id="certification_phone"
+      id="phone"
       name="phone"
       type="text"
       class="modal--phone"
       placeholder="Телефон"
     />
-    <i />
+    <i class="for-phone" />
     <div class="modal--answer_to">
       <p class="label">Если предпочитаете письменно:</p>
       <Checkbox
@@ -27,6 +27,7 @@
         @mouseup.native="answerToHandler(answer)"
       />
     </div>
+    <i />
 
     <textarea name="message" placeholder="Примечание" />
 

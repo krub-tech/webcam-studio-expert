@@ -24,4 +24,8 @@ export default ({ app }, inject) => {
       reader.readAsDataURL(data.file)
     }
   })
+  inject('scrollToTop', () => {
+    const el = document.getElementById('__layout')
+    el.scrollTo(0, 0)
+  })
 }

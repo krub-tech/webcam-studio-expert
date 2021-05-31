@@ -33,6 +33,9 @@ export default {
     modal() {
       this.component = () => import(`@/components/modals/${this.modal}.vue`)
     },
+    $route() {
+      this.$scrollToTop()
+    },
   },
   mounted() {
     this.$el.addEventListener('mousedown', this.notModalClick)
@@ -62,15 +65,12 @@ export default {
   width: 100%;
   height: 100%;
   overflow: auto;
+  scroll-behavior: smooth;
 
   &::-webkit-scrollbar {
     display: none;
   }
 }
-
-// .page-body {
-
-// }
 
 .content {
   position: relative;

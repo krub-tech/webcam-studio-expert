@@ -55,6 +55,7 @@ export default {
   methods: {
     paginate(pageNumber) {
       this.$store.dispatch('studios/paginate', pageNumber)
+      this.$nextTick().then(this.$scrollToTop())
     },
   },
 }

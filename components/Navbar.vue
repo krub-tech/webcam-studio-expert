@@ -19,16 +19,14 @@
             @selectedOption="forModelsClickHandle"
           />
         </div>
-        <nuxt-link class="nav--item nav--item-certificate" to="/certificate">
-          Сертификация
-        </nuxt-link>
         <a
           href="#"
-          class="nav--item"
-          to="/proposal"
-          @click="$store.commit('modals/setCurrent', 'Proposal')"
-          >Добавить студию</a
+          class="nav--item nav--item-certificate"
+          @click.prevent="toCertificate"
         >
+          Сертификация
+        </a>
+        <a href="#" class="nav--item" @click.prevent="toAddStudio">Добавить студию</a>
       </div>
     </nav>
   </div>
@@ -93,6 +91,14 @@ export default {
         default:
           break
       }
+      this.$store.commit('menuClose')
+    },
+    toCertificate() {
+      this.$router.push({ name: 'certificate' })
+      this.$store.commit('menuClose')
+    },
+    toAddStudio() {
+      this.$store.commit('modals/setCurrent', 'Proposal')
       this.$store.commit('menuClose')
     },
   },

@@ -8,12 +8,12 @@
       <button class="filter-btn" @click="isOpenFilter = true" />
       <Filt :class="{ isOpenFilter }" @close="isOpenFilter = false" />
     </aside>
-    <!-- <div class="studios--count">
+    <div class="studios--count">
       <p class="studios--count-current">
-        {{ $store.state.studios.currents.length }}
+        {{ $store.state.studios.allWithParamsLength }}
       </p>
       /{{ $store.state.studios.allByCityLength }}
-    </div> -->
+    </div>
     <div class="sort-wrapper">
       <div class="select-wrapper sort">
         <Select

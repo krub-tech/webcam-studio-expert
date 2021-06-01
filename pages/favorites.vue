@@ -2,6 +2,9 @@
   <div class="studio-wrapper">
     <StudioSidebar :studios="studios" />
     <Studio v-if="!$store.getters.isMobile" :studio="studio" />
+    <div v-if="!studio" class="error">
+      <h1>В избранном пока нет ни одной студии</h1>
+    </div>
   </div>
 </template>
 
@@ -17,9 +20,6 @@ export default {
   mounted() {
     this.getFavorites()
   },
-  // updated() {
-  //   this.getFavorites()
-  // },
   methods: {
     getFavorites() {
       if (localStorage.favorites) {
@@ -34,4 +34,11 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="scss">
+.studio-wrapper {
+  .error {
+    display: grid;
+    place-items: center;
+  }
+}
+</style>

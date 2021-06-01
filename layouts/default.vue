@@ -1,6 +1,7 @@
 <template>
   <div class="page-body">
     <Header />
+
     <Nuxt class="content" />
     <div v-if="$store.state.modals.current" class="modal-wrapper">
       <div class="modal-wrapper--inner">
@@ -8,6 +9,7 @@
         <button class="close-btn" @click="closeModal" />
       </div>
     </div>
+    <Footer />
   </div>
 </template>
 
@@ -80,9 +82,15 @@ export default {
   }
 }
 
+.page-body {
+  display: flex;
+  flex-direction: column;
+}
+
 .content {
   position: relative;
   top: 60px;
+  min-height: 100vh;
 }
 
 .modal-wrapper {

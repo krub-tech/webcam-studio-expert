@@ -1,6 +1,6 @@
 <template>
-  <aside>
-    <div class="studio--aside-header">
+  <aside class="studio--mobile-list">
+    <div class="studio--mobile-list-header">
       <button class="btn-filter" @click="$router.push('/')">
         <img src="@/assets/svg/i-back_arrow.svg" />
         К фильтру
@@ -84,44 +84,10 @@ export default {
 }
 </script>
 <style lang="scss">
-.studio--aside {
-  display: block;
-  min-width: 300px;
-  margin: 0 var(--fr-l);
-  margin-top: 70px;
-  grid-area: studios-list;
-  &-header {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: var(--fr-l);
-    button {
-      height: var(--fr-2);
-      padding: 0.75rem;
-      border-radius: 0.5rem;
-    }
-    .btn-filter {
-      display: flex;
-      align-items: center;
-      background-color: #e5e5ef;
-      img {
-        margin-right: var(--fr-m);
-      }
-    }
-    .btn-favorites {
-      background-color: var(--white);
-      border: 1px solid #c4c4cd;
-      &.btn_favorites_active {
-        border: 1px solid #ff93cd;
-      }
-    }
-  }
-}
-
 .studio--mobile-list {
   display: block;
   min-width: 300px;
   margin: 0 var(--fr-l);
-  margin-top: 70px;
   grid-area: studios-list;
   &-header {
     display: flex;

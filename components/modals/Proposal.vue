@@ -326,15 +326,6 @@ export default {
         e.target.value = ''
       })
     },
-    checkboxHandle(payload, selector) {
-      this.$toArray(this.formData[selector], payload)
-    },
-    filesInputHandle(e) {
-      this.$store.dispatch('modals/filesInputHandle', {
-        el: this.$el,
-        input: e.target,
-      })
-    },
     submit() {
       this.$store.dispatch('modals/submit', {
         message_type: 'proposal',

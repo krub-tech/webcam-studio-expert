@@ -135,6 +135,7 @@ export const actions = {
 
       console.log(request)
       ctx.dispatch('resetForm', payload.form)
+      ctx.commit('setCurrent', 'SendSuccess')
     } catch (error) {
       if (error.response?.status === 400) {
         console.log('errors', error.response.data)

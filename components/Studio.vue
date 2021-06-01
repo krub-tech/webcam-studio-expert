@@ -247,10 +247,6 @@ export default {
 
 .studio-wrapper {
   padding-top: 20px;
-  background-color: white;
-  .studio--aside {
-    display: none;
-  }
 }
 .studio {
   min-width: 300px;

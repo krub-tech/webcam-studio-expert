@@ -122,8 +122,7 @@ export const actions = {
         request = await this.$api.studios.postToDB(formData)
       }
       if (payload.message_type === 'specselection') {
-        // ctx.dispatch('filesToFormData', { key: 'file', formData })
-        // formData.append('studio', 1)
+        ctx.dispatch('filesToFormData', { key: 'file', formData })
 
         ctx.dispatch('specDataAdd', { data: payload.data, formData })
         formData.forEach((value, key) => {

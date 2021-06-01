@@ -105,7 +105,6 @@
       </div>
     </div>
     <hr />
-
     <div v-if="options.devices" class="devices form-module">
       <MultiSelect
         :options="Object.values(options.devices)"
@@ -228,6 +227,8 @@ import Checkbox from '@/components/form/Checkbox'
 import Range from '@/components/form/Range'
 import TermsPrivacy from '@/components/modals/TermsPrivacy'
 
+import { modals } from '@/mixins/modals'
+
 export default {
   name: 'Proposal',
   components: {
@@ -236,6 +237,7 @@ export default {
     Range,
     TermsPrivacy,
   },
+  mixins: [modals],
   data() {
     return {
       formData: {
@@ -280,19 +282,11 @@ export default {
     searchValues() {
       return this.searchResults?.map((el) => el.value)
     },
-    selectedDevices() {
-      return this.nameByKeys('devices')
-    },
     selectedSites() {
       return this.nameByKeys('work_with_sites')
     },
   },
   methods: {
-    nameByKeys(selector) {
-      return Object.values(this.formData[selector]).map((el) => {
-        return this.options[selector][el]
-      })
-    },
     async cityInputHandle(query) {
       this.searchInput = query
       const url = 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address'
@@ -334,29 +328,6 @@ export default {
     },
     checkboxHandle(payload, selector) {
       this.$toArray(this.formData[selector], payload)
-    },
-    selectHandle(payload, selector) {
-      Object.entries(this.options[selector]).forEach(([key, value]) => {
-        if (payload.includes(value)) {
-          if (selector === 'staff_gender') {
-            this.formData[selector] = [key]
-          } else {
-            let k
-            Object.entries(this.options[selector]).forEach((el) => {
-              if (el[1] !== payload) {
-                return false
-              }
-              const a = el[0]
-              k = a
-            })
-            console.log(k)
-            this.$toArray(this.formData[selector], k)
-          }
-        }
-      })
-    },
-    rangeHandle(payload, selector) {
-      this.formData[selector] = payload
     },
     filesInputHandle(e) {
       this.$store.dispatch('modals/filesInputHandle', {

@@ -46,7 +46,8 @@ export default {
     closeModal() {
       if (
         this.$store.state.modals.current === 'Terms' ||
-        this.$store.state.modals.current === 'Privacy'
+        this.$store.state.modals.current === 'Privacy' ||
+        this.$store.state.modals.current === 'EnglishDesc'
       ) {
         this.$store.commit('modals/setCurrent', this.prev)
       } else this.$store.commit('modals/setCurrent', null)

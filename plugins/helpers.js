@@ -28,4 +28,11 @@ export default ({ app }, inject) => {
     const el = document.getElementById('__layout')
     el.scrollTo(0, 0)
   })
+  inject('keysByValues', (payload, options) => {
+    let result
+    Object.entries(options).forEach(([key, value]) => {
+      if (value === payload) result = key
+    })
+    return result
+  })
 }

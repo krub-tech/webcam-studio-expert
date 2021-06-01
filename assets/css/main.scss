@@ -375,6 +375,9 @@ button {
   }
   .invalid {
     margin-bottom: 0;
+    &.select {
+      border: 1px solid red;
+    }
   }
 
   textarea {

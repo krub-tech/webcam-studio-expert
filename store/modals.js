@@ -39,6 +39,21 @@ export const actions = {
       }
     })
   },
+  filesToFormData(ctx, payload) {
+    ctx.state.photos.forEach((el, idx) => {
+      if (idx < 5) payload.formData.append(`${payload.key}_${idx + 1}`, el)
+      else return false
+    })
+  },
+  specDataAdd(ctx, payload) {
+    Object.entries(payload.data).forEach(([key, value]) => {
+      if (value?.length && typeof value !== 'string') {
+        value.forEach((l) => payload.formData.append(key, l))
+      } else if (typeof value === 'string' || key === 'avatar')
+        payload.formData.append(key, value)
+    })
+  },
+
   resetForm(ctx, form) {
     ctx.commit('setAnswerTo', [])
     ctx.commit('setPhotos', [])
@@ -47,9 +62,7 @@ export const actions = {
   },
   errorsHandler(ctx, errors) {
     const keys = []
-    Object.entries(errors).forEach((el) => {
-      const key = el[0]
-      const value = el[1]
+    Object.entries(errors).forEach(([key, value]) => {
       const invalidElem = document.getElementById(key)
       keys.push(key)
       if (invalidElem) {
@@ -61,20 +74,7 @@ export const actions = {
     })
     ctx.commit('setErrMsgElems', keys)
   },
-  filesToFormData(ctx, payload) {
-    ctx.state.photos.forEach((el, idx) => {
-      if (idx < 5) payload.formData.append(`${payload.key}_${idx + 1}`, el)
-      else return false
-    })
-  },
-  async submit(ctx, payload) {
-    const formData = new FormData(payload.form)
-
-    formData.append('message_type', payload.message_type)
-    ctx.state.answer_to.forEach((el) => {
-      formData.append('answer_to', el)
-    })
-
+  clearErrors(ctx) {
     if (ctx.state.errMsgElems?.length) {
       ctx.state.errMsgElems.forEach((key) => {
         const invalidElem = document.getElementById(key)
@@ -85,12 +85,22 @@ export const actions = {
           if (errMsgElem) errMsgElem.innerText = ''
         }
       })
-    } // dispatch clearErrs
+    }
+  },
+
+  async submit(ctx, payload) {
+    const formData = new FormData(payload.form)
+
+    formData.append('message_type', payload.message_type)
+    ctx.state.answer_to.forEach((el) => {
+      formData.append('answer_to', el)
+    })
+
+    ctx.dispatch('clearErrors')
 
     try {
       let request
 
-      // switch?
       if (payload.message_type === 'feedback' || payload.message_type === 'complaint') {
         ctx.dispatch('filesToFormData', { key: 'file', formData })
         request = await this.$api.messages.messageInput(formData)
@@ -102,20 +112,26 @@ export const actions = {
       }
       if (payload.message_type === 'proposal') {
         ctx.dispatch('filesToFormData', { key: 'image', formData })
+        ctx.dispatch('specDataAdd', { data: payload.data, formData })
 
-        Object.entries(payload.data).forEach((value) => {
-          const key = value[0]
-          const val = value[1]
-          if (val?.length && typeof val !== 'string') {
-            val.forEach((l) => formData.append(key, l))
-          } else if (typeof val === 'string' || key === 'avatar')
-            formData.append(key, val)
-        })
         formData.forEach((value, key) => {
           console.log(key)
           console.log(value)
         })
+
         request = await this.$api.studios.postToDB(formData)
+      }
+      if (payload.message_type === 'specselection') {
+        // ctx.dispatch('filesToFormData', { key: 'file', formData })
+        // formData.append('studio', 1)
+
+        ctx.dispatch('specDataAdd', { data: payload.data, formData })
+        formData.forEach((value, key) => {
+          console.log(key)
+          console.log(value)
+        })
+
+        request = await this.$api.messages.specSelection(formData)
       }
 
       console.log(request)

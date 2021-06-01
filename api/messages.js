@@ -11,4 +11,8 @@ export default ($axios) => ({
   messageRequest(data) {
     return $axios.$post(`${resource}/request/`, data)
   },
+
+  specSelection(data) {
+    return $axios.$post(`${resource}/help_in_selecting_studio/`, data)
+  },
 })

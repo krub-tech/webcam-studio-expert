@@ -1,12 +1,7 @@
 <template>
   <div class="radio">
-    <input
-      :id="`${$vnode.key}`"
-      type="radio"
-      :name="selector"
-      :class="{ active: isSelected }"
-    />
-    <label :for="`${$vnode.key}`">
+    <input type="radio" :name="selector" :class="{ active: isSelected }" />
+    <label>
       {{ item }}
     </label>
   </div>

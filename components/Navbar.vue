@@ -79,9 +79,7 @@ export default {
           this.$router.push('/')
           break
         case 'Индивидуальный подбор студии':
-          this.$store.dispatch('updateModal', {
-            name: 'SpecSelection',
-          })
+          this.$store.commit('modals/setCurrent', 'SpecSelection')
           break
         case 'Полезные ссылки':
           this.$router.push({

@@ -1,15 +1,39 @@
 <template>
-  <form class="proposal modal">
-    <h1>Добавление студии</h1>
+  <form class="proposal specselection modal">
+    <h1>Подбор студии</h1>
+    <p class="specselection--subtitle">
+      Мы подберем Вам подходящие студии, учитывая Ваши пожелания и предоставленную
+      информацию.
+    </p>
     <input
       id="name"
       name="name"
       type="text"
       class="modal--name"
-      placeholder="Название студии"
+      placeholder="Ваше имя"
     />
     <i class="for-name" />
-    <input id="avatar" type="file" @input.prevent="avatarInputHandle" />
+
+    <Select
+      :options="years"
+      :value="formData.year_of_birth || 'Год рождения'"
+      @selectedOption="formData.year_of_birth = $event.toString()"
+    />
+    <i />
+
+    <div id="model_type" class="model_type">
+      <Radio
+        v-for="(model_type, key) in options.model_type"
+        :key="key"
+        :item="model_type"
+        :selector="'models_type'"
+        :selected="formData.model_type"
+        @mouseup.native="radioHandle($event.target.innerText, 'model_type')"
+      />
+    </div>
+    <i class="for-model_type" />
+
+    <!-- <input id="avatar" type="file" @input.prevent="avatarInputHandle" />
     <label for="avatar"><p>Загрузить логотип</p></label>
     <div v-show="formData.avatar" class="modal--photos-file" />
     <i v-show="!formData.avatar" class="for-avatar" />
@@ -62,7 +86,7 @@
         :val="+formData.min_payout_percentage"
         :min="30"
         :max="90"
-        @valueChange="rangeHandle($event, 'min_payout_percentage')"
+        @valueChange="radioHandle($event, 'min_payout_percentage')"
       />
     </div>
     <hr />
@@ -72,7 +96,7 @@
         :val="+formData.shift_length"
         :min="5"
         :max="12"
-        @valueChange="rangeHandle($event, 'shift_length')"
+        @valueChange="radioHandle($event, 'shift_length')"
       />
     </div>
     <hr />
@@ -82,7 +106,7 @@
         :val="+formData.max_shifts_per_week"
         :min="3"
         :max="6"
-        @valueChange="rangeHandle($event, 'max_shifts_per_week')"
+        @valueChange="radioHandle($event, 'max_shifts_per_week')"
       />
     </div>
     <hr />
@@ -217,7 +241,12 @@
     <i class="for-whatsapp" />
     <input id="telegram" name="telegram" type="text" placeholder="telegram" />
     <i class="for-telegram" />
-    <TermsPrivacy />
+    <p class="modal--agree">
+      Нажимая “Отправить”, Вы соглашаетесь с
+      <a href="#">пользовательским соглашением</a>
+      и
+      <a href="#"> политикой конфиденциальности</a>
+    </p> -->
     <button class="modal--submit" @click.prevent="submit">Отправить</button>
   </form>
 </template>
@@ -226,147 +255,49 @@
 import InputSearch from '@/components/form/InputSearch'
 import Checkbox from '@/components/form/Checkbox'
 import Range from '@/components/form/Range'
-import TermsPrivacy from '@/components/modals/TermsPrivacy'
+import Radio from '@/components/form/Radio'
 
 export default {
-  name: 'Proposal',
+  name: 'SpecSelection',
   components: {
-    InputSearch,
-    Checkbox,
-    Range,
-    TermsPrivacy,
+    Radio,
+    // InputSearch,
+    // Checkbox,
+    // Range,
   },
   data() {
     return {
       formData: {
-        type: 'studio',
-        avatar: null,
-        address_json: null,
-        studio_type: [],
-        models_age: [],
-        model_type: [],
-        min_payout_percentage: null,
-        shift_length: null,
-        max_shifts_per_week: null,
-        staff_gender: null,
-        devices: [],
-        conditions: [],
-        support_staff: [],
-        work_with_sites: [],
+        year_of_birth: null,
+        model_type: null,
       },
-      requiredFields: [
-        'type',
-        'studio_type',
-        'name',
-        'avatar',
-        'address_json',
-        'email',
-        'phone',
-        'description',
-        'working_with_model_types',
-        'models_age',
-        'work_with_sites',
-        'image_1',
-        'staff_gender',
-      ],
-      searchInput: '',
-      searchResults: null,
     }
   },
   computed: {
     options() {
-      return this.$store.state.studios.options
+      return this.$store.state.modals.options
     },
-    searchValues() {
-      return this.searchResults?.map((el) => el.value)
-    },
-    selectedDevices() {
-      return this.nameByKeys('devices')
-    },
-    selectedSites() {
-      return this.nameByKeys('work_with_sites')
+    years() {
+      const now = new Date().getFullYear()
+      const res = []
+      for (let i = 0; i < 20; i += 1) {
+        res.push(now - 18 - i)
+      }
+      return res
     },
   },
   methods: {
-    nameByKeys(selector) {
-      return Object.values(this.formData[selector]).map((el) => {
-        return this.options[selector][el]
-      })
-    },
-    async cityInputHandle(query) {
-      this.searchInput = query
-      const url = 'https://suggestions.dadata.ru/suggestions/api/4_1/rs/suggest/address'
-      const token = 'ebb7483e04f9347fbc8d4a58d296891c05f79772'
-      const options = {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-          Authorization: `Token ${token}`,
-        },
-        body: JSON.stringify({ query }),
-      }
-      const response = await fetch(url, options)
-      const results = await response.json()
-      this.searchResults = results.suggestions
-    },
-    chooseAddress(adr) {
-      this.searchInput = adr
-      const suggestion = this.searchResults.find((el) => el.value === adr)
-      this.formData.address_json = JSON.stringify(suggestion.data)
-    },
-    avatarInputHandle(e) {
-      const file = e.target.files[0]
-      this.formData.avatar = file
-      const preview = document.createElement('img')
-      this.$previewImg({ preview, file })
-      const previewWrapper = document.createElement('div')
-      previewWrapper.classList.add('preview-wrapper')
-      previewWrapper.appendChild(preview)
-      const previews = this.$el.querySelector('.modal--photos-file')
-      previews.appendChild(previewWrapper)
-      previewWrapper.addEventListener('click', () => {
-        previewWrapper.remove()
-        this.formData.avatar = null
-        e.target.value = ''
-      })
-    },
-    checkboxHandle(payload, selector) {
-      this.$toArray(this.formData[selector], payload)
-    },
-    selectHandle(payload, selector) {
-      Object.entries(this.options[selector]).forEach(([key, value]) => {
-        if (payload.includes(value)) {
-          if (selector === 'staff_gender') {
-            this.formData[selector] = [key]
-          } else {
-            let k
-            Object.entries(this.options[selector]).forEach((el) => {
-              if (el[1] !== payload) {
-                return false
-              }
-              const a = el[0]
-              k = a
-            })
-            console.log(k)
-            this.$toArray(this.formData[selector], k)
-          }
+    radioHandle(payload, selector) {
+      Object.entries(this.options[selector]).forEach((el) => {
+        if (el[1] === payload) {
+          const key = el[0]
+          this.formData[selector] = key
         }
-      })
-    },
-    rangeHandle(payload, selector) {
-      this.formData[selector] = payload
-    },
-    filesInputHandle(e) {
-      this.$store.dispatch('modals/filesInputHandle', {
-        el: this.$el,
-        input: e.target,
       })
     },
     submit() {
       this.$store.dispatch('modals/submit', {
-        message_type: 'proposal',
+        message_type: 'specselection',
         form: this.$el,
         data: this.formData,
       })
@@ -384,16 +315,6 @@ export default {
       margin-top: 20px;
     }
   }
-  #proposal--avatar {
-    & + label {
-      p {
-        &::after {
-          left: 56px;
-          top: 10px;
-        }
-      }
-    }
-  }
   .min_payout_percentage,
   .shift_length,
   .max_shifts_per_week {
@@ -406,6 +327,41 @@ export default {
   }
   #advantages {
     height: 100px;
+  }
+}
+
+.specselection {
+  p {
+    line-height: 1.3;
+    color: #606074;
+  }
+  h2 {
+    font-size: 18px;
+    margin-bottom: 28px;
+  }
+
+  &--subtitle {
+    margin-bottom: 28px;
+  }
+  .model_type {
+    .radio {
+      display: inline-block;
+      background-color: #fefeff;
+
+      margin-bottom: 6px;
+      input[type='radio'] {
+        & + label {
+          border: 1px solid #c4c4cd;
+          border-radius: 0.5rem;
+        }
+      }
+      input[type='radio'].active {
+        & + label {
+          background-color: #fefeff;
+          border: 2px solid var(--pink);
+        }
+      }
+    }
   }
 }
 </style>

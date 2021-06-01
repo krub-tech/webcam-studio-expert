@@ -22,6 +22,7 @@ export default {
   data() {
     return {
       component: null,
+      prev: null,
     }
   },
   computed: {
@@ -30,7 +31,8 @@ export default {
     },
   },
   watch: {
-    modal() {
+    modal(newV, oldV) {
+      this.prev = oldV
       this.component = () => import(`@/components/modals/${this.modal}.vue`)
     },
     $route() {
@@ -42,7 +44,12 @@ export default {
   },
   methods: {
     closeModal() {
-      this.$store.commit('modals/setCurrent', null)
+      if (
+        this.$store.state.modals.current === 'Terms' ||
+        this.$store.state.modals.current === 'Privacy'
+      ) {
+        this.$store.commit('modals/setCurrent', this.prev)
+      } else this.$store.commit('modals/setCurrent', null)
     },
     notModalClick(e) {
       if (e.target.classList.value.includes('modal-wrapper--inner')) {
@@ -114,12 +121,15 @@ export default {
     overflow: auto;
   }
   .close-btn {
+    width: 40px;
+    height: 40px;
     position: absolute;
-    top: 55px;
+    top: 80px;
     right: 50%;
-    transform: translateX(200px);
+    transform: translateX(175px);
+    background-color: rgba(255, 255, 255, 0);
     &:active {
-      transform: translateX(200px);
+      transform: translateY(2px) translateX(175px);
     }
   }
 }

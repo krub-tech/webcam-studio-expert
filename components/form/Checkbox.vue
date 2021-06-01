@@ -46,8 +46,7 @@ export default {
       margin-bottom: var(--fr-m);
     }
     &.active + label {
-      background-color: #ffc5e4;
-      border: 1px solid #ffc5e4;
+      border: 2px solid var(--pink);
     }
   }
 }

@@ -31,12 +31,7 @@
 
     <textarea name="message" placeholder="Примечание" />
 
-    <p class="modal--agree">
-      Нажимая “Отправить”, Вы соглашаетесь с
-      <a href="#">пользовательским соглашением</a>
-      и
-      <a href="#"> политикой конфиденциальности</a>
-    </p>
+    <TermsPrivacy />
 
     <button class="modal--submit" @click.prevent="submit">Отправить</button>
   </form>
@@ -44,11 +39,13 @@
 
 <script>
 import Checkbox from '@/components/form/Checkbox'
+import TermsPrivacy from '@/components/modals/TermsPrivacy'
 
 export default {
   name: 'Certification',
   components: {
     Checkbox,
+    TermsPrivacy,
   },
   methods: {
     answerToHandler(answer) {

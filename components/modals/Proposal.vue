@@ -144,7 +144,7 @@
     <label for="image_1" class="proposal--image_1">
       <p>Загрузить все фото студии</p>
     </label>
-    <div v-show="$store.state.modals.photos.length" class="modal--photos-files" />
+    <div v-show="files" class="modal--photos-files" />
     <i class="for-image_1" />
     <hr style="width: 50%" />
 
@@ -256,6 +256,7 @@ export default {
         support_staff: [],
         work_with_sites: [],
       },
+      files: null,
       requiredFields: [
         'type',
         'studio_type',
@@ -326,12 +327,28 @@ export default {
         e.target.value = ''
       })
     },
-    submit() {
-      this.$store.dispatch('modals/submit', {
-        message_type: 'proposal',
-        form: this.$el,
-        data: this.formData,
+
+    async submit() {
+      this.clearErrors()
+      const formData = new FormData(this.$el)
+      this.formDataAdd({ data: this.formData, formData })
+      this.filesToFormData(formData, 'image')
+
+      formData.forEach((value, key) => {
+        console.log(key)
+        console.log(value)
       })
+
+      try {
+        const request = await this.$api.studios.postToDB(formData)
+        console.log(request)
+        this.$store.commit('modals/setCurrent', 'SendSuccess')
+      } catch (error) {
+        if (error.response?.status === 400) {
+          console.log('errors', error.response.data)
+          this.errorsHandler(error.response.data)
+        }
+      }
     },
   },
 }

@@ -105,10 +105,10 @@
     <div class="max_shifts_per_week">
       <Range
         :label="'Дней в неделю минимум'"
-        :val="+formData.max_shifts_per_week"
+        :val="+formData.min_shifts_per_week"
         :min="3"
         :max="6"
-        @valueChange="rangeHandle($event, 'max_shifts_per_week')"
+        @valueChange="rangeHandle($event, 'min_shifts_per_week')"
       />
     </div>
     <hr />
@@ -164,7 +164,7 @@
         v-for="answer in ['whatsapp', 'viber', 'telegram']"
         :key="answer"
         :item="answer"
-        :checked="$isChecked($store.state.modals.answer_to, answer)"
+        :checked="$isChecked(formData.answer_to, answer)"
         @mouseup.native="answerToHandler(answer)"
       />
     </div>
@@ -184,7 +184,7 @@
     <label for="file_1">
       <p>Загрузить фото или файлы</p>
     </label>
-    <div v-show="$store.state.modals.photos.length" class="modal--photos-files" />
+    <div v-show="files" class="modal--photos-files" />
     <i class="for-file_1" />
     <TermsPrivacy />
     <button class="modal--submit" @click.prevent="submit">Отправить</button>
@@ -225,11 +225,13 @@ export default {
         studio_type: [],
         min_payout_percentage: null,
         shift_length: null,
-        max_shifts_per_week: null,
+        min_shifts_per_week: null,
         staff_gender: null,
         devices: [],
         conditions: [],
+        answer_to: null,
       },
+      files: null,
     }
   },
   computed: {
@@ -279,12 +281,22 @@ export default {
       this.$toArray(this.formData[selector], payload)
     },
 
-    submit() {
-      this.$store.dispatch('modals/submit', {
-        message_type: 'specselection',
-        form: this.$el,
-        data: this.formData,
-      })
+    async submit() {
+      this.clearErrors()
+      const formData = new FormData(this.$el)
+      this.formDataAdd({ data: this.formData, formData })
+      this.filesToFormData(formData, 'file')
+
+      try {
+        const request = await this.$api.messages.specSelection(formData)
+        console.log(request)
+        this.$store.commit('modals/setCurrent', 'SendSuccess')
+      } catch (error) {
+        if (error.response?.status === 400) {
+          console.log('errors', error.response.data)
+          this.errorsHandler(error.response.data)
+        }
+      }
     },
   },
 }

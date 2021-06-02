@@ -1,6 +1,6 @@
 <template>
   <form class="interview modal">
-    <h1>Обратная связь</h1>
+    <h1>Запись на собеседование</h1>
     <input
       id="name"
       name="name"
@@ -30,7 +30,7 @@
         v-for="answer in ['whatsapp', 'viber', 'telegram']"
         :key="answer"
         :item="answer"
-        :checked="$isChecked($store.state.modals.answer_to, answer)"
+        :checked="$isChecked(formData.answer_to, answer)"
         @mouseup.native="answerToHandler(answer)"
       />
     </div>
@@ -67,21 +67,35 @@ export default {
   data() {
     return {
       formData: {
+        message_type: 'interview',
         year_of_birth: null,
         studio: null,
+        answer_to: null,
       },
+      files: null,
+      errors: null,
     }
   },
   mounted() {
     this.formData.studio = this.$route.params.id
   },
   methods: {
-    submit() {
-      this.$store.dispatch('modals/submit', {
-        message_type: 'interview',
-        form: this.$el,
-        data: this.formData,
-      })
+    async submit() {
+      this.clearErrors()
+      const formData = new FormData(this.$el)
+      this.formDataAdd({ data: this.formData, formData })
+      this.filesToFormData(formData, 'file')
+
+      try {
+        const request = await this.$api.messages.messageRequest(formData)
+        console.log(request)
+        this.$store.commit('modals/setCurrent', 'SendSuccess')
+      } catch (error) {
+        if (error.response?.status === 400) {
+          console.log('errors', error.response.data)
+          this.errorsHandler(error.response.data)
+        }
+      }
     },
   },
 }

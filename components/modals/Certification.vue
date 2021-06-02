@@ -23,7 +23,7 @@
         v-for="answer in ['whatsapp', 'viber', 'telegram']"
         :key="answer"
         :item="answer"
-        :checked="$isChecked($store.state.modals.answer_to, answer)"
+        :checked="$isChecked(formData.answer_to, answer)"
         @mouseup.native="answerToHandler(answer)"
       />
     </div>
@@ -41,21 +41,41 @@
 import Checkbox from '@/components/form/Checkbox'
 import TermsPrivacy from '@/components/modals/TermsPrivacy'
 
+import { modals } from '@/mixins/modals'
+
 export default {
   name: 'Certification',
   components: {
     Checkbox,
     TermsPrivacy,
   },
-  methods: {
-    answerToHandler(answer) {
-      this.$store.commit('modals/updateAnswerTo', answer)
-    },
-    submit() {
-      this.$store.dispatch('modals/submit', {
+  mixins: [modals],
+  data() {
+    return {
+      formData: {
         message_type: 'certification',
-        form: this.$el,
-      })
+        studio: '1',
+        answer_to: null,
+      },
+      errors: null,
+    }
+  },
+  methods: {
+    async submit() {
+      this.clearErrors()
+      const formData = new FormData(this.$el)
+      this.formDataAdd({ data: this.formData, formData })
+
+      try {
+        const request = await this.$api.messages.messageRequest(formData)
+        console.log(request)
+        this.$store.commit('modals/setCurrent', 'SendSuccess')
+      } catch (error) {
+        if (error.response?.status === 400) {
+          console.log('errors', error.response.data)
+          this.errorsHandler(error.response.data)
+        }
+      }
     },
   },
 }

@@ -219,7 +219,6 @@ export default {
     padding-left: var(--fr-2);
     margin: 0;
     .select {
-      padding: 8px 10px;
       &:hover {
         background-color: rgba(#ffffff, 0.7);
         border-radius: 6px;

@@ -58,6 +58,8 @@ export default {
     if (sessionStorage.metro) {
       this.$store.dispatch('cities/setMetroSelected', JSON.parse(sessionStorage.metro))
     }
+    if (localStorage.favorites)
+      this.$store.commit('studios/setFavorites', JSON.parse(localStorage.favorites))
   },
   methods: {
     throttle,
@@ -96,17 +98,6 @@ export default {
   z-index: 1;
   background-color: white;
   box-shadow: 0px 5px 20px 0px rgba(#5b5b83, 0.04);
-  &.bg_gradient {
-    &::before {
-      content: '';
-      width: 100vw;
-      height: 100vh;
-      position: absolute;
-      top: 0;
-      background: linear-gradient(90deg, #c45792 0%, #7f53c4 100%);
-      opacity: 0.6;
-    }
-  }
   .close-btn {
     top: 60px;
     right: 16px;
@@ -223,9 +214,9 @@ export default {
     }
   }
 }
-@media screen and (min-width: 1360px) {
+@media screen and (min-width: 1280px) {
   .header {
-    width: 1290px;
+    width: 1220px;
     margin: 0 auto;
   }
   .header--top {

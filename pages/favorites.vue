@@ -11,24 +11,12 @@
 <script>
 export default {
   name: 'Favorites',
-  data() {
-    return {
-      studio: {},
-      studios: [],
-    }
-  },
-  mounted() {
-    this.getFavorites()
-  },
-  methods: {
-    getFavorites() {
-      if (localStorage.favorites) {
-        this.$store.commit('studios/setFavorites', JSON.parse(localStorage.favorites))
-        const studios = JSON.parse(localStorage.favorites)
-        const [studio] = studios
-        this.studio = studio
-        this.studios = studios
-      }
+  computed: {
+    studio() {
+      return this.$store.state.studios.favorites[0]
+    },
+    studios() {
+      return this.$store.state.studios.favorites
     },
   },
 }

@@ -9,7 +9,7 @@
         <button class="close-btn" @click="closeModal" />
       </div>
     </div>
-    <Footer />
+    <Footer v-if="!$store.getters.isMobile" />
   </div>
 </template>
 
@@ -90,7 +90,7 @@ export default {
 .content {
   position: relative;
   top: 60px;
-  min-height: 100vh;
+  // min-height: 100vh;
 }
 
 .modal-wrapper {

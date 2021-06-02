@@ -3,6 +3,17 @@ export const modals = {
     selectedDevices() {
       return this.nameByKeys('devices')
     },
+    years() {
+      const now = new Date().getFullYear()
+      const res = []
+      for (let i = 0; i < 20; i += 1) {
+        res.push(now - 18 - i)
+      }
+      return res
+    },
+    options() {
+      return this.$store.state.modals.options
+    },
   },
   methods: {
     nameByKeys(selector) {

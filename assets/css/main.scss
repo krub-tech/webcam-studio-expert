@@ -61,9 +61,6 @@
   outline: none;
 }
 
-html {
-  height: 100%;
-}
 
 body {
   position: absolute;
@@ -71,7 +68,7 @@ body {
   right: 0;
   top: 0;
   bottom: 0;
-
+  // overflow: hidden;
   font-family: 'Averta CY', 'sans-serif';
   color: var(--color-main);
   background-color: var(--color-second);
@@ -159,6 +156,13 @@ button {
     width: 12px;
     height: 8px;
     margin-left: 8px;
+  }
+  p {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: var(--fr-m) 0.875rem;
   }
 }
 
@@ -414,7 +418,7 @@ button {
     background-color: #fefeff;
     border: 1px solid #c4c4cd;
     border-radius: 0.5rem;
-    padding: var(--fr-m) 0.875rem;
+    // padding: var(--fr-m) 0.875rem;
     justify-content: space-between;
   }
 
@@ -516,6 +520,7 @@ button {
   margin-bottom: 28px;
   .select {
     @include item;
+    padding: 0;
     width: 100%;
     display: flex;
     justify-content: space-between;

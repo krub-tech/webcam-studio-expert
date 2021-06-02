@@ -78,13 +78,11 @@ export default {
   grid-template-columns: repeat(3, 1fr);
   font-size: 0.875rem;
   padding-left: var(--fr-2);
-  @media screen and (min-width: 1360px) {
+  @media screen and (min-width: 1280px) {
     width: 1290px;
   }
 }
-.footer {
-  display: none;
-}
+
 @media screen and (min-width: 420px) {
   .footer-wrapper {
     min-width: 1024px;
@@ -157,18 +155,19 @@ export default {
     }
   }
 }
-@media screen and (min-width: 1360px) {
+@media screen and (min-width: 1280px) {
   .footer-wrapper {
     display: flex;
     justify-content: center;
   }
   .footer {
-    width: 1290px;
+    width: 1220;
     justify-content: center;
   }
   .footer--top {
-    width: 1290px;
+    width: 1220px;
     margin: 0;
+    padding-left: 0;
   }
 }
 </style>

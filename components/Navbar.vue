@@ -259,7 +259,7 @@ export default {
     }
   }
 }
-@media screen and (min-width: 1360px) {
+@media screen and (min-width: 1280px) {
   .slide-up-enter-active,
   .slide-up-leave-active {
     opacity: 1;
@@ -274,7 +274,7 @@ export default {
     justify-content: center;
   }
   .nav {
-    width: 1290px;
+    width: 1220px;
     padding: 0;
   }
 }

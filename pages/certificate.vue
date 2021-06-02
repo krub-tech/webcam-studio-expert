@@ -327,7 +327,7 @@ export default {
   }
 }
 
-@media screen and (min-width: 1360px) {
+@media screen and (min-width: 1280px) {
   .certificate-page {
     justify-content: center;
   }

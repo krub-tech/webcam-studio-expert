@@ -412,7 +412,7 @@ export default {
   }
 }
 
-@media screen and (min-width: 1360px) {
+@media screen and (min-width: 1280px) {
   .filter {
     border-top-left-radius: var(--fr);
     .filter--footer {

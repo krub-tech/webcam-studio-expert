@@ -105,9 +105,20 @@ export const actions = {
         ctx.dispatch('filesToFormData', { key: 'file', formData })
         request = await this.$api.messages.messageInput(formData)
       }
-      if (payload.message_type === 'certification') {
+      if (
+        payload.message_type === 'certification' ||
+        payload.message_type === 'interview'
+      ) {
         ctx.dispatch('filesToFormData', { key: 'file', formData })
-        formData.append('studio', 1)
+
+        if (payload.message_type === 'certification') formData.append('studio', 1)
+        if (payload.message_type === 'interview')
+          ctx.dispatch('specDataAdd', { data: payload.data, formData })
+
+        formData.forEach((value, key) => {
+          console.log(key)
+          console.log(value)
+        })
         request = await this.$api.messages.messageRequest(formData)
       }
       if (payload.message_type === 'proposal') {

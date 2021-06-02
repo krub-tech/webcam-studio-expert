@@ -1,6 +1,6 @@
 <template>
   <div v-if="pagesLength > 1" class="pagination">
-    <button v-if="pageNumber - 1 > 0">...</button>
+    <button v-if="pagesLength - pageNumber < 2">...</button>
     <div v-for="paginationNumber in paginationNumbers" :key="paginationNumber">
       <button
         :class="{

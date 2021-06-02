@@ -1,7 +1,9 @@
 <template>
   <div class="select" :class="{ open: isOpenSelect }" @click="toggle">
-    {{ value }}
-    <img src="@/assets/svg/i-arrow.svg" class="arrow" />
+    <p>
+      {{ value }}
+      <img src="@/assets/svg/i-arrow.svg" class="arrow" />
+    </p>
     <ul v-show="isOpenSelect" class="options">
       <li
         v-for="option in options"
@@ -49,8 +51,13 @@ export default {
       this.isOpenSelect = false
       document.removeEventListener('click', this.notSelectClickListener)
     },
-    toggle() {
-      if (this.isOpenSelect && this.$parent.$options.name !== 'MultiSelect') {
+    toggle(e) {
+      if (this.isOpenSelect) {
+        if (this.$parent.$options.name === 'MultiSelect') {
+          console.log(e.target.tagName)
+          if (e.target.tagName === 'P') this.closeSelect()
+          else return false
+        }
         this.closeSelect()
       } else this.openSelect()
     },

@@ -78,7 +78,7 @@ export default {
 
 <style lang="scss">
 .links {
-  min-height: 100vh;
+  // min-height: 100vh;
 
   h1 {
     font-size: 20px;
@@ -213,7 +213,7 @@ export default {
   }
 }
 
-@media screen and (min-width: 1360px) {
+@media screen and (min-width: 1280px) {
   .links {
     justify-content: center;
   }

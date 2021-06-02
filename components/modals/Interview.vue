@@ -1,5 +1,5 @@
 <template>
-  <form class="feedback modal">
+  <form class="interview modal">
     <h1>Обратная связь</h1>
     <input
       id="name"
@@ -9,6 +9,13 @@
       placeholder="Ваше имя"
     />
     <i class="for-name" />
+    <Select
+      id="year_of_birth"
+      :options="years"
+      :value="formData.year_of_birth || 'Год рождения'"
+      @selectedOption="formData.year_of_birth = $event.toString()"
+    />
+    <i class="for-year_of_birth" />
     <input
       id="phone"
       name="phone"
@@ -48,17 +55,32 @@
 import Checkbox from '@/components/form/Checkbox'
 import TermsPrivacy from '@/components/modals/TermsPrivacy'
 
+import { modals } from '@/mixins/modals'
+
 export default {
-  name: 'Feedback',
+  name: 'Interview',
   components: {
     Checkbox,
     TermsPrivacy,
   },
+  mixins: [modals],
+  data() {
+    return {
+      formData: {
+        year_of_birth: null,
+        studio: null,
+      },
+    }
+  },
+  mounted() {
+    this.formData.studio = this.$route.params.id
+  },
   methods: {
     submit() {
       this.$store.dispatch('modals/submit', {
-        message_type: 'feedback',
+        message_type: 'interview',
         form: this.$el,
+        data: this.formData,
       })
     },
   },

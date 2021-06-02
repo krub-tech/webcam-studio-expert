@@ -79,7 +79,7 @@ export default {
 @media screen and (min-width: 420px) {
   .cards {
     &--container {
-      height: max-content;
+      // height: max-content;
       grid-template-columns: repeat(2, 300px);
       justify-content: flex-start;
       margin: 0;
@@ -88,13 +88,14 @@ export default {
       width: 630px;
     }
   }
-  @media screen and (min-width: 1360px) {
+  @media screen and (min-width: 1280px) {
     .cards {
       &--container {
-        grid-template-columns: repeat(3, 300px);
+        grid-template-columns: repeat(3, 280px);
+        gap: var(--fr);
       }
       h2 {
-        width: 960px;
+        width: 880px;
       }
     }
   }

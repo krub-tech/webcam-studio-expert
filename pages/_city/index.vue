@@ -6,7 +6,11 @@
     </div>
     <aside class="filter-wrapper">
       <button class="filter-btn" @click="isOpenFilter = true" />
-      <Filt :class="{ isOpenFilter }" @close="isOpenFilter = false" />
+      <Filt
+        v-if="isShowFilter"
+        :class="{ isOpenFilter }"
+        @close="isOpenFilter = false"
+      />
     </aside>
     <div class="studios--count">
       <p class="studios--count-current">
@@ -47,16 +51,16 @@ export default {
     this.$store.commit('studios/updateCurrentStudios', studios.results)
   },
   computed: {
+    isShowFilter() {
+      if (this.$store.getters.isMobile) return this.isOpenFilter
+      return true
+    },
     studios() {
       return this.$store.state.studios.currents
     },
     currentCity() {
       return this.$store.state.cities.current?.name
     },
-  },
-  mounted() {
-    if (localStorage.favorites)
-      this.$store.commit('studios/setFavorites', JSON.parse(localStorage.favorites))
   },
   methods: {
     sortingSelect(data) {
@@ -159,6 +163,7 @@ export default {
       text-align: center;
       min-width: max-content;
       @include item;
+      padding: 0;
       .options {
         left: -60px;
       }
@@ -199,7 +204,7 @@ export default {
 }
 .studios--results {
   grid-area: cont;
-  min-height: 100vh;
+  // min-height: 100vh;
 }
 
 .filter-btn {
@@ -289,16 +294,16 @@ export default {
   }
 }
 
-@media screen and (min-width: 1360px) {
+@media screen and (min-width: 1280px) {
   .studios {
     justify-content: center;
-    grid-template-columns: 300px 1000px;
+    grid-template-columns: 300px 910px;
     &--title {
       padding-left: 0;
     }
   }
   .studios--results {
-    padding-left: var(--fr-2);
+    padding-left: var(--fr-l);
   }
 }
 </style>

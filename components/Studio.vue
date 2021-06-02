@@ -6,7 +6,12 @@
       <div class="studio--btn-like">
         <Like :id="studio.id" />
       </div>
-      <button class="studio--btn-interview">Оставить заявку</button>
+      <button
+        class="studio--btn-interview"
+        @click.prevent="$store.commit('modals/setCurrent', 'Interview')"
+      >
+        Оставить заявку
+      </button>
     </div>
     <div class="studio--main">
       <div class="studio--avatar">
@@ -142,7 +147,12 @@
       <div class="studio--btn-like">
         <Like :id="studio.id" />
       </div>
-      <button class="studio--btn-interview">Записаться на собеседование</button>
+      <button
+        class="studio--btn-interview"
+        @click.prevent="$store.commit('modals/setCurrent', 'Interview')"
+      >
+        Записаться на собеседование
+      </button>
     </div>
     <div class="studio--contacts">
       <p>
@@ -247,6 +257,7 @@ export default {
 
 .studio-wrapper {
   padding-top: 20px;
+  background-color: var(--white);
 }
 .studio {
   min-width: 300px;
@@ -440,7 +451,6 @@ export default {
   }
 }
 .studio--slider {
-  // overflow: hidden;
   height: 200px;
   @include row-gap;
 }
@@ -698,7 +708,7 @@ export default {
   }
 }
 
-@media screen and (min-width: 1360px) {
+@media screen and (min-width: 1280px) {
   .studio-wrapper {
     justify-content: center;
   }

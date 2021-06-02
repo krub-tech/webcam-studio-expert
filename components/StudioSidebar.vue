@@ -1,6 +1,6 @@
 <template>
-  <aside class="studio--mobile-list">
-    <div class="studio--mobile-list-header">
+  <aside class="studio--sidebar">
+    <div class="studio--sidebar-header">
       <button class="btn-filter" @click="$router.push('/')">
         <img src="@/assets/svg/i-back_arrow.svg" />
         К фильтру
@@ -17,7 +17,7 @@
     <article
       v-for="studio in studios"
       :key="studio.id"
-      class="studio--mobile-list-card"
+      class="studio--sidebar-card"
       @click="
         toStudio($event, {
           city: studio.city.id,
@@ -84,7 +84,7 @@ export default {
 }
 </script>
 <style lang="scss">
-.studio--mobile-list {
+.studio--sidebar {
   display: block;
   min-width: 300px;
   margin: 0 var(--fr-l);
@@ -161,7 +161,7 @@ export default {
   }
 }
 @media screen and (min-width: 420px) {
-  .studio--mobile-list {
+  .studio--sidebar {
     margin: 0;
   }
 }

@@ -182,13 +182,18 @@ export default {
     display: flex;
     align-items: center;
     border-bottom: 1px solid var(--grey);
-    padding-left: var(--fr);
     &[href] {
       color: inherit;
       &:last-of-type {
         border: none;
       }
     }
+    .select {
+      padding-left: 5px;
+    }
+  }
+  a.nav--item {
+    padding-left: var(--fr);
   }
   .nav--city {
     @extend .nav--item;

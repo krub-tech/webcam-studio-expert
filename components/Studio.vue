@@ -144,7 +144,11 @@
       </p>
     </div>
     <div class="studio--interview">
-      <div class="studio--btn-like">
+      <div
+        class="studio--btn-like"
+        :class="{ liked: isLiked }"
+        @click="mobileLikeClickHandle"
+      >
         <Like :id="studio.id" />
       </div>
       <button
@@ -194,6 +198,19 @@ export default {
         if (this.studio[fieldName]) result.push(this.studio[fieldName])
       }
       return result
+    },
+    isLiked() {
+      let result = false
+      this.$store.state.studios.favorites.forEach((el) => {
+        if (el.id === this.studio.id) result = true
+      })
+      return result
+    },
+  },
+  methods: {
+    mobileLikeClickHandle() {
+      if (this.$store.getters.isMobile)
+        this.$store.dispatch('studios/toFavorites', this.studio.id)
     },
   },
 }

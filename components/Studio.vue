@@ -333,7 +333,7 @@ export default {
   float: left;
   width: 50%;
   height: 130px;
-  padding-right: var(--fr);
+  padding-right: var(--fr-l);
   img {
     width: 100%;
     height: 100%;
@@ -359,6 +359,7 @@ export default {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    padding: 15px 0;
   }
   .work-with-perc-cert {
     clear: both;
@@ -412,6 +413,7 @@ export default {
   display: flex;
   align-items: center;
   position: relative;
+  line-height: 1.3;
   border-top: 1px solid #eeeef6;
   border-bottom: 1px solid #eeeef6;
   margin: var(--fr-l) 0 var(--fr-2) 0;
@@ -638,6 +640,7 @@ export default {
       display: flex;
       flex-wrap: nowrap;
       align-items: center;
+      padding: 0;
     }
     .work-with-perc-cert {
       clear: none;

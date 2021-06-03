@@ -184,10 +184,10 @@
     <i class="for-site" />
     <input
       id="email"
-      name="email"
       type="text"
       class="modal--email"
       placeholder="Email представителя"
+      @change="mailValidate($event.target)"
     />
     <i class="for-email" />
     <input
@@ -255,6 +255,7 @@ export default {
         conditions: [],
         support_staff: [],
         work_with_sites: [],
+        email: null,
         phone: null,
         whatsapp: null,
         viber: null,

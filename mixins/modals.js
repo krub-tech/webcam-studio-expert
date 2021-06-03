@@ -93,6 +93,24 @@ export const modals = {
       this.$phoneFormat(e)
       this.formData[selector] = e.target.value.replace(/\D/g, '')
     },
+    mailValidate(input) {
+      const inputId = input.getAttribute('id')
+      input.classList.remove('invalid')
+      const invalidMsgElem = this.$el.querySelector(`.for-${inputId}`)
+      invalidMsgElem.innerText = ''
+
+      const isValid =
+        /^([A-Za-zА-Яа-я0-9_\-.])+@([A-Za-zА-Яа-я0-9_\-.])+\.([A-Za-zА-Яа-я]{2,6})$/.test(
+          input.value
+        )
+
+      if (!isValid) {
+        input.classList.add('invalid')
+        invalidMsgElem.innerText = 'Введите корректный e-mail'
+      } else {
+        this.formData.email = input.value
+      }
+    },
 
     filesToFormData(formData, key) {
       this.files?.forEach((el, idx) => {

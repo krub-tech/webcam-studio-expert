@@ -90,7 +90,7 @@ export default {
 .content {
   position: relative;
   top: 60px;
-  // min-height: 100vh;
+  min-height: 100vh;
 }
 
 .modal-wrapper {

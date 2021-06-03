@@ -15,6 +15,16 @@ export default {
   data: () => ({
     studio: {},
   }),
+  head() {
+    return {
+      title: `Вебкам студия ${this.studio.name}`,
+      meta: [
+        {
+          description: this.studio.advantages,
+        },
+      ],
+    }
+  },
   computed: {
     studios() {
       return this.$store.state.studios.currents

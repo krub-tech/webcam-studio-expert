@@ -15,7 +15,6 @@ export const getters = {
 export const actions = {
   async nuxtServerInit(ctx) {
     ctx.commit('cities/updateCurrentById', 'sankt-peterburg')
-
     const [usefulLinksOptions, studiosOptions, cities, messageOptions] =
       await Promise.all([
         this.$api.usefulLinks.getOptions(),

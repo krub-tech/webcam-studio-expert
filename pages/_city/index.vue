@@ -2,7 +2,7 @@
   <section class="studios">
     <div v-if="currentCity" class="studios--title">
       <h1>Вебкам студии г. {{ currentCity }}</h1>
-      <p>Место для SEO-подстрочника</p>
+      <p>работа и вакансии для веб-моделей</p>
     </div>
     <aside class="filter-wrapper">
       <button class="filter-btn" @click="isOpenFilter = true" />
@@ -42,6 +42,8 @@ export default {
       studiosByCityLength: 0,
       ordering: 'Сортировка',
       isOpenFilter: false,
+
+      cityName: null,
     }
   },
   async fetch() {
@@ -49,6 +51,21 @@ export default {
       this.$store.getters['studios/query']
     )
     this.$store.commit('studios/updateCurrentStudios', studios.results)
+    const idx = this.$store.state.cities.uniques.findIndex(
+      (el) => el.id === this.$route.params.city
+    )
+    this.cityName = this.$store.state.cities.uniques[idx].name
+  },
+  head() {
+    return {
+      title: `Вебкам студии ${this.cityName}`,
+      meta: [
+        {
+          description:
+            'Подбери себе студию по любым параметрам, используя удобные фильтры и подробную информацию.',
+        },
+      ],
+    }
   },
   computed: {
     isShowFilter() {

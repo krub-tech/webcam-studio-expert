@@ -6,11 +6,7 @@
     </div>
     <aside class="filter-wrapper">
       <button class="filter-btn" @click="isOpenFilter = true" />
-      <Filt
-        v-if="isShowFilter"
-        :class="{ isOpenFilter }"
-        @close="isOpenFilter = false"
-      />
+      <Filt :class="{ isOpenFilter }" @close="isOpenFilter = false" />
     </aside>
     <div class="studios--count">
       <p class="studios--count-current">
@@ -68,10 +64,6 @@ export default {
     }
   },
   computed: {
-    isShowFilter() {
-      if (this.$store.getters.isMobile) return this.isOpenFilter
-      return true
-    },
     studios() {
       return this.$store.state.studios.currents
     },
@@ -151,14 +143,36 @@ export default {
       width: 100%;
       max-width: 420px;
       position: absolute;
-      top: 0;
+      top: -1000px;
       left: -420px;
       z-index: 3;
       transition: left 500ms;
       background-color: #fbfbfd;
+      animation: close 1000ms;
+      @keyframes close {
+        0% {
+          top: 0;
+        }
+        50% {
+          top: 0;
+        }
+        100% {
+          top: -1000px;
+        }
+      }
     }
     .isOpenFilter {
+      animation: open 500ms;
       left: 0;
+      top: 0;
+      @keyframes open {
+        0% {
+          left: -420px;
+        }
+        100% {
+          left: 0;
+        }
+      }
     }
   }
   .pageCounter-wrapper {

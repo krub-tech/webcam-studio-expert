@@ -11,10 +11,10 @@
     <i class="for-name" />
     <input
       id="phone"
-      name="phone"
       type="text"
       class="modal--phone"
       placeholder="Телефон"
+      @input="phoneInputHandle($event, 'phone')"
     />
     <i class="for-phone" />
     <div class="modal--answer_to">
@@ -56,6 +56,7 @@ export default {
         message_type: 'certification',
         studio: '1',
         answer_to: null,
+        phone: null,
       },
       errors: null,
     }

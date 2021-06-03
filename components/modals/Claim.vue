@@ -12,10 +12,10 @@
     <i class="for-name" />
     <input
       id="phone"
-      name="phone"
       type="text"
       class="modal--phone"
       placeholder="Телефон"
+      @input="phoneInputHandle($event, 'phone')"
     />
     <i class="for-phone" />
     <div class="modal--answer_to">
@@ -65,6 +65,7 @@ export default {
       formData: {
         message_type: 'complaint',
         answer_to: [],
+        phone: null,
       },
       files: null,
       errors: null,

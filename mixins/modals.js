@@ -78,6 +78,10 @@ export const modals = {
         }
       })
     },
+    phoneInputHandle(e, selector) {
+      this.$phoneFormat(e)
+      this.formData[selector] = e.target.value.replace(/\D/g, '')
+    },
 
     filesToFormData(formData, key) {
       this.files?.forEach((el, idx) => {

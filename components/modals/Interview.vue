@@ -18,10 +18,10 @@
     <i class="for-year_of_birth" />
     <input
       id="phone"
-      name="phone"
       type="text"
       class="modal--phone"
       placeholder="Телефон"
+      @input="phoneInputHandle($event, 'phone')"
     />
     <i class="for-phone" />
     <div class="modal--answer_to">
@@ -71,21 +71,23 @@ export default {
         year_of_birth: null,
         studio: null,
         answer_to: null,
+        phone: null,
       },
       files: null,
       errors: null,
     }
   },
-  mounted() {
-    this.formData.studio = this.$route.params.id
-  },
   methods: {
     async submit() {
       this.clearErrors()
       const formData = new FormData(this.$el)
+      this.formData.studio = this.$route.params.id.toString()
       this.formDataAdd({ data: this.formData, formData })
       this.filesToFormData(formData, 'file')
-
+      formData.forEach((value, key) => {
+        console.log(key)
+        console.log(value)
+      })
       try {
         const request = await this.$api.messages.messageRequest(formData)
         console.log(request)

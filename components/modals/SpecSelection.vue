@@ -152,10 +152,10 @@
     <hr class="hr-second" />
     <input
       id="phone"
-      name="phone"
       type="tel"
       class="modal--phone"
       placeholder="Телефон представителя"
+      @input="phoneInputHandle($event, 'phone')"
     />
     <i class="for-phone" />
     <div class="modal--answer_to">
@@ -230,6 +230,7 @@ export default {
         devices: [],
         conditions: [],
         answer_to: null,
+        phone: null,
       },
       files: null,
     }

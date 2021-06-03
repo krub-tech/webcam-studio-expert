@@ -192,26 +192,26 @@
     <i class="for-email" />
     <input
       id="phone"
-      name="phone"
       type="tel"
       class="modal--phone"
       placeholder="Телефон представителя"
+      @input="phoneInputHandle($event, 'phone')"
     />
     <i class="for-phone" />
     <input
       id="whatsapp"
-      name="whatsapp"
       type="text"
       class="modal-whatsapp"
       placeholder="whatsapp"
+      @input="phoneInputHandle($event, 'whatsapp')"
     />
     <i class="for-whatsapp" />
     <input
       id="viber"
-      name="viber"
       type="text"
       class="modal-viber"
       placeholder="viber"
+      @input="phoneInputHandle($event, 'viber')"
     />
     <i class="for-whatsapp" />
     <input id="telegram" name="telegram" type="text" placeholder="telegram" />
@@ -255,6 +255,9 @@ export default {
         conditions: [],
         support_staff: [],
         work_with_sites: [],
+        phone: null,
+        whatsapp: null,
+        viber: null,
       },
       files: null,
       requiredFields: [
@@ -333,12 +336,6 @@ export default {
       const formData = new FormData(this.$el)
       this.formDataAdd({ data: this.formData, formData })
       this.filesToFormData(formData, 'image')
-
-      formData.forEach((value, key) => {
-        console.log(key)
-        console.log(value)
-      })
-
       try {
         const request = await this.$api.studios.postToDB(formData)
         console.log(request)

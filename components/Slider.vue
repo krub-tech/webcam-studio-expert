@@ -5,20 +5,22 @@
         <img :src="slide" />
       </div>
     </div>
-    <button class="slide-next" @click="next">
-      <img src="@/assets/svg/i-slider-arrow.svg" alt="" />
-    </button>
-    <button class="slide-prev" @click="prev">
-      <img src="@/assets/svg/i-slider-arrow.svg" alt="" />
-    </button>
-    <div class="points">
-      <span
-        v-for="point in data.length"
-        :key="point"
-        class="point"
-        :class="{ active: point - 1 == count }"
-      />
-    </div>
+    <template v-if="data.length > 1">
+      <button class="slide-next" @click="next">
+        <img src="@/assets/svg/i-slider-arrow.svg" alt="" />
+      </button>
+      <button class="slide-prev" @click="prev">
+        <img src="@/assets/svg/i-slider-arrow.svg" alt="" />
+      </button>
+      <div class="points">
+        <span
+          v-for="point in data.length"
+          :key="point"
+          class="point"
+          :class="{ active: point - 1 == count }"
+        />
+      </div>
+    </template>
   </div>
 </template>
 

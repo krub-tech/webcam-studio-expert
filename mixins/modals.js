@@ -1,4 +1,14 @@
 export const modals = {
+  mounted() {
+    document
+      .querySelector('.page-body')
+      .addEventListener('mousedown', this.notModalClick)
+  },
+  beforeDestroy() {
+    document
+      .querySelector('.page-body')
+      .removeEventListener('mousedown', this.notModalClick)
+  },
   computed: {
     selectedDevices() {
       return this.nameByKeys('devices')
@@ -28,6 +38,7 @@ export const modals = {
       this.formData[selector] = payload.toString()
     },
     selectHandle(payload, selector) {
+      // this.notCloseFlag = true
       Object.entries(this.options[selector]).forEach(([key, value]) => {
         if (payload.includes(value)) {
           if (selector === 'staff_gender') {
@@ -121,6 +132,13 @@ export const modals = {
         } else if (typeof value === 'string' || key === 'avatar')
           payload.formData.append(key, value)
       })
+    },
+
+    notModalClick(e) {
+      if (this.$store.state.modals.notClose) return false
+      if (e.target.classList.value.includes('modal-wrapper--inner')) {
+        this.$closeModal()
+      }
     },
   },
 }

@@ -125,7 +125,7 @@
         v-if="formData.staff_gender && options.staff_gender"
         class="selected-options"
       >
-        <div class="badge" @click="formData.staff_gender = []">
+        <div class="badge" @click="formData.staff_gender = null">
           {{ options.staff_gender[formData.staff_gender] }}
         </div>
       </div>

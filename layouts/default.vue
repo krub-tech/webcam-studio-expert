@@ -6,7 +6,7 @@
     <div v-if="$store.state.modals.current" class="modal-wrapper">
       <div class="modal-wrapper--inner">
         <component :is="component" />
-        <button class="close-btn" @click="closeModal" />
+        <button class="close-btn" @click="$closeModal" />
       </div>
     </div>
     <Footer v-if="!$store.getters.isMobile" />
@@ -24,7 +24,6 @@ export default {
   data() {
     return {
       component: null,
-      prev: null,
     }
   },
   computed: {
@@ -34,30 +33,11 @@ export default {
   },
   watch: {
     modal(newV, oldV) {
-      this.prev = oldV
+      this.$store.commit('modals/setPrev', oldV)
       this.component = () => import(`@/components/modals/${this.modal}.vue`)
     },
     $route() {
       this.$scrollToTop()
-    },
-  },
-  mounted() {
-    this.$el.addEventListener('mousedown', this.notModalClick)
-  },
-  methods: {
-    closeModal() {
-      if (
-        this.$store.state.modals.current === 'Terms' ||
-        this.$store.state.modals.current === 'Privacy' ||
-        this.$store.state.modals.current === 'EnglishDesc'
-      ) {
-        this.$store.commit('modals/setCurrent', this.prev)
-      } else this.$store.commit('modals/setCurrent', null)
-    },
-    notModalClick(e) {
-      if (e.target.classList.value.includes('modal-wrapper--inner')) {
-        this.closeModal()
-      }
     },
   },
 }

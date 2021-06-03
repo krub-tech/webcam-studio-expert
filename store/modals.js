@@ -2,14 +2,22 @@
 
 export const state = () => ({
   current: null,
+  prev: null,
   options: null,
+  notClose: false,
 })
 
 export const mutations = {
   setCurrent(state, payload) {
     state.current = payload
   },
+  setPrev(state, payload) {
+    state.prev = payload
+  },
   setOptions(state, payload) {
     state.options = payload
+  },
+  setNotClose(state, payload) {
+    state.notClose = payload
   },
 }

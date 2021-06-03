@@ -45,10 +45,12 @@ export default {
   methods: {
     openSelect() {
       this.isOpenSelect = true
+      this.$store.commit('modals/setNotClose', true)
       document.addEventListener('click', this.notSelectClickListener)
     },
     closeSelect() {
       this.isOpenSelect = false
+      this.$store.commit('modals/setNotClose', false)
       document.removeEventListener('click', this.notSelectClickListener)
     },
     toggle(e) {

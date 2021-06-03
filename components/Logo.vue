@@ -20,6 +20,7 @@ export default {
       this.$store.dispatch('cities/updateCurrent', 'sankt-peterburg')
       this.$router.push({ name: 'city', params: { city: 'sankt-peterburg' } })
       this.$store.commit('menuClose')
+      this.$scrollToTop()
     },
   },
 }

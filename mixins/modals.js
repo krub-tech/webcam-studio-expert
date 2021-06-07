@@ -95,10 +95,9 @@ export const modals = {
     },
     mailValidate(input) {
       const inputId = input.getAttribute('id')
-      input.classList.remove('invalid')
       const invalidMsgElem = this.$el.querySelector(`.for-${inputId}`)
+      input.classList.remove('invalid')
       invalidMsgElem.innerText = ''
-
       const isValid =
         /^([A-Za-zА-Яа-я0-9_\-.])+@([A-Za-zА-Яа-я0-9_\-.])+\.([A-Za-zА-Яа-я]{2,6})$/.test(
           input.value

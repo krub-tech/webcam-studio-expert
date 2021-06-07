@@ -1,14 +1,13 @@
 <template>
   <div class="page-body">
     <Header />
-
     <Nuxt class="content" />
-    <div v-if="$store.state.modals.current" class="modal-wrapper">
+    <!-- <div v-if="$store.state.modals.current" class="modal-wrapper">
       <div class="modal-wrapper--inner">
         <component :is="component" />
         <button class="close-btn" @click="$closeModal" />
       </div>
-    </div>
+    </div> -->
     <Footer v-if="!$store.getters.isMobile" />
   </div>
 </template>
@@ -63,8 +62,9 @@ export default {
 }
 
 .page-body {
-  display: flex;
-  flex-direction: column;
+  // display: grid;
+  // grid-template-rows: auto 1fr auto;
+  // min-height: 100vh;
 }
 
 .content {

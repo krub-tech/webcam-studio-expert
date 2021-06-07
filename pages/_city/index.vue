@@ -58,7 +58,7 @@ export default {
       meta: [
         {
           description:
-            'Подбери себе студию по любым параметрам, используя удобные фильтры и подробную информацию.',
+            'Подбери себе вебкам студию для заработка по любым параметрам, используя удобные фильтры и подробную информацию.',
         },
       ],
     }
@@ -104,6 +104,44 @@ export default {
   padding: var(--fr-m) 0.875rem;
 }
 
+@media screen and (max-width: 420px) {
+  .filter {
+    width: 100%;
+    max-width: 420px;
+    position: absolute;
+    top: -1000px;
+    left: -420px;
+    z-index: 3;
+    transition: left 500ms;
+    background-color: #fbfbfd;
+    animation: close 1000ms;
+    @keyframes close {
+      0% {
+        top: 0;
+      }
+      50% {
+        top: 0;
+      }
+      100% {
+        top: -1000px;
+      }
+    }
+  }
+  .isOpenFilter {
+    animation: open 500ms;
+    left: 0;
+    top: 0;
+    @keyframes open {
+      0% {
+        left: -420px;
+      }
+      100% {
+        left: 0;
+      }
+    }
+  }
+}
+
 .studios {
   white-space: nowrap;
   display: grid;
@@ -139,41 +177,6 @@ export default {
   .filter-wrapper {
     grid-area: filter;
     height: min-content;
-    .filter {
-      width: 100%;
-      max-width: 420px;
-      position: absolute;
-      top: -1000px;
-      left: -420px;
-      z-index: 3;
-      transition: left 500ms;
-      background-color: #fbfbfd;
-      animation: close 1000ms;
-      @keyframes close {
-        0% {
-          top: 0;
-        }
-        50% {
-          top: 0;
-        }
-        100% {
-          top: -1000px;
-        }
-      }
-    }
-    .isOpenFilter {
-      animation: open 500ms;
-      left: 0;
-      top: 0;
-      @keyframes open {
-        0% {
-          left: -420px;
-        }
-        100% {
-          left: 0;
-        }
-      }
-    }
   }
   .pageCounter-wrapper {
     grid-area: counter;

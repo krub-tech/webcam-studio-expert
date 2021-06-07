@@ -293,7 +293,6 @@ export default {
 }
 
 .filter {
-  width: 300px;
   background-color: var(--grey-filt);
   border-radius: 0px 20px 0px 0px;
   &--container {
@@ -394,6 +393,7 @@ export default {
 
 @media screen and (min-width: 420px) {
   .filter {
+    width: 300px;
     .filter--footer {
       .reset {
         width: 140px;

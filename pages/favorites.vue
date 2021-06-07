@@ -43,4 +43,9 @@ export default {
     padding: var(--fr-2);
   }
 }
+@media screen and (min-width: 1280px) {
+  .favorites-wrapper {
+    justify-content: center;
+  }
+}
 </style>

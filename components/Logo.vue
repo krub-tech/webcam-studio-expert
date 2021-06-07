@@ -17,8 +17,7 @@ export default {
   },
   methods: {
     logoClickHandle() {
-      this.$store.dispatch('cities/updateCurrent', 'sankt-peterburg')
-      this.$router.push({ name: 'city', params: { city: 'sankt-peterburg' } })
+      this.$store.dispatch('studios/paginate', 1)
       this.$store.commit('menuClose')
       this.$scrollToTop()
     },

@@ -660,13 +660,30 @@ export default {
   }
   .studio--model_types {
     width: max-content;
-    &:not(:first-child) {
+    &:not(:first-child):not(:nth-child(4)) {
       @include small-point-from-left;
+    }
+    &:first-child {
+      margin-right: 18px;
+      position: relative;
+      &::after {
+        content: '';
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        bottom: 0;
+        transform: translateY(-50%);
+        border-radius: 50%;
+        background-color: var(--black);
+        opacity: 0.1;
+        right: -18px;
+      }
     }
     margin-right: 1.5rem;
   }
   .studio--min_payout_percentage {
     margin-top: 6px;
+    margin-left: 8px;
   }
   .studio--address {
     margin: var(--fr-l) 0 var(--fr-2);

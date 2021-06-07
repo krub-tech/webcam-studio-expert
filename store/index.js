@@ -41,7 +41,6 @@ export const mutations = {
     state.isMenuOpen = true
   },
   menuClose(state) {
-    console.log('close')
     state.isMenuOpen = false
   },
 }

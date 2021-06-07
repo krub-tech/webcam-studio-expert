@@ -56,7 +56,6 @@ export default {
     toggle(e) {
       if (this.isOpenSelect) {
         if (this.$parent.$options.name === 'MultiSelect') {
-          console.log(e.target.tagName)
           if (e.target.tagName === 'P') this.closeSelect()
           else return false
         }

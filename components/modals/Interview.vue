@@ -84,10 +84,6 @@ export default {
       this.formData.studio = this.$route.params.id.toString()
       this.formDataAdd({ data: this.formData, formData })
       this.filesToFormData(formData, 'file')
-      formData.forEach((value, key) => {
-        console.log(key)
-        console.log(value)
-      })
       try {
         const request = await this.$api.messages.messageRequest(formData)
         console.log(request)

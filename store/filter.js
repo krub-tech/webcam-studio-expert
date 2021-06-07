@@ -23,7 +23,6 @@ export const actions = {
     ctx.dispatch('studios/updateCurrents', null, { root: true })
   },
   set(ctx, { key, data }) {
-    console.log(data)
     ctx.commit('setParams', { key, data })
     ctx.dispatch('build')
     ctx.dispatch('studios/updateCurrents', null, { root: true })

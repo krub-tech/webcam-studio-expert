@@ -2,12 +2,12 @@
   <div class="page-body">
     <Header />
     <Nuxt class="content" />
-    <!-- <div v-if="$store.state.modals.current" class="modal-wrapper">
+    <div v-if="$store.state.modals.current" class="modal-wrapper">
       <div class="modal-wrapper--inner">
         <component :is="component" />
         <button class="close-btn" @click="$closeModal" />
       </div>
-    </div> -->
+    </div>
     <Footer v-if="!$store.getters.isMobile" />
   </div>
 </template>

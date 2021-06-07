@@ -17,6 +17,10 @@ export default {
   },
   methods: {
     logoClickHandle() {
+      this.$store.$router.push({
+        name: 'city',
+        params: { city: this.$store.state.cities.current.id },
+      })
       this.$store.dispatch('studios/paginate', 1)
       this.$store.commit('menuClose')
       this.$scrollToTop()

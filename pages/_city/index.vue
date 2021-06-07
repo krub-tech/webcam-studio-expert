@@ -8,7 +8,7 @@
       <button class="filter-btn" @click="isOpenFilter = true" />
       <Filt :class="{ isOpenFilter }" @close="isOpenFilter = false" />
     </aside>
-    <div class="studios--count">
+    <div class="studios--count" :class="{ dirty: isFilterDirt }">
       <p class="studios--count-current">
         {{ $store.state.studios.allWithParamsLength }}
       </p>
@@ -69,6 +69,9 @@ export default {
     },
     currentCity() {
       return this.$store.state.cities.current?.name
+    },
+    isFilterDirt() {
+      return this.$store.state.filter.query
     },
   },
   methods: {

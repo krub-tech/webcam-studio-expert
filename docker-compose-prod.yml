@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
       args:
         TRGET: prod
-    command: nuxt start --dotenv .env.prod
+    command: npm run start_prod
     image: ${IMAGE_BASE_PATH}/web:latest
 
 

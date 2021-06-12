@@ -20,7 +20,7 @@ services:
       dockerfile: Dockerfile
       args:
         TRGET: test
-    command: nuxt start --dotenv .env.test
+    command: npm run start_test
     image: ${IMAGE_BASE_PATH}/front-test:latest
 
 

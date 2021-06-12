@@ -6,7 +6,7 @@ WORKDIR /app
 COPY . /app
 
 RUN npm i -g npm \
-    && npm ci
-RUN nuxt build --dotenv .env.$TARGET
+    && npm ci \
+    && npm run build_$TARGET
 
 EXPOSE 3000

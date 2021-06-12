@@ -19,7 +19,7 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        TRGET: test
+        TARGET: test
     command: npm run start_test
     image: ${IMAGE_BASE_PATH}/front-test:latest
 

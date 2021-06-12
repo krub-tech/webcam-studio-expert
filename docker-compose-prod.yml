@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        TRGET: prod
+        TARGET: prod
     command: npm run start_prod
     image: ${IMAGE_BASE_PATH}/web:latest
 

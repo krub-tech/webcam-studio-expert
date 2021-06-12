@@ -43,7 +43,10 @@ prod_deploy:
   stage: deploy
   tags:
     - swarm-manager-prod
+  before_script:
+    - docker login -u ${CI_DEPLOY_USER} -p ${CI_DEPLOY_PASSWORD} ${CI_REGISTRY}
   script:
     - docker stack deploy --with-registry-auth --compose-file=docker-compose-prod.yml --prune ${CI_PROJECT_NAME}
   only:
     - master
+

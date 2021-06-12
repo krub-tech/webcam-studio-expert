@@ -4,14 +4,13 @@ services:
   web:
     build:
       context: .
-      dockerfile: ./nginx/Dockerfile
+      dockerfile: Dockerfile
       args:
-        CONFIG_NAME: nginx
-    image: ${IMAGE_BASE_PATH}/front-prod:latest
-    networks:
-      - studio-expert-swarm
+        TARGET: prod
+    command: npm run start_prod
+    image: ${IMAGE_BASE_PATH}/web:latest
+
 
 networks:
   studio-expert-swarm:
     external: true
-

@@ -18,16 +18,7 @@ test_build:
     - docker-compose -f docker-compose-test.yml build
     - docker-compose -f docker-compose-test.yml push
   only:
-    - dev
-
-test_deploy:
-  stage: deploy
-  tags:
-    - swarm-manager-test
-  script:
-    - docker stack deploy --with-registry-auth --compose-file=docker-compose-test.yml --prune ${CI_PROJECT_NAME}
-  only:
-    - dev
+    - nuxt
 
 prod_build:
   stage: build
@@ -38,6 +29,15 @@ prod_build:
     - docker-compose -f docker-compose-prod.yml push
   only:
     - master
+
+test_deploy:
+  stage: deploy
+  tags:
+    - swarm-manager-test
+  script:
+    - docker stack deploy --with-registry-auth --compose-file=docker-compose-test.yml --prune ${CI_PROJECT_NAME}
+  only:
+    - nuxt
 
 prod_deploy:
   stage: deploy

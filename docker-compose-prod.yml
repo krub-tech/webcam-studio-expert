@@ -9,6 +9,8 @@ services:
         TARGET: prod
     command: npm run start_prod
     image: ${IMAGE_BASE_PATH}/web:latest
+    networks:
+      - studio-expert-swarm
 
 
 networks:

@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
       args:
         CONFIG_NAME: nginx.test
-    image: ${IMAGE_BASE_PATH}/web-nuxt-test:latest
+    image: ${IMAGE_BASE_PATH}/web-test:latest
     networks:
       - default
       - studio-expert-swarm
@@ -15,9 +15,13 @@ services:
       - "4546:80"
 
   front:
-    build: .
-    command: npm run start
-    image: ${IMAGE_BASE_PATH}/front-nuxt-test:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        TARGET: test
+    command: npm run start_test
+    image: ${IMAGE_BASE_PATH}/front-test:latest
 
 
 networks:

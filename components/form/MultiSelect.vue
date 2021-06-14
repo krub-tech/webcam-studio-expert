@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import Select from '@/components/Select'
+import Select from '@/components/form/Select'
 
 export default {
   name: 'MultiSelect',

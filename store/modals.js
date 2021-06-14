@@ -9,7 +9,6 @@ export const state = () => ({
 
 export const mutations = {
   setCurrent(state, payload) {
-    console.log('csjn')
     state.current = payload
   },
   setPrev(state, payload) {

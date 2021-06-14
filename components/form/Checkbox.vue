@@ -32,6 +32,7 @@ export default {
 }
 
 .checkbox {
+  white-space: nowrap;
   display: inline-block;
   &:not(:last-of-type) {
     margin-right: var(--fr-m);

@@ -52,6 +52,7 @@
 </template>
 
 <script>
+import Select from '@/components/form/Select'
 import Checkbox from '@/components/form/Checkbox'
 import TermsPrivacy from '@/components/modals/TermsPrivacy'
 
@@ -60,6 +61,7 @@ import { modals } from '@/mixins/modals'
 export default {
   name: 'Interview',
   components: {
+    Select,
     Checkbox,
     TermsPrivacy,
   },

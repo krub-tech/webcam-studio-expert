@@ -10,8 +10,13 @@
 </template>
 
 <script>
+import MultiSelect from '@/components/form/MultiSelect'
+
 export default {
   name: 'DistrictsSelect',
+  components: {
+    MultiSelect,
+  },
   props: {
     districts: {
       type: Array,

@@ -2,6 +2,8 @@
 export const state = () => ({
   windowWidth: 0,
   isMenuOpen: false,
+  isSidebarOpen: false,
+  title: null,
 })
 
 export const getters = {
@@ -14,7 +16,6 @@ export const getters = {
 
 export const actions = {
   async nuxtServerInit(ctx) {
-    ctx.commit('cities/updateCurrentById', 'sankt-peterburg')
     const [usefulLinksOptions, studiosOptions, cities, messageOptions] =
       await Promise.all([
         this.$api.usefulLinks.getOptions(),
@@ -31,16 +32,29 @@ export const actions = {
     if (ctx.state.isMenuOpen) ctx.commit('menuClose')
     else ctx.commit('menuOpen')
   },
+  sidebarToggle(ctx) {
+    if (ctx.state.isSidebarOpen) ctx.commit('sidebarClose')
+    else ctx.commit('sidebarOpen')
+  },
 }
 
 export const mutations = {
   updateWindowWidth(state, payload) {
     state.windowWidth = payload
   },
+  setTitle(state, payload) {
+    state.title = payload
+  },
   menuOpen(state) {
     state.isMenuOpen = true
   },
   menuClose(state) {
     state.isMenuOpen = false
+  },
+  sidebarOpen(state) {
+    state.isSidebarOpen = true
+  },
+  sidebarClose(state) {
+    state.isSidebarOpen = false
   },
 }

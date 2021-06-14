@@ -52,6 +52,10 @@
   padding: var(--fr-m) 0.875rem;
 }
 
+.item {
+  @include item;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -60,7 +64,6 @@
   appearance: none;
   outline: none;
 }
-
 
 body {
   position: absolute;
@@ -103,8 +106,8 @@ button {
   }
 }
 
-
 .select {
+  white-space: nowrap;
   width: max-content;
   line-height: 1;
   position: relative;
@@ -293,8 +296,6 @@ button {
     margin-right: var(--fr-m);
   }
 }
-
-
 
 .modal {
   border-radius: 10px;
@@ -527,8 +528,110 @@ button {
   }
 }
 
+.secondary-layout {
+  h1 {
+    font-size: 20px;
+    padding: 30px 80px;
+    text-align: center;
+  }
+
+  &--list {
+    display: none;
+  }
+
+  &--item {
+    min-height: 120px;
+    background-color: #fefeff;
+    box-shadow: 0px 0px 30px rgba(91, 91, 131, 0.02);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    cursor: pointer;
+
+    img {
+      display: block;
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      float: left;
+      margin-right: 20px;
+    }
+    &_title {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+
+      &-name {
+        color: #4b74dc;
+        font-weight: bold;
+        font-size: 18px;
+      }
+
+      &-followers {
+        color: #606074;
+      }
+    }
+
+    &_desc {
+      line-height: 20px;
+    }
+  }
+
+}
+
 @media screen and (min-width: 420px) {
   .btn-back {
     display: none;
+  }
+
+  .secondary-layout {
+    grid-area: main;
+    h1 {
+      grid-area: title;
+      white-space: nowrap;
+      font-size: 22px;
+      text-align: left;
+      padding: 60px 40px;
+    }
+    &--nav {
+      grid-area: aside;
+
+      ul {
+        margin: 0;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+    }
+    &--list {
+      display: block;
+      grid-area: links;
+      padding-left: 40px;
+
+      .link {
+        width: 640px;
+      }
+
+      .link--title {
+        &-name {
+          width: max-content;
+        }
+      }
+
+      .link--desc {
+        display: block;
+        margin-top: 0;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .secondary-layout {
+    justify-content: center;
+    &--nav {
+      ul {
+        border-radius: 20px;
+      }
+    }
   }
 }

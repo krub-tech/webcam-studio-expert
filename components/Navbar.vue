@@ -1,39 +1,38 @@
 <template>
-  <div class="nav-wrapper">
-    <nav class="nav">
-      <div v-if="cities && $store.state.cities.current" class="nav--city">
-        <Select
-          class="select--cities"
-          :options="cities.map((city) => city.name)"
-          :value="$store.state.cities.current.name"
-          @selectedOption="selectCityHandle"
-        />
-      </div>
+  <nav class="page-nav">
+    <div class="nav">
+      <Select
+        class="select-cities"
+        :options="cities.map((city) => city.name)"
+        :value="$store.state.cities.current.name"
+        @selectedOption="selectCityHandle"
+      />
       <div class="nav--inner">
-        <div class="nav--item">
-          <Select
-            class="select--for_models"
-            :options="for_models"
-            :value="`Моделям`"
-            static-placeholder
-            @selectedOption="forModelsClickHandle"
-          />
-        </div>
-        <a
-          href="#"
-          class="nav--item nav--item-certificate"
-          @click.prevent="toCertificate"
-        >
-          Сертификация
-        </a>
-        <a href="#" class="nav--item" @click.prevent="toAddStudio">Добавить студию</a>
+        <Select
+          class="nav--item"
+          :options="for_models"
+          :value="`Моделям`"
+          static-placeholder
+          @selectedOption="forModelsClickHandle"
+        />
+
+        <Select
+          class="nav--item"
+          :options="for_studios"
+          :value="`Студиям`"
+          static-placeholder
+          @selectedOption="forStudiosClickHandle"
+        />
+
+        <a href="#" class="nav--item">Специалистам</a>
+        <a href="#" class="nav--item">Статьи и новости</a>
       </div>
-    </nav>
-  </div>
+    </div>
+  </nav>
 </template>
 
 <script>
-import Select from '@/components/Select'
+import Select from '@/components/form/Select'
 
 export default {
   components: {
@@ -50,8 +49,19 @@ export default {
       for_models: [
         'Каталог студий',
         'Индивидуальный подбор студии',
+        'Тренинги',
         'Полезные ссылки',
+        'Психологическая помощь',
+        'Черный список студий',
         'Оставить жалобу',
+      ],
+      for_studios: [
+        'Добавление в каталог',
+        'Сертификация',
+        'Специалисты',
+        'Тренинги для админов',
+        'Помощь в организации тренингов',
+        'Полезное студиям',
       ],
     }
   },
@@ -79,6 +89,11 @@ export default {
         case 'Индивидуальный подбор студии':
           this.$store.commit('modals/setCurrent', 'SpecSelection')
           break
+        case 'Тренинги':
+          this.$router.push({
+            name: 'trainings',
+          })
+          break
         case 'Полезные ссылки':
           this.$router.push({
             name: 'links-category',
@@ -87,6 +102,27 @@ export default {
           break
         case 'Оставить жалобу':
           this.$store.commit('modals/setCurrent', 'Claim')
+          break
+        default:
+          break
+      }
+      this.$store.commit('menuClose')
+    },
+    forStudiosClickHandle(data) {
+      switch (data) {
+        case 'Добавление в каталог':
+          this.toAddStudio()
+          break
+        case 'Сертификация':
+          this.toCertificate()
+          break
+        case 'Специалисты':
+          break
+        case 'Тренинги для админов':
+          break
+        case 'Помощь в организации тренингов':
+          break
+        case 'Полезное студиям':
           break
         default:
           break
@@ -108,7 +144,6 @@ export default {
 <style lang="scss">
 @mixin small-point {
   position: relative;
-  margin-right: 28px;
   &::after {
     content: '';
     position: absolute;
@@ -119,32 +154,9 @@ export default {
     border-radius: 50%;
     background-color: var(--black);
     opacity: 0.1;
-    right: -40px;
+    right: -20px;
     @content;
   }
-}
-.slide-up-enter-active,
-.slide-up-leave-active {
-  position: fixed;
-  top: 60px;
-}
-.slide-up-enter,
-.slide-up-leave-to {
-  z-index: -1;
-  top: -480px;
-}
-
-.nav-wrapper {
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  position: relative;
-  background-color: #fbfbfd;
-  border-radius: 20px;
-  overflow: hidden;
-  z-index: 1;
-  padding-top: 30px;
 }
 .nav {
   white-space: nowrap;
@@ -159,14 +171,18 @@ export default {
   .select {
     flex-shrink: 2;
     border-radius: 0.375rem;
-    &--cities {
+    &-cities {
       .options {
         width: 264px;
       }
     }
-    &--for_models {
+    &.nav--item {
+      @include small-point;
       .options {
         width: 314px;
+      }
+      .arrow {
+        display: none;
       }
     }
   }
@@ -189,40 +205,29 @@ export default {
       }
     }
     .select {
-      padding-left: 5px;
+      .arrow {
+        display: none;
+      }
     }
-  }
-  a.nav--item {
-    padding-left: var(--fr);
-  }
-  .nav--city {
-    @extend .nav--item;
   }
 }
 
 @media screen and (min-width: 420px) {
-  .nav-wrapper {
-    justify-content: flex-start;
-    height: 60px;
-    min-width: 1024px;
-    position: static;
-    overflow: auto;
+  .page-nav {
+    width: 100%;
     background: linear-gradient(90deg, #d9f4ff 0%, #e9dbff 100%);
-    padding-top: 0;
-    border-radius: 0;
-    &::before {
-      display: none;
-    }
   }
   .nav {
-    width: 1010px;
+    width: 960px;
     height: var(--fr-3);
     flex-wrap: nowrap;
     align-items: center;
     background: none;
     box-shadow: none;
-    padding-left: var(--fr-2);
+    padding-left: 30px;
     margin: 0;
+    position: relative;
+
     .select {
       &:hover {
         background-color: rgba(#ffffff, 0.7);
@@ -233,27 +238,32 @@ export default {
       display: flex;
       flex-wrap: nowrap;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-end;
       flex-grow: 2;
     }
     .nav--item {
       width: max-content;
-      height: var(--fr-l);
+      height: 28px;
       display: flex;
       align-items: center;
       border-bottom: none;
+      margin-left: 36px;
       &[href] {
         font: inherit;
         color: inherit;
-        margin-left: var(--fr-2);
+        padding: 0 12px;
+        &:not(:last-of-type) {
+          @include small-point;
+        }
+        &:last-of-type {
+          padding-right: 0;
+        }
+        &:hover {
+          text-decoration: underline;
+        }
       }
     }
-    .nav--city {
-      border-bottom: none;
-      padding-left: 0;
-    }
   }
-  .select--for_models,
   .nav--item-certificate {
     @include small-point;
   }
@@ -263,23 +273,13 @@ export default {
     }
   }
 }
+
 @media screen and (min-width: 1280px) {
-  .slide-up-enter-active,
-  .slide-up-leave-active {
-    opacity: 1;
-    transition: opacity 500ms;
-  }
-  .slide-up-enter,
-  .slide-up-leave-to {
-    opacity: 0;
-    top: 0;
-  }
-  .nav-wrapper {
-    justify-content: center;
-  }
   .nav {
-    width: 1220px;
-    padding: 0;
+    width: 1250px;
+    .nav--inner {
+      justify-content: center;
+    }
   }
 }
 </style>

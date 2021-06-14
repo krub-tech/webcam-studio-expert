@@ -1,5 +1,5 @@
 <template>
-  <aside class="studio--sidebar">
+  <div class="studio--sidebar">
     <div class="studio--sidebar-header">
       <button class="btn-filter" @click="$router.push('/')">
         <img src="@/assets/svg/i-back_arrow.svg" />
@@ -45,7 +45,7 @@
         <a href="#">Сертифицирована</a>
       </div>
     </article>
-  </aside>
+  </div>
 </template>
 
 <script>
@@ -87,7 +87,6 @@ export default {
 .studio--sidebar {
   display: block;
   min-width: 300px;
-  margin: 0 var(--fr-l);
   grid-area: studios-list;
   &-header {
     display: flex;
@@ -158,11 +157,6 @@ export default {
         color: inherit;
       }
     }
-  }
-}
-@media screen and (min-width: 420px) {
-  .studio--sidebar {
-    margin: 0;
   }
 }
 </style>

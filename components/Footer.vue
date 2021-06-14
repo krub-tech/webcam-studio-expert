@@ -3,13 +3,28 @@
     <div class="footer">
       <div class="footer--top">
         <Logo :logo="`i-logo_footer`" />
-        <router-link to="/"> Каталог студий </router-link>
+        <router-link to="/">Экспертные статьи и новости</router-link>
+        <router-link to="/">Обратная связь</router-link>
+        <router-link to="/">Кабинет</router-link>
       </div>
       <div class="footer--mid">
         <div class="footer--mid-inner">
+          <p>Моделям</p>
+          <p>Студиям</p>
+          <p>Специалистам</p>
+          <a href="#" @click.prevent="$router.push('/')">Каталог студий</a>
+          <a href="#" @click.prevent="modalLinkClickHandle('Proposal')"
+            >Добавление в каталог</a
+          >
+          <a href="#">Вакансии</a>
           <a href="#" @click.prevent="modalLinkClickHandle('SpecSelection')"
             >Индивидуальный подбор студии</a
           >
+          <router-link to="/certificate"> Сертификация </router-link>
+          <a href="#">Разместить резюме</a>
+          <a href="#">Тренинги (платные и бесплатные)</a>
+          <a href="#">Специалисты</a>
+          <a href="#">Сертификация (бесплатно)</a>
           <a
             href="#"
             @click.prevent="
@@ -21,14 +36,16 @@
           >
             Полезные ссылки
           </a>
-          <a href="#" @click.prevent="modalLinkClickHandle('Proposal')"
-            >Добавить студию</a
-          >
-          <router-link to="/certificate"> Сертификация </router-link>
+          <a href="#">Тренинги для админов</a>
+          <a href="#">Тренинги (платные и бесплатные)</a>
+          <a href="#">Психологическая помощь</a>
+          <a href="#">Помощь в организации тренингов</a>
+          <a href="#"> </a>
+          <a href="#">Черный список студий</a>
+          <a href="#">Полезное студиям</a>
+          <a href="#"> </a>
+
           <a href="#" @click.prevent="modalLinkClickHandle('Claim')">Оставить жалобу</a>
-          <a href="#" @click.prevent="modalLinkClickHandle('Feedback')"
-            >Обратная связь</a
-          >
         </div>
       </div>
       <div class="footer--bott">
@@ -91,6 +108,7 @@ export default {
     right: 0;
     left: 0;
     background: linear-gradient(180deg, #313136 0%, #674780 100%);
+    margin-top: 30px;
     &::after {
       content: '';
       position: absolute;
@@ -105,7 +123,7 @@ export default {
   .footer {
     display: flex;
     flex-wrap: wrap;
-    height: 278px;
+    height: 486px;
     white-space: nowrap;
     a {
       color: var(--white);
@@ -122,6 +140,11 @@ export default {
       &--desc {
         color: #aa9ab8;
       }
+      .logo {
+        &--desc {
+          display: none;
+        }
+      }
     }
     &--top {
       height: 110px;
@@ -133,13 +156,17 @@ export default {
       padding-left: var(--fr-2);
     }
     &--mid {
-      height: 130px;
+      height: 338px;
       display: flex;
       align-items: center;
       &-inner {
         @include three-col;
         row-gap: var(--fr);
         grid-template-rows: repeat(2, 1fr);
+        p {
+          font-size: 18px;
+          color: #7bd0ff;
+        }
       }
     }
     &--bott {
@@ -147,7 +174,7 @@ export default {
         position: relative;
         z-index: 1;
         p {
-          color: #aa9ab8;
+          color: #7bd0ff;
         }
         @include three-col;
         height: inherit;

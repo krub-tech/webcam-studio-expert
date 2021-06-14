@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import MultiSelect from '@/components/MultiSelect'
+import MultiSelect from '@/components/form/MultiSelect'
 
 export default {
   name: 'MetroSelect',

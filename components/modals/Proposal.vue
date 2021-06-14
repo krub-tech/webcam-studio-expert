@@ -223,6 +223,8 @@
 
 <script>
 import InputSearch from '@/components/form/InputSearch'
+import Select from '@/components/form/Select'
+import MultiSelect from '@/components/form/MultiSelect'
 import Checkbox from '@/components/form/Checkbox'
 import Range from '@/components/form/Range'
 import TermsPrivacy from '@/components/modals/TermsPrivacy'
@@ -233,6 +235,8 @@ export default {
   name: 'Proposal',
   components: {
     InputSearch,
+    Select,
+    MultiSelect,
     Checkbox,
     Range,
     TermsPrivacy,

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="options" class="filter">
+  <div class="filter">
     <div class="filter--container">
       <InputSearch
         :value="$store.state.studios.search"
@@ -157,21 +157,25 @@
 
 <script>
 import Checkbox from '@/components/form/Checkbox'
+import Select from '@/components/form/Select'
+import MultiSelect from '@/components/form/MultiSelect'
 import Radio from '@/components/form/Radio'
 import Range from '@/components/form/Range'
 import InputSearch from '@/components/form/InputSearch'
-// import DistrictsSelect from '@/components/form/modules/DistrictsSelect'
-// import MetroSelect from '@/components/form/modules/MetroSelect'
+import DistrictsSelect from '@/components/form/DistrictsSelect'
+import MetroSelect from '@/components/form/MetroSelect'
 
 export default {
   name: 'Filt',
   components: {
     Checkbox,
+    Select,
+    MultiSelect,
     Radio,
     Range,
     InputSearch,
-    // DistrictsSelect,
-    // MetroSelect,
+    DistrictsSelect,
+    MetroSelect,
   },
   data() {
     return {}

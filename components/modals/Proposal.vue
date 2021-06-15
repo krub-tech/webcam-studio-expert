@@ -313,7 +313,7 @@ export default {
     chooseAddress(adr) {
       this.searchInput = adr
       const suggestion = this.searchResults.find((el) => el.value === adr)
-      this.formData.address_json = JSON.stringify(suggestion.data)
+      this.formData.address_json = JSON.stringify(suggestion)
     },
     avatarInputHandle(e) {
       const file = e.target.files[0]

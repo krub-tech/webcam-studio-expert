@@ -156,6 +156,23 @@ export const modals = {
       })
     },
 
+    validator() {
+      let cnt = this.requiredFields.length
+      this.requiredFields.forEach((el) => {
+        if (!this.formData[el]) {
+          if (el === 'image_1' && this.files) {
+            cnt -= 1
+            return
+          }
+          this.errorHandler(el, 'Обязательное поле')
+          this.errors = { ...this.errors, [el]: 'Обязательное поле' }
+        } else {
+          cnt -= 1
+        }
+      })
+      return cnt === 0
+    },
+
     notModalClick(e) {
       if (this.$store.state.modals.notClose) return false
       if (e.target.classList.value.includes('modal-wrapper--inner')) {

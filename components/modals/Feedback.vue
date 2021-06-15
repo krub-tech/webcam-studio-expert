@@ -3,7 +3,7 @@
     <h1>Обратная связь</h1>
     <input
       id="name"
-      name="name"
+      v-model="formData.name"
       type="text"
       class="modal--name"
       placeholder="Ваше имя"
@@ -64,6 +64,7 @@ export default {
         answer_to: [],
         phone: null,
       },
+      requiredFields: ['name', 'phone'],
       files: null,
       errors: null,
     }
@@ -71,6 +72,9 @@ export default {
   methods: {
     async submit() {
       this.clearErrors()
+      const isValid = this.validator()
+      if (!isValid) return
+
       const formData = new FormData(this.$el)
       this.formDataAdd({ data: this.formData, formData })
       this.filesToFormData(formData, 'file')

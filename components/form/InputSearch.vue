@@ -44,6 +44,7 @@ export default {
   },
   methods: {
     focusHandle() {
+      if (this.$el.getAttribute('id') === 'address_json') return
       this.inputHandle(null)
     },
     inputHandle(data) {

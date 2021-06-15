@@ -233,6 +233,7 @@ export default {
         phone: null,
       },
       files: null,
+      errors: null,
     }
   },
   computed: {

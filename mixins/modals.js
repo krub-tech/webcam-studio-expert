@@ -117,15 +117,18 @@ export const modals = {
         else return false
       })
     },
+    errorHandler(key, value) {
+      const invalidElem = document.getElementById(key)
+      if (invalidElem) {
+        const errMsgElem = document.querySelector(`.for-${key}`)
+
+        invalidElem.classList.add('invalid')
+        errMsgElem.innerText = value
+      }
+    },
     errorsHandler(err) {
       Object.entries(err).forEach(([key, value]) => {
-        const invalidElem = document.getElementById(key)
-        if (invalidElem) {
-          const errMsgElem = document.querySelector(`.for-${key}`)
-
-          invalidElem.classList.add('invalid')
-          errMsgElem.innerText = value
-        }
+        this.errorHandler(key, value)
       })
       this.errors = err
     },
@@ -139,6 +142,8 @@ export const modals = {
             invalidElem.classList.remove('invalid')
             if (errMsgElem) errMsgElem.innerText = ''
           }
+
+          delete this.errors[key]
         })
       }
     },

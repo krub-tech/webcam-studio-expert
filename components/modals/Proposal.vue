@@ -262,22 +262,18 @@ export default {
       },
       files: null,
       requiredFields: [
-        'type',
-        'studio_type',
         'name',
         'avatar',
         'address_json',
         'email',
         'phone',
         'description',
-        'working_with_model_types',
-        'models_age',
-        'work_with_sites',
         'image_1',
         'staff_gender',
       ],
       searchInput: '',
       searchResults: null,
+      errors: null,
     }
   },
   computed: {
@@ -332,8 +328,24 @@ export default {
       })
     },
 
+    validator() {
+      let result = true
+      this.requiredFields.forEach((el) => {
+        if (!this.formData[el]) {
+          if (el === 'image_1' && this.files) return
+          result = false
+          this.errorHandler(el, 'Обязательное поле')
+          this.errors = { ...this.errors, [el]: 'Обязательное поле' }
+        }
+      })
+      return result
+    },
+
     async submit() {
       this.clearErrors()
+      const isValid = this.validator()
+      if (!isValid) return
+
       const formData = new FormData(this.$el)
       this.formDataAdd({ data: this.formData, formData })
       this.filesToFormData(formData, 'image')

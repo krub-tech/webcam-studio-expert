@@ -45,10 +45,18 @@ export default {
   mounted() {
     this.$nextTick(() => this.resizeHandle())
     window.addEventListener('resize', this.throttle(this.resizeHandle, 500))
-    this.$store.dispatch(
-      'cities/updateCurrent',
-      this.$route.params.city || 'sankt-peterburg'
+
+    const idx = this.$store.state.cities.uniques.findIndex(
+      (el) => el.id === this.$route.params.city
     )
+    if (idx !== -1) {
+      this.$store.dispatch('cities/updateCurrent', this.$route.params.city)
+    } else {
+      this.$store.dispatch('cities/updateCurrent', 'sankt-peterburg')
+      this.$router.push('/sankt-peterburg')
+      alert(`${this.$route.params.city} нет в базе городов`)
+    }
+
     if (sessionStorage.districts) {
       this.$store.dispatch(
         'cities/setDistrictsSelected',

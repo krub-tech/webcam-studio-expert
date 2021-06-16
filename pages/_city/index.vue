@@ -43,12 +43,15 @@ export default {
     }
   },
   async fetch() {
-    const studios = await this.$api.studios.getByQuery(
-      this.$store.getters['studios/query']
-    )
+    const currentCity = this.$route.params.city
+
+    const studios = await this.$api.studios.getByQuery({
+      ...this.$store.getters['studios/query'],
+      city: currentCity,
+    })
     this.$store.commit('studios/updateCurrentStudios', studios.results)
     const idx = this.$store.state.cities.uniques.findIndex(
-      (el) => el.id === this.$route.params.city
+      (el) => el.id === currentCity
     )
     this.cityName = this.$store.state.cities.uniques[idx].name
   },

@@ -3,7 +3,7 @@
     <h1>Запись на собеседование</h1>
     <input
       id="name"
-      name="name"
+      v-model="formData.name"
       type="text"
       class="modal--name"
       placeholder="Ваше имя"
@@ -68,11 +68,13 @@ export default {
     return {
       formData: {
         message_type: 'interview',
+        name: null,
         year_of_birth: null,
         studio: null,
         answer_to: null,
         phone: null,
       },
+      requiredFields: ['name', 'phone'],
       files: null,
       errors: null,
     }
@@ -80,6 +82,9 @@ export default {
   methods: {
     async submit() {
       this.clearErrors()
+      const isValid = this.validator()
+      if (!isValid) return
+
       const formData = new FormData(this.$el)
       this.formData.studio = this.$route.params.id.toString()
       this.formDataAdd({ data: this.formData, formData })

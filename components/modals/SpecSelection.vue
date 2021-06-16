@@ -7,7 +7,7 @@
     </p>
     <input
       id="name"
-      name="name"
+      v-model="formData.name"
       type="text"
       class="modal--name"
       placeholder="Ваше имя"
@@ -216,6 +216,7 @@ export default {
       metro: null,
       selectedMetro: [],
       formData: {
+        name: null,
         year_of_birth: null,
         model_type: null,
         english_level: null,
@@ -232,7 +233,16 @@ export default {
         answer_to: null,
         phone: null,
       },
+      requiredFields: [
+        'name',
+        'phone',
+        'year_of_birth',
+        'model_type',
+        'english_level',
+        'city',
+      ],
       files: null,
+      errors: null,
     }
   },
   computed: {
@@ -284,6 +294,9 @@ export default {
 
     async submit() {
       this.clearErrors()
+      const isValid = this.validator()
+      console.log(isValid)
+      if (!isValid) return
       const formData = new FormData(this.$el)
       this.formDataAdd({ data: this.formData, formData })
       this.filesToFormData(formData, 'file')

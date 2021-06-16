@@ -3,7 +3,7 @@
     <h1>Запись на сертификацию</h1>
     <input
       id="name"
-      name="name"
+      v-model="formData.name"
       type="text"
       class="modal--name"
       placeholder="Ваше имя"
@@ -54,16 +54,21 @@ export default {
     return {
       formData: {
         message_type: 'certification',
+        name: null,
         studio: '1',
         answer_to: null,
         phone: null,
       },
+      requiredFields: ['name', 'phone'],
       errors: null,
     }
   },
   methods: {
     async submit() {
       this.clearErrors()
+      const isValid = this.validator()
+      if (!isValid) return
+
       const formData = new FormData(this.$el)
       this.formDataAdd({ data: this.formData, formData })
 

@@ -3,7 +3,7 @@
     <h1>Добавление студии</h1>
     <input
       id="name"
-      name="name"
+      v-model="formData.name"
       type="text"
       class="modal--name"
       placeholder="Название студии"
@@ -87,8 +87,9 @@
     </div>
     <hr />
 
-    <div class="staff_gender form-module">
+    <div class="staff_gender form-module" style="margin-bottom: 0">
       <Select
+        id="staff_gender"
         :options="Object.values(options.staff_gender)"
         :value="'Пол администраторов'"
         :selected="options.staff_gender[formData.staff_gender]"
@@ -104,6 +105,7 @@
         </div>
       </div>
     </div>
+    <i class="for-staff_gender" />
     <hr />
     <div v-if="options.devices" class="devices form-module">
       <MultiSelect
@@ -128,7 +130,7 @@
 
     <textarea
       id="description"
-      name="description"
+      v-model="formData.description"
       placeholder="Полное описание Вашей студии"
     />
     <i class="for-description" />
@@ -242,7 +244,9 @@ export default {
     return {
       formData: {
         type: 'studio',
+        name: null,
         avatar: null,
+        description: null,
         address_json: null,
         studio_type: [],
         models_age: [],
@@ -262,22 +266,18 @@ export default {
       },
       files: null,
       requiredFields: [
-        'type',
-        'studio_type',
         'name',
         'avatar',
         'address_json',
         'email',
         'phone',
         'description',
-        'working_with_model_types',
-        'models_age',
-        'work_with_sites',
         'image_1',
         'staff_gender',
       ],
       searchInput: '',
       searchResults: null,
+      errors: null,
     }
   },
   computed: {
@@ -334,6 +334,9 @@ export default {
 
     async submit() {
       this.clearErrors()
+      const isValid = this.validator()
+      if (!isValid) return
+
       const formData = new FormData(this.$el)
       this.formDataAdd({ data: this.formData, formData })
       this.filesToFormData(formData, 'image')

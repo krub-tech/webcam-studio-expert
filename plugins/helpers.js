@@ -81,6 +81,7 @@ export default ({ app }, inject) => {
         if (inputNumbersValue[0] === '9') inputNumbersValue = `7${inputNumbersValue}`
         const firstSymbols = inputNumbersValue[0] === '8' ? '8' : '+7'
         formattedInputValue = `${firstSymbols} `
+
         input.value = `${firstSymbols} `
         if (inputNumbersValue.length > 1) {
           formattedInputValue += `(${inputNumbersValue.substring(1, 4)}`
@@ -101,9 +102,11 @@ export default ({ app }, inject) => {
     }
     const onPhoneKeyDown = function (e) {
       // Clear input after remove last symbol
+
       const inputValue = e.target.value.replace(/\D/g, '')
       if (e.keyCode === 8 && inputValue.length === 1) {
         e.target.value = ''
+        onPhoneInput(e)
       }
     }
     payload.target.addEventListener('keydown', onPhoneKeyDown)

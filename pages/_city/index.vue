@@ -50,6 +50,8 @@ export default {
       city: currentCity,
     })
     this.$store.commit('studios/updateCurrentStudios', studios.results)
+    this.$store.commit('studios/updateAllByCityLength', studios.count_by_city)
+    this.$store.commit('studios/updateAllWithParamsLength', studios.count)
     const idx = this.$store.state.cities.uniques.findIndex(
       (el) => el.id === currentCity
     )

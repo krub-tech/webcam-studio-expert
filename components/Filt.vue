@@ -8,7 +8,7 @@
         @choose="$store.commit('studios/updateSearchQuery', $event)"
       />
       <hr />
-      <!-- <DistrictsSelect
+      <DistrictsSelect
         :districts="districts"
         :selected="districtsSelected"
         @districtSelect="districtSelectHandle"
@@ -17,7 +17,7 @@
         :metro="metro"
         :selected="metroSelected"
         @metroSelect="metroSelectHandle"
-      /> -->
+      />
       <hr
         v-if="$store.state.cities.districts.length || $store.state.cities.metro.length"
       />
@@ -214,7 +214,8 @@ export default {
   },
   mounted() {
     if (sessionStorage.filter) {
-      this.$store.dispatch('filter/change', JSON.parse(sessionStorage.filter))
+      this.$store.commit('filter/setFilter', JSON.parse(sessionStorage.filter))
+      this.$store.dispatch('filter/build')
     }
   },
   methods: {

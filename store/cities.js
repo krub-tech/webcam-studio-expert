@@ -33,7 +33,6 @@ export const actions = {
     ])
     ctx.commit('setDistricts', districts)
     ctx.commit('setMetro', metro)
-    ctx.dispatch('studios/paginate', 1, { root: true })
   },
   updateDistrictsSelected(ctx, payload) {
     ctx.commit('updateDistrictsSelected', payload)

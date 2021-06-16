@@ -4,7 +4,7 @@
     <p>Мы сможем помочь в этих случаях, а вот в этих, к сожалению, нет.</p>
     <input
       id="name"
-      name="name"
+      v-model="formData.name"
       type="text"
       class="modal--name"
       placeholder="Ваше имя"
@@ -64,9 +64,11 @@ export default {
     return {
       formData: {
         message_type: 'complaint',
+        name: null,
         answer_to: [],
         phone: null,
       },
+      requiredFields: ['name', 'phone'],
       files: null,
       errors: null,
     }
@@ -74,6 +76,9 @@ export default {
   methods: {
     async submit() {
       this.clearErrors()
+      const isValid = this.validator()
+      if (!isValid) return
+
       const formData = new FormData(this.$el)
       this.formDataAdd({ data: this.formData, formData })
       this.filesToFormData(formData, 'file')

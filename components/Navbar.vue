@@ -34,6 +34,7 @@
 
 <script>
 import Select from '@/components/Select'
+import studios from '~/api/studios'
 
 export default {
   components: {
@@ -63,13 +64,19 @@ export default {
   methods: {
     selectCityHandle(city) {
       const cityData = this.cities.find((el) => el.name === city)
+
+      this.$store.commit('studios/updateSearchQuery', null)
+      this.$store.commit('filter/resetParams')
+      this.$store.commit('filter/resetQuery')
+      this.$store.commit('studios/updatePageNumber', 1)
+      this.$store.commit('menuClose')
       this.$store.dispatch('cities/updateCurrent', cityData.id)
-      this.$store.dispatch('filter/reset')
+      sessionStorage.filter = JSON.stringify(this.$store.state.filter.params)
+
       this.$router.push({
         name: 'city',
         params: { city: cityData.id },
       })
-      this.$store.commit('menuClose')
     },
     forModelsClickHandle(data) {
       switch (data) {

@@ -57,12 +57,15 @@
     <hr class="hr-second" />
 
     <div class="min_payout_percentage">
-      <Range
+      <MultiRange
         :label="'Минимальный % выплат'"
         :val="+formData.min_payout_percentage"
         :min="30"
+        :min-in-val="formData.min_payout_percentage"
         :max="90"
-        @valueChange="rangeHandle($event, 'min_payout_percentage')"
+        :max-in-val="formData.max_payout_percentage"
+        @valueMinChange="rangeHandle($event, 'min_payout_percentage')"
+        @valueMaxChange="rangeHandle($event, 'max_payout_percentage')"
       />
     </div>
     <hr />
@@ -188,7 +191,7 @@
       id="email"
       type="text"
       class="modal--email"
-      placeholder="Email представителя"
+      placeholder="Email для заявок"
       @change="mailValidate($event.target)"
     />
     <i class="for-email" />
@@ -227,6 +230,7 @@
 import InputSearch from '@/components/form/InputSearch'
 import Checkbox from '@/components/form/Checkbox'
 import Range from '@/components/form/Range'
+import MultiRange from '@/components/form/MultiRange'
 import TermsPrivacy from '@/components/modals/TermsPrivacy'
 
 import { modals } from '@/mixins/modals'
@@ -237,6 +241,7 @@ export default {
     InputSearch,
     Checkbox,
     Range,
+    MultiRange,
     TermsPrivacy,
   },
   mixins: [modals],
@@ -252,6 +257,7 @@ export default {
         models_age: [],
         model_type: [],
         min_payout_percentage: null,
+        max_payout_percentage: null,
         shift_length: null,
         max_shifts_per_week: null,
         staff_gender: null,
@@ -334,12 +340,15 @@ export default {
 
     async submit() {
       this.clearErrors()
-      const isValid = this.validator()
-      if (!isValid) return
 
       const formData = new FormData(this.$el)
       this.formDataAdd({ data: this.formData, formData })
       this.filesToFormData(formData, 'image')
+      formData.forEach((val) => {
+        console.log(val)
+      })
+      const isValid = this.validator()
+      if (!isValid) return
       try {
         const request = await this.$api.studios.postToDB(formData)
         console.log(request)

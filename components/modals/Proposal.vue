@@ -50,8 +50,8 @@
         v-for="(model_type, key) in options.working_with_model_types"
         :key="key"
         :item="model_type"
-        :checked="$isChecked(formData.model_type, key)"
-        @mouseup.native="checkboxHandle(key, 'model_type')"
+        :checked="$isChecked(formData.working_with_model_types, key)"
+        @mouseup.native="checkboxHandle(key, 'working_with_model_types')"
       />
     </div>
     <hr class="hr-second" />
@@ -255,7 +255,7 @@ export default {
         address_json: null,
         studio_type: [],
         models_age: [],
-        model_type: [],
+        working_with_model_types: [],
         min_payout_percentage: null,
         max_payout_percentage: null,
         shift_length: null,

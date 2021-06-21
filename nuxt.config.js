@@ -13,7 +13,7 @@ export default {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       {
         name: 'google-site-verification',
-        content: 'Nwmv3fQCjiUwxFmMULeCRcehcbgFZ_yX-JVnD1l-TOQ',
+        content: '6Vh60wt7I1lZ4qj_dNW_c8XKf5rMMiHTkZBcHXgVVJ0',
       },
       { name: 'yandex-verification', content: 'f6c2a6d67435a525' },
     ],

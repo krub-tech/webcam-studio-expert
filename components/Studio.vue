@@ -347,6 +347,7 @@ export default {
 }
 .studio--models_age:not(:last-of-type) {
   margin-right: 1rem;
+  @include small-point;
 }
 .studio--main {
   display: flex;

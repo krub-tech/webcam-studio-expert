@@ -44,14 +44,11 @@ export default {
       default: 0,
     },
     maxInVal: {
-      type: Array,
-      required: true,
+      type: [Array, Number, String],
     },
     minInVal: {
-      type: Array,
-      required: true,
+      type: [Array, Number, String],
     },
-
     max: {
       type: Number,
       default: 100,

@@ -35,7 +35,7 @@
       />
     </div>
     <i />
-    <textarea name="message" placeholder="Опишите ситуацию" />
+    <textarea name="message" placeholder="Расскажите о себе" />
     <i />
     <input
       id="photos"

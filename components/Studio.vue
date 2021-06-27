@@ -481,7 +481,7 @@ export default {
   padding-bottom: 40px;
   border-bottom: 1px solid #eeeef6;
   margin-bottom: 40px;
-  white-space: pre-wrap;
+  white-space: pre-line;
   p {
     font-weight: normal;
     font-size: 1rem;

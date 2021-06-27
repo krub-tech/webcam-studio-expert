@@ -25,10 +25,7 @@ module.exports = {
     'no-param-reassign': 'off',
     'consistent-return': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
-<<<<<<< HEAD
     'vue/no-deprecated-destroyed-lifecycle': 'off',
-=======
->>>>>>> 52f359c91ea0249b7c6866e7fff30f89077224f1
     'prettier/prettier': [
       'error',
       {

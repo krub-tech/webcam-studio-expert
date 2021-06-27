@@ -129,19 +129,15 @@
       <Slider :data="slides" />
     </div>
     <h5 v-if="studio.advantages" class="studio--remark">
-      {{ studio.advantages }}
+      <div v-html="studio.advantages" />
     </h5>
     <div v-if="studio.bonuses_for_models" class="studio--bonus">
       <h4>Бонусы</h4>
-      <p>
-        {{ studio.bonuses_for_models }}
-      </p>
+      <div v-html="studio.bonuses_for_models" />
     </div>
     <div class="studio--desc">
       <h4>Описание студии</h4>
-      <p>
-        {{ studio.description }}
-      </p>
+      <div v-html="studio.description" />
     </div>
     <div class="studio--interview">
       <div

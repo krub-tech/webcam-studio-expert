@@ -10,8 +10,8 @@
   >
     <div class="card--inner">
       <div class="card--img">
-        <img :src="data.avatar" :alt="data.name" />
-        <img :src="data.image_1" :alt="data.name" />
+        <img :src="data.avatar" loading="lazy" :alt="data.name" />
+        <img :src="data.image_1" loading="lazy" :alt="data.name" />
       </div>
       <div class="card--title">
         <!-- :class="{ 'card--title-best': data.haveCrown }" -->

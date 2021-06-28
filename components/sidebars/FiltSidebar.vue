@@ -57,7 +57,7 @@
       </div>
       <hr />
       <div class="min_payout_percentage">
-        <MultiRange
+        <Range
           :label="'Минимальный % выплат'"
           :val="+$store.state.filter.params.min_payout_percentage"
           :min="30"
@@ -157,9 +157,10 @@
 
 <script>
 import Checkbox from '@/components/form/Checkbox'
+import Select from '@/components/form/Select'
+import MultiSelect from '@/components/form/MultiSelect'
 import Radio from '@/components/form/Radio'
 import Range from '@/components/form/Range'
-import MultiRange from '@/components/form/MultiRange'
 import InputSearch from '@/components/form/InputSearch'
 import DistrictsSelect from '@/components/form/modules/DistrictsSelect'
 import MetroSelect from '@/components/form/modules/MetroSelect'
@@ -168,9 +169,10 @@ export default {
   name: 'Filt',
   components: {
     Checkbox,
+    Select,
+    MultiSelect,
     Radio,
     Range,
-    MultiRange,
     InputSearch,
     DistrictsSelect,
     MetroSelect,
@@ -216,8 +218,7 @@ export default {
   },
   mounted() {
     if (sessionStorage.filter) {
-      this.$store.commit('filter/setFilter', JSON.parse(sessionStorage.filter))
-      this.$store.dispatch('filter/build')
+      this.$store.dispatch('filter/change', JSON.parse(sessionStorage.filter))
     }
   },
   methods: {

@@ -91,7 +91,7 @@ export default {
   @media screen and (min-width: 1280px) {
     .cards {
       &--container {
-        grid-template-columns: repeat(3, 280px);
+        grid-template-columns: repeat(3, 295px);
         gap: var(--fr);
       }
       h2 {

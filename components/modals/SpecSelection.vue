@@ -193,9 +193,13 @@
 
 <script>
 import Checkbox from '@/components/form/Checkbox'
+import Select from '@/components/form/Select'
+import MultiSelect from '@/components/form/MultiSelect'
 import Range from '@/components/form/Range'
 import Radio from '@/components/form/Radio'
 import TermsPrivacy from '@/components/modals/TermsPrivacy'
+import DistrictsSelect from '@/components/form/DistrictsSelect'
+import MetroSelect from '@/components/form/MetroSelect'
 
 import { modals } from '@/mixins/modals'
 
@@ -204,8 +208,12 @@ export default {
   components: {
     Radio,
     Checkbox,
+    Select,
+    MultiSelect,
     Range,
     TermsPrivacy,
+    DistrictsSelect,
+    MetroSelect,
   },
   mixins: [modals],
   data() {

@@ -268,19 +268,13 @@ export default {
   @content;
 }
 
-.studio-wrapper {
-  padding-top: 20px;
-  background-color: var(--white);
-}
 .studio {
   min-width: 300px;
-  margin: 0 var(--fr-l);
   p {
     display: inline-block;
   }
   h4 {
     font-size: 1.125rem;
-    // margin-bottom: 2rem;
   }
 }
 .studio--title {
@@ -598,24 +592,12 @@ export default {
 }
 
 @media screen and (min-width: 420px) {
-  .studio-wrapper {
-    background: none;
-    display: grid;
-    grid-template-columns: 300px 640px;
-    grid-template-areas: 'studios-list studio';
-    column-gap: var(--fr-2);
-    padding: var(--fr-2);
-    .studio--aside {
-      display: block;
-    }
-  }
   .studio {
-    grid-area: studio;
+    grid-area: main;
     width: 640px;
     background-color: white;
     border-radius: 1rem;
     padding: var(--fr-2) var(--fr-l) var(--fr) var(--fr-l);
-    margin: 0;
   }
   .studio--title {
     @include bottom-line;

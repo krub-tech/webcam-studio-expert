@@ -1,7 +1,7 @@
 <template>
   <div class="favorites-wrapper">
-    <StudioSidebar :studios="studios" />
     <Studio v-if="!$store.getters.isMobile" :studio="studio" />
+    <StudioSidebar v-else :studios="studios" />
     <div v-if="!studio" class="error">
       <h1>В избранном пока нет ни одной студии</h1>
     </div>
@@ -9,8 +9,13 @@
 </template>
 
 <script>
+import StudioSidebar from '@/components/sidebars/StudioSidebar'
+
 export default {
   name: 'Favorites',
+  components: {
+    StudioSidebar,
+  },
   computed: {
     studio() {
       return this.$store.state.studios.favorites[0]
@@ -19,12 +24,24 @@ export default {
       return this.$store.state.studios.favorites
     },
   },
+  beforeMount() {
+    this.$store.commit('setTitle', null)
+    const el = document.querySelector('.page-body .center')
+    el.classList.add('padding')
+  },
+  beforeDestroy() {
+    const el = document.querySelector('.page-body .center')
+    el.classList.remove('padding')
+  },
 }
 </script>
 
 <style lang="scss">
+.padding {
+  padding: 30px;
+}
 .favorites-wrapper {
-  padding: 20px 30px 0;
+  grid-area: main;
   background-color: var(--color-second);
   .studio--sidebar {
     margin: 0;
@@ -36,11 +53,6 @@ export default {
 }
 @media screen and (min-width: 420px) {
   .favorites-wrapper {
-    display: grid;
-    grid-template-columns: 300px 640px;
-    grid-template-areas: 'studios-list studio';
-    grid-column-gap: var(--fr-2);
-    padding: var(--fr-2);
   }
 }
 @media screen and (min-width: 1280px) {

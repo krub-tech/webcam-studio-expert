@@ -1,14 +1,12 @@
 <template>
-  <section class="studio-wrapper">
-    <StudioSidebar v-if="!$store.getters.isMobile" :studios="studios" />
-    <Studio :studio="studio" />
-  </section>
+  <Studio :studio="studio" />
 </template>
 
 <script>
 export default {
   name: 'StudioById',
   async asyncData(context) {
+    context.store.commit('setTitle', null)
     const studio = await context.$api.studios.getById(context.route.params.id)
     return { studio }
   },
@@ -25,10 +23,19 @@ export default {
       ],
     }
   },
-  computed: {
-    studios() {
-      return this.$store.state.studios.currents
-    },
+  beforeMount() {
+    const el = document.querySelector('.page-body .center')
+    el.classList.add('padding')
+  },
+  beforeDestroy() {
+    const el = document.querySelector('.page-body .center')
+    el.classList.remove('padding')
   },
 }
 </script>
+
+<style lang="scss">
+.padding {
+  padding: 30px;
+}
+</style>

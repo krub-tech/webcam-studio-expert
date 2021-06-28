@@ -1,14 +1,20 @@
 <template>
   <div class="page-body">
-    <Header />
-    <Nuxt class="content" />
     <div v-if="$store.state.modals.current" class="modal-wrapper">
       <div class="modal-wrapper--inner">
-        <component :is="component" />
+        <component :is="modal" />
         <button class="close-btn" @click="$closeModal" />
       </div>
     </div>
-    <Footer v-if="!$store.getters.isMobile" />
+    <Header class="top" />
+    <div class="center">
+      <Title v-if="$store.state.title" />
+      <transition name="sidebar">
+        <Aside v-show="sidebarShow" />
+      </transition>
+      <Nuxt />
+    </div>
+    <Footer v-if="!$store.getters.isMobile" class="bottom" />
   </div>
 </template>
 
@@ -22,18 +28,22 @@ export default {
   },
   data() {
     return {
-      component: null,
+      modal: null,
     }
   },
   computed: {
-    modal() {
+    sidebarShow() {
+      if (this.$store.getters.isMobile) return this.$store.state.isSidebarOpen
+      return true
+    },
+    modalCurrent() {
       return this.$store.state.modals.current
     },
   },
   watch: {
-    modal(newV, oldV) {
+    modalCurrent(newV, oldV) {
       this.$store.commit('modals/setPrev', oldV)
-      this.component = () => import(`@/components/modals/${this.modal}.vue`)
+      this.modal = () => import(`@/components/modals/${this.modalCurrent}.vue`)
     },
     $route() {
       this.$scrollToTop()
@@ -62,15 +72,41 @@ export default {
 }
 
 .page-body {
-  // display: grid;
-  // grid-template-rows: auto 1fr auto;
-  // min-height: 100vh;
-}
-
-.content {
-  position: relative;
-  top: 60px;
-  min-height: 100vh;
+  display: grid;
+  grid-template-areas:
+    'top'
+    'center';
+  grid-template-columns: minmax(300px, 100%);
+  .top {
+    grid-area: top;
+  }
+  .center {
+    grid-area: center;
+    display: grid;
+    grid-template-areas:
+      'title'
+      'main';
+    grid-template-rows: max-content 1fr;
+    grid-template-columns: 100%;
+    position: relative;
+    top: 60px;
+    height: 100%;
+    min-height: 100vh;
+    .page-title {
+      grid-area: title;
+    }
+    aside {
+      grid-area: aside;
+      position: absolute;
+      z-index: 1;
+    }
+    .studios {
+      grid-area: main;
+    }
+  }
+  .bottom {
+    grid-area: bottom;
+  }
 }
 
 .modal-wrapper {
@@ -79,7 +115,7 @@ export default {
   top: 0;
   bottom: 0;
   overflow: auto;
-  z-index: 2;
+  z-index: 3;
 }
 .modal-wrapper--inner {
   min-height: 100vh;
@@ -123,9 +159,57 @@ export default {
   }
 }
 
+.sidebar-enter-active,
+.sidebar-leave-active {
+  width: 100%;
+  transition: all 1s;
+  left: 0;
+  position: absolute;
+  z-index: 1;
+}
+
+.sidebar-enter,
+.sidebar-leave-to {
+  width: 100%;
+  left: -420px;
+  position: absolute;
+  z-index: 1;
+}
+
 @media screen and (min-width: 420px) {
-  .content {
-    top: 150px;
+  .page-body {
+    grid-template-areas:
+      'top'
+      'center'
+      'bottom';
+    grid-template-rows: auto 1fr auto;
+    .center {
+      display: grid;
+      grid-template-areas:
+        'title title'
+        'aside main';
+      grid-template-rows: max-content 1fr;
+      grid-template-columns: 300px 630px;
+      grid-column-gap: 30px;
+      position: relative;
+      top: 150px;
+      aside {
+        position: relative;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .page-body {
+    justify-items: center;
+    .center {
+      width: 1250px;
+      grid-template-columns: 300px 920px;
+      aside {
+        position: relative;
+      }
+    }
   }
 }
 </style>

@@ -1,24 +1,22 @@
 <template>
-  <header class="header-wrapper">
+  <header class="page-header">
     <div class="header">
-      <div class="header--top">
-        <button class="header--burger" @click="$store.dispatch('menuToggle')">
-          <span class="header--burger-icon" />
-          <span class="header--burger-text">Меню</span>
-        </button>
-        <Logo />
-        <div class="header--btns">
-          <Like class="header--btns-favorites" @click.native="toFavoritesPage" />
-          <button
-            class="header--btns-mail"
-            @click="$store.commit('modals/setCurrent', 'Feedback')"
-          />
-          <!-- <button class="header--btns-profile" /> -->
-        </div>
+      <button class="header--burger" @click="$store.dispatch('menuToggle')">
+        <span class="header--burger-icon" />
+        <span class="header--burger-text">Меню</span>
+      </button>
+      <Logo />
+      <div class="header--btns">
+        <Like class="header--btns-favorites" @click.native="toFavoritesPage" />
+        <button
+          class="header--btns-mail"
+          @click="$store.commit('modals/setCurrent', 'Feedback')"
+        />
+        <!-- <button class="header--btns-profile" /> -->
       </div>
     </div>
+
     <Navbar v-if="$store.getters.isMenuOpen" />
-    <!-- <button class="close-btn" /> -->
   </header>
 </template>
 
@@ -98,7 +96,7 @@ export default {
   background-position: center;
   @content;
 }
-.header-wrapper {
+.page-header {
   position: fixed;
   top: 0;
   left: 0;
@@ -113,32 +111,12 @@ export default {
   }
 }
 .header {
-  height: inherit;
-  white-space: nowrap;
-  & > * {
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 var(--fr);
-  }
-  &--burger {
-    font: normal 1rem 'Averta CY';
-    display: flex;
-    align-items: center;
-    &-icon {
-      @include icon;
-      display: inline-block;
-      background-image: url('~@/assets/svg/i-burger.svg');
-    }
-    &-text {
-      display: none;
-    }
-  }
-  &--top {
-    display: flex;
-    height: var(--fr-3);
-    background-color: white;
-  }
-
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  background-color: white;
+  padding: 0 15px;
   &--btns {
     display: flex;
     flex-wrap: nowrap;
@@ -164,10 +142,24 @@ export default {
       background-image: url('~@/assets/svg/i-profile.svg');
     }
   }
+  &--burger {
+    font: normal 1rem 'Averta CY';
+    display: flex;
+    align-items: center;
+    &-icon {
+      @include icon;
+      display: inline-block;
+      background-image: url('~@/assets/svg/i-burger.svg');
+    }
+    &-text {
+      display: none;
+    }
+  }
 }
 
 @media screen and (min-width: 420px) {
-  .header-wrapper {
+  .page-header {
+    z-index: 2;
     height: 90px;
     min-width: 1024px;
     .close-btn {
@@ -175,12 +167,10 @@ export default {
     }
   }
   .header {
-    & > * {
-      padding: 0 var(--fr-2);
-    }
-    &--top {
-      height: 90px;
-    }
+    height: 90px;
+    width: 960px;
+    padding-left: 30px;
+    padding-right: 0;
     &--burger {
       display: none;
     }
@@ -202,33 +192,17 @@ export default {
       display: inline-block;
     }
   }
-
-  .header-turn {
-    // height: 90px;
-    .header--burger {
-      display: flex;
-      color: var(--black);
-      background: linear-gradient(90deg, #d9f4ff 0%, #e9dbff 100%);
-      border-radius: 8px;
-      padding: 0.625rem 0.75rem;
-      &-text {
-        display: inline-block;
-        margin-left: 0.75rem;
-      }
-    }
-    .logo--desc,
-    .header--btns-mail {
-      display: none;
-    }
-  }
 }
 @media screen and (min-width: 1280px) {
-  .header {
-    width: 1220px;
-    margin: 0 auto;
+  .page-header,
+  .page-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
   }
-  .header--top {
-    padding: 0;
+  .header {
+    width: 1250px;
+    padding-left: 0;
   }
 }
 </style>

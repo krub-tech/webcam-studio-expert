@@ -163,20 +163,18 @@ export default {
   .footer {
     width: 1220;
     justify-content: center;
-    .logo {
-      flex-grow: 2;
-      justify-content: space-between;
-    }
-    .logo--desc {
-      flex-grow: 2;
-      margin: 0;
-      text-align: center;
-    }
   }
   .footer--top {
     width: 1220px;
     margin: 0;
     padding-left: 0;
+  }
+  .logo {
+    flex-grow: 2;
+    justify-content: space-between;
+  }
+  .logo--desc {
+    margin: 0;
   }
 }
 </style>

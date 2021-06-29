@@ -1,14 +1,7 @@
 <template>
   <section class="links">
-    <template v-if="$store.getters.isMobile">
-      <button class="btn-back" @click="$router.push({ name: 'links' })" />
-      <h1>{{ usefulLinksOptions.categories[currentCategory] }}</h1>
-    </template>
-    <template v-else>
-      <h1>Полезные ссылки для вебкам-моделей</h1>
-      <LinksSidebar :options="usefulLinksOptions" :categories="countByCategories" />
-    </template>
-
+    <h1>Полезные ссылки для вебкам-моделей</h1>
+    <LinksSidebar :options="usefulLinksOptions" :categories="countByCategories" />
     <main v-if="links" class="links--list">
       <article
         v-for="link in links"
@@ -57,17 +50,21 @@ export default {
       return this.$store.state.links?.options
     },
   },
+  methods: {
+    linkCategoryClickHandle(category) {
+      this.$router.push({ name: 'links-category', params: { category } })
+    },
+    linkClickHandle(link) {
+      window.open(link)
+    },
+  },
 }
 </script>
 
 <style lang="scss">
 .links {
   // min-height: 100vh;
-  .btn-back {
-    position: absolute;
-    left: 15px;
-    top: 20px;
-  }
+
   h1 {
     font-size: 20px;
     padding: 30px 80px;
@@ -76,16 +73,7 @@ export default {
 }
 
 .links--list {
-  padding: 0 15px;
-}
-.link--title {
-  flex-wrap: wrap;
-  &-name {
-    margin-bottom: 16px;
-  }
-  &-followers {
-    margin-bottom: 38px;
-  }
+  display: none;
 }
 
 .link {
@@ -127,6 +115,43 @@ export default {
   line-height: 20px;
 }
 
+.links--nav {
+  ul {
+    width: 320px;
+    border-radius: 20px;
+    overflow: hidden;
+    margin: 0 auto;
+  }
+
+  li {
+    width: 100%;
+    height: 56px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    background-color: #fefeff;
+    border-bottom: 1px solid var(--grey);
+    padding-left: var(--fr);
+
+    &::after {
+      content: attr(count);
+      position: absolute;
+      color: #8b8ba3;
+      right: 20px;
+    }
+
+    &.active {
+      color: #e95ba8;
+      font-weight: bold;
+
+      &::after {
+        font-weight: normal;
+      }
+    }
+  }
+}
+
 @media screen and (min-width: 420px) {
   .links {
     display: grid;
@@ -142,7 +167,15 @@ export default {
       padding: 60px 40px;
     }
   }
+  .links--nav {
+    grid-area: aside;
 
+    ul {
+      margin: 0;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  }
   .links--list {
     display: block;
     grid-area: links;
@@ -163,18 +196,16 @@ export default {
       margin-top: 0;
     }
   }
-  .link--title {
-    flex-wrap: nowrap;
-    &-name,
-    &-followers {
-      margin-bottom: 0;
-    }
-  }
 }
 
 @media screen and (min-width: 1280px) {
   .links {
     justify-content: center;
+  }
+  .links--nav {
+    ul {
+      border-radius: 20px;
+    }
   }
 }
 </style>

@@ -46,12 +46,12 @@ export default {
     this.$nextTick(() => this.resizeHandle())
     window.addEventListener('resize', this.throttle(this.resizeHandle, 500))
 
-    if (this.$route.params.city) {
-      this.$store.dispatch('cities/updateCurrent', this.$route.params.city)
-    } else {
-      this.$store.dispatch('cities/updateCurrent', 'sankt-peterburg')
-      // this.$router.push('/sankt-peterburg')
-    }
+    const idx = this.$store.state.cities.uniques.findIndex(
+      (el) => el.id === this.$route.params.city
+    )
+    this.$store.dispatch('cities/updateCurrent', this.$route.params.city)
+    this.$store.dispatch('cities/updateCurrent', 'sankt-peterburg')
+    this.$router.push('/sankt-peterburg')
 
     if (sessionStorage.districts) {
       this.$store.dispatch(

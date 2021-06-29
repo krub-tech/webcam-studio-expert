@@ -1,7 +1,7 @@
 <template>
   <section class="links">
     <template v-if="$store.getters.isMobile">
-      <button class="btn-back" @click="$router.push({ name: 'links' })" />
+      <button class="btn-back"></button>
       <h1>{{ usefulLinksOptions.categories[currentCategory] }}</h1>
     </template>
     <template v-else>

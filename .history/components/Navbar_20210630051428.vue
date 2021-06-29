@@ -91,12 +91,11 @@ export default {
             this.$router.push({
               name: 'links',
             })
-          } else {
-            this.$router.push({
-              name: 'links-category',
-              params: { category: 'telegram_channels' },
-            })
           }
+          this.$router.push({
+            name: 'links-category',
+            params: { category: 'telegram_channels' },
+          })
           break
         case 'Оставить жалобу':
           this.$store.commit('modals/setCurrent', 'Claim')

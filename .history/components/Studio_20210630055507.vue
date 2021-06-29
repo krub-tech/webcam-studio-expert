@@ -375,7 +375,7 @@ export default {
 .studio--model_types {
   display: inline-block;
   margin-bottom: 1rem;
-  &:nth-child(odd) {
+  &:nth-child(odd):not(:last-of-type) {
     @include small-point;
     &::after {
       top: 20px;
@@ -395,7 +395,6 @@ export default {
 .studio--min_payout_percentage {
   font-weight: bold;
   margin-right: var(--fr);
-  margin-left: -4px;
 }
 .studio--certificate {
   width: max-content;
@@ -690,15 +689,10 @@ export default {
   .studio--model_types {
     width: max-content;
     margin-right: 30px;
-    &:nth-child(even) {
+    &:nth-child(even):not(:last-of-type) {
       @include small-point;
       &::after {
         top: 20px;
-      }
-    }
-    &:nth-child(3) {
-      &::after {
-        display: none;
       }
     }
   }

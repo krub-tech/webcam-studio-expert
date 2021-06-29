@@ -395,7 +395,6 @@ export default {
 .studio--min_payout_percentage {
   font-weight: bold;
   margin-right: var(--fr);
-  margin-left: -4px;
 }
 .studio--certificate {
   width: max-content;

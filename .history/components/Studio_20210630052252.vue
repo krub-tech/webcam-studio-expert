@@ -345,15 +345,6 @@ export default {
   margin-right: 1rem;
   @include small-point;
 }
-.studio--models_age:last-of-type {
-  position: relative;
-  &::after {
-    content: 'лет';
-    position: absolute;
-    right: 0;
-    transform: translateX(calc(100% + 4px));
-  }
-}
 .studio--main {
   display: flex;
   flex-wrap: wrap;
@@ -365,6 +356,7 @@ export default {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    padding: 15px 0;
   }
   .work-with-perc-cert {
     clear: both;
@@ -374,14 +366,8 @@ export default {
 }
 .studio--model_types {
   display: inline-block;
+  width: 50%;
   margin-bottom: 1rem;
-  &:nth-child(odd) {
-    @include small-point;
-    &::after {
-      top: 20px;
-    }
-  }
-
   img {
     width: max-content;
     display: inline-block;
@@ -395,7 +381,6 @@ export default {
 .studio--min_payout_percentage {
   font-weight: bold;
   margin-right: var(--fr);
-  margin-left: -4px;
 }
 .studio--certificate {
   width: max-content;
@@ -486,15 +471,6 @@ export default {
   @include row-gap;
 }
 .studio--remark {
-  display: block;
-  font-weight: normal;
-  font-size: 1rem;
-  line-height: 1.5rem;
-  border: 1px solid #e5e5f0;
-  border-radius: 6px;
-  padding: 1rem var(--fr);
-  @include row-gap;
-
   & > * {
     @include line-height;
   }
@@ -689,27 +665,46 @@ export default {
   }
   .studio--model_types {
     width: max-content;
-    margin-right: 30px;
-    &:nth-child(even) {
-      @include small-point;
+    &:not(:first-child):not(:nth-child(4)) {
+      @include small-point-from-left;
+    }
+    &:first-child {
+      margin-right: 18px;
+      position: relative;
       &::after {
-        top: 20px;
+        content: '';
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        bottom: 0;
+        transform: translateY(-50%);
+        border-radius: 50%;
+        background-color: var(--black);
+        opacity: 0.1;
+        right: -18px;
       }
     }
-    &:nth-child(3) {
-      &::after {
-        display: none;
-      }
-    }
+    margin-right: 1.5rem;
   }
   .studio--min_payout_percentage {
     margin-top: 6px;
+    margin-left: 8px;
   }
   .studio--address {
     margin: var(--fr-l) 0 var(--fr-2);
   }
   .studio--slider {
     height: 360px;
+  }
+  .studio--remark {
+    display: block;
+    font-weight: normal;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    border: 1px solid #e5e5f0;
+    border-radius: 6px;
+    padding: 1rem var(--fr);
+    @include row-gap;
   }
   .studio--interview {
     position: relative;

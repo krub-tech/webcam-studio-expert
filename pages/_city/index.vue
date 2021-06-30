@@ -44,7 +44,7 @@ export default {
   },
   async fetch() {
     const currentCity = this.$route.params.city
-
+    const { page } = this.$store.state.studios
     const studios = await this.$api.studios.getByQuery({
       ...this.$store.getters['studios/query'],
       city: currentCity,
@@ -52,6 +52,7 @@ export default {
     this.$store.commit('studios/updateCurrentStudios', studios.results)
     this.$store.commit('studios/updateAllByCityLength', studios.count_by_city)
     this.$store.commit('studios/updateAllWithParamsLength', studios.count)
+    this.$store.commit('studios/updatePageNumber', page)
     const idx = this.$store.state.cities.uniques.findIndex(
       (el) => el.id === currentCity
     )

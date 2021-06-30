@@ -52,11 +52,11 @@ export default {
     this.$store.commit('studios/updateCurrentStudios', studios.results)
     this.$store.commit('studios/updateAllByCityLength', studios.count_by_city)
     this.$store.commit('studios/updateAllWithParamsLength', studios.count)
+    this.$store.commit('studios/updatePageNumber', page)
     const idx = this.$store.state.cities.uniques.findIndex(
       (el) => el.id === currentCity
     )
     this.cityName = this.$store.state.cities.uniques[idx].name
-    this.$store.dispatch('studios/paginate', page)
   },
   head() {
     return {

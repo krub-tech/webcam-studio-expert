@@ -511,9 +511,6 @@ export default {
     font-size: 1rem;
     @include line-height;
   }
-  ul {
-    list-style-type: none;
-  }
 }
 .studio--desc {
   white-space: pre-wrap;
@@ -522,9 +519,6 @@ export default {
   }
   & > *:not(h4) {
     @include line-height;
-  }
-  ul {
-    list-style-type: none;
   }
 }
 

@@ -511,20 +511,14 @@ export default {
     font-size: 1rem;
     @include line-height;
   }
-  ul {
-    list-style-type: none;
-  }
 }
 .studio--desc {
   white-space: pre-wrap;
   h4 {
     margin-bottom: 20px;
   }
-  & > *:not(h4) {
+  *:not(h4) {
     @include line-height;
-  }
-  ul {
-    list-style-type: none;
   }
 }
 

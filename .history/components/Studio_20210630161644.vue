@@ -375,10 +375,11 @@ export default {
 .studio--model_types {
   display: inline-block;
   margin-bottom: 1rem;
-
-  @include small-point;
-  &::after {
-    top: 20px;
+  &:nth-child(odd) {
+    @include small-point;
+    &::after {
+      top: 20px;
+    }
   }
 
   img {
@@ -511,9 +512,6 @@ export default {
     font-size: 1rem;
     @include line-height;
   }
-  ul {
-    list-style-type: none;
-  }
 }
 .studio--desc {
   white-space: pre-wrap;
@@ -522,9 +520,6 @@ export default {
   }
   & > *:not(h4) {
     @include line-height;
-  }
-  ul {
-    list-style-type: none;
   }
 }
 

@@ -137,7 +137,7 @@ export default {
     height: 130px;
     img {
       width: 50%;
-      object-fit: contain;
+      object-fit: cover;
     }
   }
   &--title {

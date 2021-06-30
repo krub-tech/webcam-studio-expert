@@ -510,9 +510,6 @@ export default {
     font-weight: normal;
     font-size: 1rem;
     @include line-height;
-    & > * {
-      @include line-height;
-    }
   }
   ul {
     padding-left: 20px;
@@ -523,11 +520,9 @@ export default {
   h4 {
     margin-bottom: 20px;
   }
+  @include line-height;
   & > *:not(h4) {
     @include line-height;
-    & > * {
-      @include line-height;
-    }
   }
   ul {
     padding-left: 20px;

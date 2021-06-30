@@ -29,5 +29,10 @@ export default {
       ],
     }
   },
+  // computed: {
+  //   studios() {
+  //     return this.$store.state.studios.currents
+  //   },
+  // },
 }
 </script>

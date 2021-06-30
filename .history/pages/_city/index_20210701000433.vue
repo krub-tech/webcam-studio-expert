@@ -44,7 +44,7 @@ export default {
   },
   async fetch() {
     const currentCity = this.$route.params.city
-    const { page } = this.$store.state.studios
+    console.log(this.$store.state.studios.page)
     const studios = await this.$api.studios.getByQuery({
       ...this.$store.getters['studios/query'],
       city: currentCity,
@@ -56,7 +56,7 @@ export default {
       (el) => el.id === currentCity
     )
     this.cityName = this.$store.state.cities.uniques[idx].name
-    this.$store.dispatch('studios/paginate', page)
+    console.log(this.$store.state.studios.page)
   },
   head() {
     return {

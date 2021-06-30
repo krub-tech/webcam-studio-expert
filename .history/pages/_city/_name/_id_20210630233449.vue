@@ -7,13 +7,13 @@
 
 <script>
 export default {
-  name: 'StudioById',
+  name: "StudioById",
   async asyncData(context) {
-    const studio = await context.$api.studios.getById(context.route.params.id)
-    const studios = await context.$api.studios
-      .getByQuery(context.store.getters['studios/query'])
-      .then((r) => r.results)
-    return { studio, studios }
+    const studio = await context.$api.studios.getById(context.route.params.id);
+    const studios = await context.$api.studios.getByQuery(
+      context.$store.getters["studios/query"]
+    );
+    return { studio, studios };
   },
   data: () => ({
     studio: {},
@@ -27,7 +27,12 @@ export default {
           description: this.studio.advantages,
         },
       ],
-    }
+    };
   },
-}
+  computed: {
+    studios() {
+      return this.$store.state.studios.currents;
+    },
+  },
+};
 </script>

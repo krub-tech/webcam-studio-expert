@@ -13,6 +13,7 @@ export default {
     const studios = await context.$api.studios
       .getByQuery(context.store.getters['studios/query'])
       .then((r) => r.results)
+    console.log(studios)
     return { studio, studios }
   },
   data: () => ({
@@ -29,5 +30,10 @@ export default {
       ],
     }
   },
+  // computed: {
+  //   studios() {
+  //     return this.$store.state.studios.currents
+  //   },
+  // },
 }
 </script>

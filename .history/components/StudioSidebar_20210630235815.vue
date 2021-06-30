@@ -1,7 +1,7 @@
 <template>
   <aside class="studio--sidebar">
     <div class="studio--sidebar-header">
-      <button class="btn-filter" @click="$router.go(-1)">
+      <button class="btn-filter" @click="back">
         <img src="@/assets/svg/i-back_arrow.svg" />
         К фильтру
       </button>
@@ -79,6 +79,9 @@ export default {
           },
         })
       }
+    },
+    back() {
+      this.$router.go(-1)
     },
   },
 }

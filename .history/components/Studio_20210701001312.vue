@@ -510,12 +510,8 @@ export default {
     font-weight: normal;
     font-size: 1rem;
     @include line-height;
-    & > * {
-      @include line-height;
-    }
   }
   ul {
-    padding-left: 20px;
   }
 }
 .studio--desc {
@@ -525,12 +521,8 @@ export default {
   }
   & > *:not(h4) {
     @include line-height;
-    & > * {
-      @include line-height;
-    }
   }
   ul {
-    padding-left: 20px;
   }
 }
 

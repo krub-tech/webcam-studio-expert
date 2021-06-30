@@ -10,10 +10,14 @@ export default {
   name: 'StudioById',
   async asyncData(context) {
     const studio = await context.$api.studios.getById(context.route.params.id)
-    return { studio }
+    const studios = await context.$api.studios
+      .getByQuery(context.store.getters['studios/query'])
+      .then((r) => r.results)
+    return { studio, studios }
   },
   data: () => ({
     studio: {},
+    studios: [],
   }),
   head() {
     return {
@@ -24,11 +28,6 @@ export default {
         },
       ],
     }
-  },
-  computed: {
-    studios() {
-      return this.$store.state.studios.currents
-    },
   },
 }
 </script>

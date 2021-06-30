@@ -138,6 +138,9 @@ export default {
     img {
       width: 50%;
       object-fit: contain;
+      &:nth-child(2) {
+        object-fit: cover;
+      }
     }
   }
   &--title {

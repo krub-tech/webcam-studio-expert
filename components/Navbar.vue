@@ -87,10 +87,16 @@ export default {
           this.$store.commit('modals/setCurrent', 'SpecSelection')
           break
         case 'Полезные ссылки':
-          this.$router.push({
-            name: 'links-category',
-            params: { category: 'telegram_channels' },
-          })
+          if (this.$store.getters.isMobile) {
+            this.$router.push({
+              name: 'links',
+            })
+          } else {
+            this.$router.push({
+              name: 'links-category',
+              params: { category: 'telegram_channels' },
+            })
+          }
           break
         case 'Оставить жалобу':
           this.$store.commit('modals/setCurrent', 'Claim')

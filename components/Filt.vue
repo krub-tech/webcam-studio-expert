@@ -57,7 +57,7 @@
       </div>
       <hr />
       <div class="min_payout_percentage">
-        <MultiRange
+        <Range
           :label="'Минимальный % выплат'"
           :val="+$store.state.filter.params.min_payout_percentage"
           :min="30"
@@ -159,7 +159,6 @@
 import Checkbox from '@/components/form/Checkbox'
 import Radio from '@/components/form/Radio'
 import Range from '@/components/form/Range'
-import MultiRange from '@/components/form/MultiRange'
 import InputSearch from '@/components/form/InputSearch'
 import DistrictsSelect from '@/components/form/modules/DistrictsSelect'
 import MetroSelect from '@/components/form/modules/MetroSelect'
@@ -170,7 +169,6 @@ export default {
     Checkbox,
     Radio,
     Range,
-    MultiRange,
     InputSearch,
     DistrictsSelect,
     MetroSelect,

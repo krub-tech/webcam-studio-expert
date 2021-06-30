@@ -517,6 +517,9 @@ export default {
   ul {
     padding-left: 20px;
   }
+  ul {
+    list-style-type: none;
+  }
 }
 .studio--desc {
   white-space: pre-wrap;
@@ -531,6 +534,9 @@ export default {
   }
   ul {
     padding-left: 20px;
+  }
+  ul {
+    list-style-type: none;
   }
 }
 

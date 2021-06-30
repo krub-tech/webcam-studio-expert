@@ -365,6 +365,7 @@ export default {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    padding: 15px 0;
   }
   .work-with-perc-cert {
     clear: both;
@@ -374,6 +375,7 @@ export default {
 }
 .studio--model_types {
   display: inline-block;
+  width: 50%;
   margin-bottom: 1rem;
 
   @include small-point;
@@ -701,17 +703,12 @@ export default {
   .studio--model_types {
     width: max-content;
     margin-right: 30px;
-    &:nth-child(even) {
+
       @include small-point;
       &::after {
         top: 20px;
       }
-    }
-    &:nth-child(3) {
-      &::after {
-        display: none;
-      }
-    }
+
   }
   .studio--min_payout_percentage {
     margin-top: 6px;

@@ -517,9 +517,6 @@ export default {
   ul {
     padding-left: 20px;
   }
-  ul {
-    list-style-type: none;
-  }
 }
 .studio--desc {
   white-space: pre-wrap;
@@ -534,9 +531,6 @@ export default {
   }
   ul {
     padding-left: 20px;
-  }
-  ul {
-    list-style-type: none;
   }
 }
 
@@ -707,17 +701,12 @@ export default {
   .studio--model_types {
     width: max-content;
     margin-right: 30px;
-    &:nth-child(even) {
+
       @include small-point;
       &::after {
         top: 20px;
       }
-    }
-    &:nth-child(3) {
-      &::after {
-        display: none;
-      }
-    }
+
   }
   .studio--min_payout_percentage {
     margin-top: 6px;

@@ -15,7 +15,17 @@
       </div>
       <div class="card--title">
         <!-- :class="{ 'card--title-best': data.haveCrown }" -->
-        <h3>{{ data.name }}</h3>
+        <nuxt-link
+          :to="{
+            name: 'city-name-id',
+            params: {
+              city: $route.params.city,
+              name: data.name,
+              id: data.id,
+            },
+          }"
+          >{{ data.name }}</nuxt-link
+        >
         <Like :id="data.id" />
       </div>
       <template v-for="type in Object.values(data.studio_type)">
@@ -147,8 +157,10 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    h3 {
+    a {
       font-size: var(--fr);
+      font-weight: bold;
+      color: inherit;
       margin: 24px 0;
     }
     &-best {

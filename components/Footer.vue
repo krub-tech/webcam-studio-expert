@@ -3,15 +3,14 @@
     <div class="footer">
       <div class="footer--top">
         <Logo :logo="`i-logo_footer`" />
-        <router-link to="/"> Каталог студий </router-link>
+        <nuxt-link to="/"> Каталог студий </nuxt-link>
       </div>
       <div class="footer--mid">
         <div class="footer--mid-inner">
-          <a href="#" @click.prevent="modalLinkClickHandle('SpecSelection')"
-            >Индивидуальный подбор студии</a
-          >
-          <a
-            href="#"
+          <button @click.prevent="modalLinkClickHandle('SpecSelection')">
+            Индивидуальный подбор студии
+          </button>
+          <button
             @click.prevent="
               $router.push({
                 name: 'links-category',
@@ -20,29 +19,28 @@
             "
           >
             Полезные ссылки
-          </a>
-          <a href="#" @click.prevent="modalLinkClickHandle('Proposal')"
-            >Добавить студию</a
-          >
-          <router-link to="/certificate"> Сертификация </router-link>
-          <a href="#" @click.prevent="modalLinkClickHandle('Claim')">Оставить жалобу</a>
-          <a href="#" @click.prevent="modalLinkClickHandle('Feedback')"
-            >Обратная связь</a
-          >
+          </button>
+          <button @click.prevent="modalLinkClickHandle('Proposal')">
+            Добавить студию
+          </button>
+          <nuxt-link to="/certificate"> Сертификация </nuxt-link>
+          <button @click.prevent="modalLinkClickHandle('Claim')">
+            Оставить жалобу
+          </button>
+          <button @click.prevent="modalLinkClickHandle('Feedback')">
+            Обратная связь
+          </button>
         </div>
       </div>
       <div class="footer--bott">
         <div class="footer--bott-inner">
           <p>© 2021 webcam-studio.expert</p>
-          <a href="#" to="/terms_of_use" @click.prevent="modalLinkClickHandle('Terms')"
-            >Пользовательское соглашение</a
-          >
-          <a
-            href="#"
-            to="/privacy_policy"
-            @click.prevent="modalLinkClickHandle('Privacy')"
-            >Политика конфиденциальности</a
-          >
+          <button to="/terms_of_use" @click.prevent="modalLinkClickHandle('Terms')">
+            Пользовательское соглашение
+          </button>
+          <button to="/privacy_policy" @click.prevent="modalLinkClickHandle('Privacy')">
+            Политика конфиденциальности
+          </button>
         </div>
       </div>
     </div>
@@ -63,7 +61,6 @@ export default {
   methods: {
     modalLinkClickHandle(name) {
       this.$store.commit('modals/setCurrent', name)
-      //   this.$scrollToTop()
     },
   },
 }
@@ -107,7 +104,11 @@ export default {
     flex-wrap: wrap;
     height: 278px;
     white-space: nowrap;
+    button,
     a {
+      text-align: left;
+      font-weight: normal;
+      font-size: 14px;
       color: var(--white);
     }
     .logo {

@@ -20,7 +20,7 @@
             name: 'city-name-id',
             params: {
               city: $route.params.city,
-              name: data.name,
+              name,
               id: data.id,
             },
           }"
@@ -75,6 +75,8 @@
 <script>
 import Like from '@/components/buttons/Like'
 
+import CyrillicToTranslit from 'cyrillic-to-translit-js'
+
 export default {
   name: 'Card',
   components: { Like },
@@ -88,6 +90,10 @@ export default {
     studiosOptions() {
       return this.$store.state.studios.options
     },
+    name() {
+      const cyrillicToTranslit = new CyrillicToTranslit()
+      return cyrillicToTranslit.transform(this.data.name).toLowerCase()
+    },
   },
   methods: {
     arrayFromObject(object) {
@@ -99,7 +105,7 @@ export default {
           name: 'city-name-id',
           params: {
             city: this.$route.params.city,
-            name: data.name,
+            name: this.name,
             id: data.id,
           },
         })

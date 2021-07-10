@@ -6,14 +6,21 @@
     </p>
     <ul v-show="isOpenSelect" class="options">
       <li
-        v-for="option in options"
+        v-for="(option, idx) in options"
         :key="option.id"
         class="option"
         :value="option"
         :selected="isSelected(option)"
         @click="optionClickHandler(option)"
       >
-        {{ option }}
+        <template v-if="links">
+          <nuxt-link :to="links[idx]">
+            {{ option }}
+          </nuxt-link>
+        </template>
+        <template v-else>
+          {{ option }}
+        </template>
       </li>
     </ul>
   </div>
@@ -33,6 +40,10 @@ export default {
     },
     selected: {
       type: [Array, String],
+      default: null,
+    },
+    links: {
+      type: Array,
       default: null,
     },
   },

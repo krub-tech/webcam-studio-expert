@@ -58,7 +58,7 @@
 
     <div class="min_payout_percentage">
       <MultiRange
-        :label="'Минимальный % выплат'"
+        :label="'Мин. и Макс. % выплат'"
         :val="+formData.min_payout_percentage"
         :min="30"
         :min-in-val="formData.min_payout_percentage"

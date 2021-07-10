@@ -25,6 +25,7 @@ export const getters = {
 export const actions = {
   async updateCurrents(ctx) {
     const studios = await this.$api.studios.getByQuery(ctx.getters.query)
+    console.dir(studios)
     ctx.commit('updateAllByCityLength', studios.count_by_city)
     ctx.commit('updateAllWithParamsLength', studios.count)
     ctx.commit('updateCurrentStudios', studios.results)

@@ -5,6 +5,7 @@
         <Select
           class="select--cities"
           :options="cities.map((city) => city.name)"
+          :links="cities.map((city) => city.id)"
           :value="$store.state.cities.current.name"
           @selectedOption="selectCityHandle"
         />
@@ -20,13 +21,15 @@
           />
         </div>
         <a
-          href="#"
+          :href="'/certificate'"
           class="nav--item nav--item-certificate"
           @click.prevent="toCertificate"
         >
           Сертификация
         </a>
-        <a href="#" class="nav--item" @click.prevent="toAddStudio">Добавить студию</a>
+        <button href="#" class="nav--item" @click.prevent="toAddStudio">
+          Добавить студию
+        </button>
       </div>
     </nav>
   </div>
@@ -174,6 +177,9 @@ export default {
     border-radius: 0.375rem;
     &--cities {
       .options {
+        a {
+          color: var(--color-main);
+        }
         width: 264px;
       }
     }

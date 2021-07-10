@@ -21,10 +21,10 @@ export default {
   }),
   head() {
     return {
-      title: `Вебкам студия ${this.studio.name}`,
+      title: this.studio.meta_title,
       meta: [
         {
-          description: this.studio.advantages,
+          description: this.studio.meta_description,
         },
       ],
     }

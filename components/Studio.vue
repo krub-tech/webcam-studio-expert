@@ -268,13 +268,19 @@ export default {
   @content;
 }
 
+.studio-wrapper {
+  padding-top: 20px;
+  background-color: var(--white);
+}
 .studio {
   min-width: 300px;
+  margin: 0 var(--fr-l);
   p {
     display: inline-block;
   }
   h4 {
     font-size: 1.125rem;
+    // margin-bottom: 2rem;
   }
 }
 .studio--title {
@@ -339,6 +345,15 @@ export default {
   margin-right: 1rem;
   @include small-point;
 }
+.studio--models_age:last-of-type {
+  position: relative;
+  &::after {
+    content: 'лет';
+    position: absolute;
+    right: 0;
+    transform: translateX(calc(100% + 4px));
+  }
+}
 .studio--main {
   display: flex;
   flex-wrap: wrap;
@@ -350,7 +365,6 @@ export default {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    padding: 15px 0;
   }
   .work-with-perc-cert {
     clear: both;
@@ -360,8 +374,13 @@ export default {
 }
 .studio--model_types {
   display: inline-block;
-  width: 50%;
   margin-bottom: 1rem;
+
+  @include small-point;
+  &::after {
+    top: 20px;
+  }
+
   img {
     width: max-content;
     display: inline-block;
@@ -375,6 +394,7 @@ export default {
 .studio--min_payout_percentage {
   font-weight: bold;
   margin-right: var(--fr);
+  margin-left: -4px;
 }
 .studio--certificate {
   width: max-content;
@@ -465,7 +485,18 @@ export default {
   @include row-gap;
 }
 .studio--remark {
-  display: none;
+  display: block;
+  font-weight: normal;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  border: 1px solid #e5e5f0;
+  border-radius: 6px;
+  padding: 1rem var(--fr);
+  @include row-gap;
+
+  & > * {
+    @include line-height;
+  }
 }
 .studio--bonus {
   padding-bottom: 40px;
@@ -479,6 +510,12 @@ export default {
     font-weight: normal;
     font-size: 1rem;
     @include line-height;
+    & > * {
+      @include line-height;
+    }
+  }
+  ul {
+    padding-left: 20px;
   }
 }
 .studio--desc {
@@ -487,9 +524,13 @@ export default {
     margin-bottom: 20px;
   }
   & > *:not(h4) {
-    font-weight: normal;
-    font-size: 1rem;
     @include line-height;
+    & > * {
+      @include line-height;
+    }
+  }
+  ul {
+    padding-left: 20px;
   }
 }
 
@@ -600,12 +641,24 @@ export default {
 }
 
 @media screen and (min-width: 420px) {
+  .studio-wrapper {
+    background: none;
+    display: grid;
+    grid-template-columns: 300px 640px;
+    grid-template-areas: 'studios-list studio';
+    column-gap: var(--fr-2);
+    padding: var(--fr-2);
+    .studio--aside {
+      display: block;
+    }
+  }
   .studio {
-    grid-area: main;
+    grid-area: studio;
     width: 640px;
     background-color: white;
     border-radius: 1rem;
     padding: var(--fr-2) var(--fr-l) var(--fr) var(--fr-l);
+    margin: 0;
   }
   .studio--title {
     @include bottom-line;
@@ -647,46 +700,22 @@ export default {
   }
   .studio--model_types {
     width: max-content;
-    &:not(:first-child):not(:nth-child(4)) {
-      @include small-point-from-left;
-    }
-    &:first-child {
-      margin-right: 18px;
-      position: relative;
+    margin-right: 30px;
+
+      @include small-point;
       &::after {
-        content: '';
-        position: absolute;
-        width: 6px;
-        height: 6px;
-        bottom: 0;
-        transform: translateY(-50%);
-        border-radius: 50%;
-        background-color: var(--black);
-        opacity: 0.1;
-        right: -18px;
+        top: 20px;
       }
-    }
-    margin-right: 1.5rem;
+
   }
   .studio--min_payout_percentage {
     margin-top: 6px;
-    margin-left: 8px;
   }
   .studio--address {
     margin: var(--fr-l) 0 var(--fr-2);
   }
   .studio--slider {
     height: 360px;
-  }
-  .studio--remark {
-    display: block;
-    font-weight: normal;
-    font-size: 1rem;
-    line-height: 1.5rem;
-    border: 1px solid #e5e5f0;
-    border-radius: 6px;
-    padding: 1rem var(--fr);
-    @include row-gap;
   }
   .studio--interview {
     position: relative;

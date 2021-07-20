@@ -1,41 +1,33 @@
 <template>
-  <Studio :studio="studio" />
+  <section class="studio-wrapper">
+    <StudioSidebar v-if="!$store.getters.isMobile" :studios="studios" />
+    <Studio :studio="studio" />
+  </section>
 </template>
 
 <script>
 export default {
   name: 'StudioById',
   async asyncData(context) {
-    context.store.commit('setTitle', null)
     const studio = await context.$api.studios.getById(context.route.params.id)
-    return { studio }
+    const studios = await context.$api.studios
+      .getByQuery(context.store.getters['studios/query'])
+      .then((r) => r.results)
+    return { studio, studios }
   },
   data: () => ({
     studio: {},
+    studios: [],
   }),
   head() {
     return {
-      title: `Вебкам студия ${this.studio.name}`,
+      title: this.studio.meta_title,
       meta: [
         {
-          description: this.studio.advantages,
+          description: this.studio.meta_description,
         },
       ],
     }
   },
-  beforeMount() {
-    const el = document.querySelector('.page-body .center')
-    el.classList.add('padding')
-  },
-  beforeDestroy() {
-    const el = document.querySelector('.page-body .center')
-    el.classList.remove('padding')
-  },
 }
 </script>
-
-<style lang="scss">
-.padding {
-  padding: 15px;
-}
-</style>

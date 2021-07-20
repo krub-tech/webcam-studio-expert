@@ -1,38 +1,43 @@
 <template>
-  <nav class="page-nav">
-    <div class="nav">
-      <Select
-        class="select-cities"
-        :options="cities.map((city) => city.name)"
-        :value="$store.state.cities.current.name"
-        @selectedOption="selectCityHandle"
-      />
-      <div class="nav--inner">
+  <div class="nav-wrapper">
+    <nav class="nav">
+      <div v-if="cities && $store.state.cities.current" class="nav--city">
         <Select
-          class="nav--item"
-          :options="for_models"
-          :value="`Моделям`"
-          static-placeholder
-          @selectedOption="forModelsClickHandle"
+          class="select--cities"
+          :options="cities.map((city) => city.name)"
+          :links="cities.map((city) => city.id)"
+          :value="$store.state.cities.current.name"
+          @selectedOption="selectCityHandle"
         />
-
-        <Select
-          class="nav--item"
-          :options="for_studios"
-          :value="`Студиям`"
-          static-placeholder
-          @selectedOption="forStudiosClickHandle"
-        />
-
-        <a href="#" class="nav--item">Специалистам</a>
-        <a href="#" class="nav--item">Статьи и новости</a>
       </div>
-    </div>
-  </nav>
+      <div class="nav--inner">
+        <div class="nav--item">
+          <Select
+            class="select--for_models"
+            :options="for_models"
+            :value="`Моделям`"
+            static-placeholder
+            @selectedOption="forModelsClickHandle"
+          />
+        </div>
+        <a
+          :href="'/certificate'"
+          class="nav--item nav--item-certificate"
+          @click.prevent="toCertificate"
+        >
+          Сертификация
+        </a>
+        <button href="#" class="nav--item" @click.prevent="toAddStudio">
+          Добавить студию
+        </button>
+      </div>
+    </nav>
+  </div>
 </template>
 
 <script>
-import Select from '@/components/form/Select'
+import Select from '@/components/Select'
+import studios from '~/api/studios'
 
 export default {
   components: {
@@ -49,19 +54,8 @@ export default {
       for_models: [
         'Каталог студий',
         'Индивидуальный подбор студии',
-        'Тренинги',
         'Полезные ссылки',
-        'Психологическая помощь',
-        'Черный список студий',
         'Оставить жалобу',
-      ],
-      for_studios: [
-        'Добавление в каталог',
-        'Сертификация',
-        'Специалисты',
-        'Тренинги для админов',
-        'Помощь в организации тренингов',
-        'Полезное студиям',
       ],
     }
   },
@@ -73,13 +67,19 @@ export default {
   methods: {
     selectCityHandle(city) {
       const cityData = this.cities.find((el) => el.name === city)
+
+      this.$store.commit('studios/updateSearchQuery', null)
+      this.$store.commit('filter/resetParams')
+      this.$store.commit('filter/resetQuery')
+      this.$store.commit('studios/updatePageNumber', 1)
+      this.$store.commit('menuClose')
       this.$store.dispatch('cities/updateCurrent', cityData.id)
-      this.$store.dispatch('filter/reset')
+      sessionStorage.filter = JSON.stringify(this.$store.state.filter.params)
+
       this.$router.push({
         name: 'city',
         params: { city: cityData.id },
       })
-      this.$store.commit('menuClose')
     },
     forModelsClickHandle(data) {
       switch (data) {
@@ -89,42 +89,20 @@ export default {
         case 'Индивидуальный подбор студии':
           this.$store.commit('modals/setCurrent', 'SpecSelection')
           break
-        case 'Тренинги':
-          this.$router.push({
-            name: 'trainings',
-          })
-          break
         case 'Полезные ссылки':
-          this.$router.push({
-            name: 'links-category',
-            params: { category: 'telegram_channels' },
-          })
-          this.$store.commit('setTitle', `Полезные ссылки для вебкам-моделей`)
-          this.$store.commit('sidebarOpen')
+          if (this.$store.getters.isMobile) {
+            this.$router.push({
+              name: 'links',
+            })
+          } else {
+            this.$router.push({
+              name: 'links-category',
+              params: { category: 'telegram_channels' },
+            })
+          }
           break
         case 'Оставить жалобу':
           this.$store.commit('modals/setCurrent', 'Claim')
-          break
-        default:
-          break
-      }
-      this.$store.commit('menuClose')
-    },
-    forStudiosClickHandle(data) {
-      switch (data) {
-        case 'Добавление в каталог':
-          this.toAddStudio()
-          break
-        case 'Сертификация':
-          this.toCertificate()
-          break
-        case 'Специалисты':
-          break
-        case 'Тренинги для админов':
-          break
-        case 'Помощь в организации тренингов':
-          break
-        case 'Полезное студиям':
           break
         default:
           break
@@ -146,6 +124,7 @@ export default {
 <style lang="scss">
 @mixin small-point {
   position: relative;
+  margin-right: 28px;
   &::after {
     content: '';
     position: absolute;
@@ -156,43 +135,57 @@ export default {
     border-radius: 50%;
     background-color: var(--black);
     opacity: 0.1;
-    right: -20px;
+    right: -40px;
     @content;
   }
+}
+.slide-up-enter-active,
+.slide-up-leave-active {
+  position: fixed;
+  top: 60px;
+}
+.slide-up-enter,
+.slide-up-leave-to {
+  z-index: -1;
+  top: -480px;
+}
+
+.nav-wrapper {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  background-color: #fbfbfd;
+  border-radius: 20px;
+  overflow: hidden;
+  z-index: 1;
+  padding-top: 30px;
 }
 .nav {
   white-space: nowrap;
   width: 312px;
-  left: 15px;
   position: absolute;
   height: max-content;
-
+  display: flex;
+  flex-wrap: wrap;
   border-radius: var(--fr);
   box-shadow: 0px 0px 30px rgba(91, 91, 131, 0.22);
   background-color: var(--white);
   .select {
+    flex-shrink: 2;
     border-radius: 0.375rem;
-    &-cities {
-      width: 100%;
-      height: 56px;
-      border-bottom: 1px solid var(--grey);
+    &--cities {
       .options {
+        a {
+          color: var(--color-main);
+        }
         width: 264px;
       }
-      p {
-        padding-left: 20px;
-      }
     }
-    &.nav--item {
-      @include small-point;
+    &--for_models {
       .options {
         width: 314px;
-      }
-      .arrow {
-        display: none;
-      }
-      p {
-        padding-left: 20px;
       }
     }
   }
@@ -209,43 +202,47 @@ export default {
     align-items: center;
     border-bottom: 1px solid var(--grey);
     &[href] {
-      padding-left: 20px;
       color: inherit;
       &:last-of-type {
         border: none;
       }
     }
     .select {
-      .arrow {
-        display: none;
-      }
+      padding-left: 5px;
     }
+  }
+  a.nav--item {
+    padding-left: var(--fr);
+  }
+  .nav--city {
+    @extend .nav--item;
   }
 }
 
 @media screen and (min-width: 420px) {
-  .page-nav {
-    width: 100%;
+  .nav-wrapper {
+    justify-content: flex-start;
+    height: 60px;
+    min-width: 1024px;
+    position: static;
+    overflow: auto;
     background: linear-gradient(90deg, #d9f4ff 0%, #e9dbff 100%);
+    padding-top: 0;
+    border-radius: 0;
+    &::before {
+      display: none;
+    }
   }
   .nav {
-    width: 960px;
+    width: 1010px;
     height: var(--fr-3);
-    display: flex;
     flex-wrap: nowrap;
     align-items: center;
     background: none;
     box-shadow: none;
-    padding-left: 30px;
+    padding-left: var(--fr-2);
     margin: 0;
-    position: relative;
-    left: 0;
     .select {
-      &-cities {
-        width: max-content;
-        height: max-content;
-        border: none;
-      }
       &:hover {
         background-color: rgba(#ffffff, 0.7);
         border-radius: 6px;
@@ -255,37 +252,27 @@ export default {
       display: flex;
       flex-wrap: nowrap;
       align-items: center;
-      justify-content: flex-end;
+      justify-content: center;
       flex-grow: 2;
     }
     .nav--item {
       width: max-content;
-      height: 28px;
+      height: var(--fr-l);
       display: flex;
       align-items: center;
       border-bottom: none;
-      margin-left: 36px;
       &[href] {
         font: inherit;
         color: inherit;
-        padding: 0 12px;
-        &:not(:last-of-type) {
-          @include small-point;
-        }
-        &:last-of-type {
-          padding-right: 0;
-        }
-        &:hover {
-          text-decoration: underline;
-        }
-      }
-      &.select {
-        p {
-          padding-left: 14px;
-        }
+        margin-left: var(--fr-2);
       }
     }
+    .nav--city {
+      border-bottom: none;
+      padding-left: 0;
+    }
   }
+  .select--for_models,
   .nav--item-certificate {
     @include small-point;
   }
@@ -295,14 +282,23 @@ export default {
     }
   }
 }
-
 @media screen and (min-width: 1280px) {
+  .slide-up-enter-active,
+  .slide-up-leave-active {
+    opacity: 1;
+    transition: opacity 500ms;
+  }
+  .slide-up-enter,
+  .slide-up-leave-to {
+    opacity: 0;
+    top: 0;
+  }
+  .nav-wrapper {
+    justify-content: center;
+  }
   .nav {
-    padding-left: 0;
-    width: 1250px;
-    .nav--inner {
-      justify-content: center;
-    }
+    width: 1220px;
+    padding: 0;
   }
 }
 </style>

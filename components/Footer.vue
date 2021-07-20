@@ -3,30 +3,14 @@
     <div class="footer">
       <div class="footer--top">
         <Logo :logo="`i-logo_footer`" />
-        <router-link to="/">Экспертные статьи и новости</router-link>
-        <router-link to="/">Обратная связь</router-link>
-        <router-link to="/">Кабинет</router-link>
+        <nuxt-link to="/"> Каталог студий </nuxt-link>
       </div>
       <div class="footer--mid">
         <div class="footer--mid-inner">
-          <p>Моделям</p>
-          <p>Студиям</p>
-          <p>Специалистам</p>
-          <a href="#" @click.prevent="$router.push('/')">Каталог студий</a>
-          <a href="#" @click.prevent="modalLinkClickHandle('Proposal')"
-            >Добавление в каталог</a
-          >
-          <a href="#">Вакансии</a>
-          <a href="#" @click.prevent="modalLinkClickHandle('SpecSelection')"
-            >Индивидуальный подбор студии</a
-          >
-          <router-link to="/certificate"> Сертификация </router-link>
-          <a href="#">Разместить резюме</a>
-          <a href="#">Тренинги (платные и бесплатные)</a>
-          <a href="#">Специалисты</a>
-          <a href="#">Сертификация (бесплатно)</a>
-          <a
-            href="#"
+          <button @click.prevent="modalLinkClickHandle('SpecSelection')">
+            Индивидуальный подбор студии
+          </button>
+          <button
             @click.prevent="
               $router.push({
                 name: 'links-category',
@@ -35,31 +19,28 @@
             "
           >
             Полезные ссылки
-          </a>
-          <a href="#">Тренинги для админов</a>
-          <a href="#">Тренинги (платные и бесплатные)</a>
-          <a href="#">Психологическая помощь</a>
-          <a href="#">Помощь в организации тренингов</a>
-          <a href="#"> </a>
-          <a href="#">Черный список студий</a>
-          <a href="#">Полезное студиям</a>
-          <a href="#"> </a>
-
-          <a href="#" @click.prevent="modalLinkClickHandle('Claim')">Оставить жалобу</a>
+          </button>
+          <button @click.prevent="modalLinkClickHandle('Proposal')">
+            Добавить студию
+          </button>
+          <nuxt-link to="/certificate"> Сертификация </nuxt-link>
+          <button @click.prevent="modalLinkClickHandle('Claim')">
+            Оставить жалобу
+          </button>
+          <button @click.prevent="modalLinkClickHandle('Feedback')">
+            Обратная связь
+          </button>
         </div>
       </div>
       <div class="footer--bott">
         <div class="footer--bott-inner">
           <p>© 2021 webcam-studio.expert</p>
-          <a href="#" to="/terms_of_use" @click.prevent="modalLinkClickHandle('Terms')"
-            >Пользовательское соглашение</a
-          >
-          <a
-            href="#"
-            to="/privacy_policy"
-            @click.prevent="modalLinkClickHandle('Privacy')"
-            >Политика конфиденциальности</a
-          >
+          <button to="/terms_of_use" @click.prevent="modalLinkClickHandle('Terms')">
+            Пользовательское соглашение
+          </button>
+          <button to="/privacy_policy" @click.prevent="modalLinkClickHandle('Privacy')">
+            Политика конфиденциальности
+          </button>
         </div>
       </div>
     </div>
@@ -80,7 +61,6 @@ export default {
   methods: {
     modalLinkClickHandle(name) {
       this.$store.commit('modals/setCurrent', name)
-      //   this.$scrollToTop()
     },
   },
 }
@@ -108,7 +88,6 @@ export default {
     right: 0;
     left: 0;
     background: linear-gradient(180deg, #313136 0%, #674780 100%);
-    margin-top: 30px;
     &::after {
       content: '';
       position: absolute;
@@ -123,9 +102,13 @@ export default {
   .footer {
     display: flex;
     flex-wrap: wrap;
-    height: 486px;
+    height: 278px;
     white-space: nowrap;
+    button,
     a {
+      text-align: left;
+      font-weight: normal;
+      font-size: 14px;
       color: var(--white);
     }
     .logo {
@@ -140,11 +123,6 @@ export default {
       &--desc {
         color: #aa9ab8;
       }
-      .logo {
-        &--desc {
-          display: none;
-        }
-      }
     }
     &--top {
       height: 110px;
@@ -156,17 +134,13 @@ export default {
       padding-left: var(--fr-2);
     }
     &--mid {
-      height: 338px;
+      height: 130px;
       display: flex;
       align-items: center;
       &-inner {
         @include three-col;
         row-gap: var(--fr);
         grid-template-rows: repeat(2, 1fr);
-        p {
-          font-size: 18px;
-          color: #7bd0ff;
-        }
       }
     }
     &--bott {
@@ -174,7 +148,7 @@ export default {
         position: relative;
         z-index: 1;
         p {
-          color: #7bd0ff;
+          color: #aa9ab8;
         }
         @include three-col;
         height: inherit;
@@ -190,6 +164,15 @@ export default {
   .footer {
     width: 1220;
     justify-content: center;
+    .logo {
+      flex-grow: 2;
+      justify-content: space-between;
+    }
+    .logo--desc {
+      flex-grow: 2;
+      margin: 0;
+      text-align: center;
+    }
   }
   .footer--top {
     width: 1220px;

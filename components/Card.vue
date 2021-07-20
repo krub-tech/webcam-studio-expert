@@ -15,7 +15,17 @@
       </div>
       <div class="card--title">
         <!-- :class="{ 'card--title-best': data.haveCrown }" -->
-        <h3>{{ data.name }}</h3>
+        <nuxt-link
+          :to="{
+            name: 'city-name-id',
+            params: {
+              city: $route.params.city,
+              name,
+              id: data.id,
+            },
+          }"
+          >{{ data.name }}</nuxt-link
+        >
         <Like :id="data.id" />
       </div>
       <template v-for="type in Object.values(data.studio_type)">
@@ -65,6 +75,8 @@
 <script>
 import Like from '@/components/buttons/Like'
 
+import CyrillicToTranslit from 'cyrillic-to-translit-js'
+
 export default {
   name: 'Card',
   components: { Like },
@@ -78,6 +90,10 @@ export default {
     studiosOptions() {
       return this.$store.state.studios.options
     },
+    name() {
+      const cyrillicToTranslit = new CyrillicToTranslit()
+      return cyrillicToTranslit.transform(this.data.name).toLowerCase()
+    },
   },
   methods: {
     arrayFromObject(object) {
@@ -89,7 +105,7 @@ export default {
           name: 'city-name-id',
           params: {
             city: this.$route.params.city,
-            name: data.name,
+            name: this.name,
             id: data.id,
           },
         })
@@ -137,15 +153,20 @@ export default {
     height: 130px;
     img {
       width: 50%;
-      object-fit: cover;
+      object-fit: contain;
+      &:nth-child(2) {
+        object-fit: cover;
+      }
     }
   }
   &--title {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    h3 {
+    a {
       font-size: var(--fr);
+      font-weight: bold;
+      color: inherit;
       margin: 24px 0;
     }
     &-best {

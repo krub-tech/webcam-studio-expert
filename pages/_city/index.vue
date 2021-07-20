@@ -1,64 +1,62 @@
 <template>
-  <div class="studios">
-    <div class="page-title">
+  <section class="studios">
+    <div v-if="currentCity" class="studios--title">
       <h1>Вебкам студии г. {{ currentCity }}</h1>
-      <button
-        :class="{ dirty: isFilterDirt }"
-        class="filter-btn"
-        @click="$store.dispatch('sidebarToggle')"
-      >
-        Фильтр
-      </button>
-      <div class="studios--count">
-        <span class="studios--count-current">
-          {{ $store.state.studios.allWithParamsLength }}
-        </span>
-        /{{ $store.state.studios.allByCityLength }}
-      </div>
-      <div class="form-module">
+      <p>работа и вакансии для веб-моделей</p>
+    </div>
+    <aside class="filter-wrapper">
+      <button class="filter-btn" @click="isOpenFilter = true" />
+      <Filt :class="{ isOpenFilter }" @close="isOpenFilter = false" />
+    </aside>
+    <div class="studios--count" :class="{ dirty: isFilterDirt }">
+      <p class="studios--count-current">
+        {{ $store.state.studios.allWithParamsLength }}
+      </p>
+      /{{ $store.state.studios.allByCityLength }}
+    </div>
+    <div class="sort-wrapper">
+      <div class="select-wrapper sort">
         <Select
-          class="form-module"
           :options="sortingTypes"
           :value="ordering"
           @selectedOption="sortingSelect"
         />
       </div>
     </div>
-    <main class="studios--content">
-      <Card v-for="studio in studios" :key="studio.id" :data="studio" />
-    </main>
-    <Pagination :length="$store.state.studios.allWithParamsLength" />
-  </div>
+    <div class="studios--results">
+      <Cards :studios="studios" :length="$store.state.studios.allWithParamsLength" />
+    </div>
+  </section>
 </template>
 
 <script>
-import Select from '@/components/form/Select'
-
 export default {
   name: 'StudiosByCity',
-  components: {
-    Select,
-  },
-  async asyncData({ $api, route, store }) {
-    const idx = store.state.cities.uniques.findIndex(
-      (el) => el.id === route.params.city
-    )
-    const cityName = store.state.cities.uniques[idx].name
-    store.commit('cities/updateCurrentById', route.params.city)
-
-    const studios = await $api.studios.getByQuery(store.getters['studios/query'])
-    store.commit('studios/updateCurrentStudios', studios.results)
-
-    store.commit('setTitle', `Вебкам студии г. ${cityName}`)
-    return { cityName }
-  },
   data() {
     return {
-      studiosByCityLength: 0,
-      cityName: null,
       sortingTypes: ['По умолчанию', 'По названию', 'По процентам'],
+      studiosByCityLength: 0,
       ordering: 'Сортировка',
+      isOpenFilter: false,
+
+      cityName: null,
     }
+  },
+  async fetch() {
+    const currentCity = this.$route.params.city
+    const { page } = this.$store.state.studios
+    const studios = await this.$api.studios.getByQuery({
+      ...this.$store.getters['studios/query'],
+      city: currentCity,
+    })
+    this.$store.commit('studios/updateCurrentStudios', studios.results)
+    this.$store.commit('studios/updateAllByCityLength', studios.count_by_city)
+    this.$store.commit('studios/updateAllWithParamsLength', studios.count)
+    this.$store.commit('studios/updatePageNumber', page)
+    const idx = this.$store.state.cities.uniques.findIndex(
+      (el) => el.id === currentCity
+    )
+    this.cityName = this.$store.state.cities.uniques[idx].name
   },
   head() {
     return {
@@ -81,9 +79,6 @@ export default {
     isFilterDirt() {
       return this.$store.state.filter.query
     },
-  },
-  created() {
-    this.$store.commit('setTitle', `Вебкам студии г. ${this.cityName}`)
   },
   methods: {
     sortingSelect(data) {
@@ -111,128 +106,247 @@ export default {
 </script>
 
 <style lang="scss">
-.page-title {
-  height: 140px;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  padding: 15px;
-  justify-content: center;
-  h1 {
+@mixin item {
+  background-color: #fefeff;
+  border: 1px solid #c4c4cd;
+  border-radius: 0.5rem;
+  padding: var(--fr-m) 0.875rem;
+}
+
+@media screen and (max-width: 420px) {
+  .filter {
     width: 100%;
-    font-size: 18px;
-    text-align: center;
-  }
-  .filter-btn {
-    display: flex;
-    align-items: center;
-    height: 40px;
-    background-color: #e5e5ef;
-    padding: 12px;
-    border-radius: 8px;
-    padding-left: 50px;
-    position: relative;
-    &::before {
-      content: '';
-      position: absolute;
-      left: 16px;
-      width: 20px;
-      height: 16px;
-      background-image: url('~@/assets/svg/i-filter.svg');
-      background-position: 0;
-      background-size: contain;
-      background-repeat: no-repeat;
-    }
-    &.dirty {
-      &::after {
-        content: '';
-        position: absolute;
-        top: -10px;
-        right: -10px;
-        width: 20px;
-        height: 20px;
-        background-image: url('~@/assets/svg/i-point.svg');
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-position: 50%;
+    max-width: 420px;
+    position: absolute;
+    top: -1000px;
+    left: -420px;
+    z-index: 3;
+    transition: left 500ms;
+    background-color: #fbfbfd;
+    animation: close 1000ms;
+    @keyframes close {
+      0% {
+        top: 0;
+      }
+      50% {
+        top: 0;
+      }
+      100% {
+        top: -1000px;
       }
     }
   }
-  .studios--count {
-    margin: 0 auto;
-    &-current {
-      color: #e95ba8;
-      font-weight: 700;
-    }
-    position: relative;
-  }
-  .form-module {
-    margin: 0;
-    .select {
-      position: relative;
-      .options {
-        position: absolute;
-        width: 180px;
-        left: -50px;
+  .isOpenFilter {
+    animation: open 500ms;
+    left: 0;
+    top: 0;
+    @keyframes open {
+      0% {
+        left: -420px;
       }
-      .arrow {
-        display: none;
+      100% {
+        left: 0;
       }
     }
   }
 }
 
 .studios {
+  white-space: nowrap;
+  display: grid;
+  grid-template-areas:
+    'title title title'
+    'filter count sort'
+    'cont cont cont';
+  grid-template-columns: repeat(3, minmax(100px, 31%));
+  justify-content: center;
+  position: relative;
+  &--title {
+    grid-area: title;
+    height: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    h1 {
+      font-size: 18px;
+    }
+    p {
+      line-height: 1.4;
+    }
+  }
+  .filter-wrapper,
+  .sort-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding-bottom: var(--fr-l);
+  }
+  .filter-wrapper {
+    grid-area: filter;
+    height: min-content;
+  }
+  .pageCounter-wrapper {
+    grid-area: counter;
+    justify-content: center;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    i {
+      font-style: normal;
+      font-weight: bold;
+      color: var(--pink);
+    }
+  }
+  .sort-wrapper {
+    grid-area: sort;
+    justify-content: flex-end;
+    .select {
+      display: block;
+      text-align: center;
+      min-width: max-content;
+      @include item;
+      padding: 0;
+      .options {
+        left: -60px;
+      }
+      img {
+        display: none;
+      }
+    }
+  }
+}
+.studios--count {
+  grid-area: count;
   display: flex;
-  flex-direction: column;
-  padding: 0 15px;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding-left: 0;
+  padding-right: 1rem;
+  padding-bottom: var(--fr-l);
+  &-current {
+    display: inline-block;
+    color: #e95ba8;
+    font-weight: bold;
+  }
+  &.dirty {
+    &::after {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      width: 20px;
+      height: 20px;
+      background-image: url('~@/assets/svg/i-point.svg');
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
+    }
+  }
+}
+.studios--results {
+  grid-area: cont;
+  // min-height: 100vh;
+}
 
-  .card {
-    margin-bottom: 20px;
+.filter-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: var(--fr-2);
+  background-color: #e5e5ef;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  &::after {
+    content: '';
+    position: absolute;
+    left: 1rem;
+    width: var(--fr);
+    height: 1rem;
+    background-image: url('~@/assets/svg/i-filter.svg');
+    background-position: left;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+  &::before {
+    content: 'Фильтр';
+    position: absolute;
+    right: 0.7rem;
   }
 }
 
 @media screen and (min-width: 420px) {
-  .page-title {
-    position: relative;
-    left: -330px;
-    width: 960px;
-    padding: 0;
-    padding-left: 30px;
-    justify-content: space-between;
-    h1 {
-      width: max-content;
-      font-size: 22px;
+  .studios {
+    display: grid;
+    grid-template-areas:
+      'title sort'
+      'filter cont';
+    grid-template-columns: 300px 660px;
+    justify-content: flex-start;
+    &--title {
+      height: 140px;
+      align-items: flex-start;
+      padding-left: var(--fr-2);
+      h1 {
+        font-size: 1.375rem;
+      }
+      p {
+        display: block;
+        color: #606074;
+        line-height: 1.4;
+      }
     }
-    .filter-btn,
-    .studios--count {
+    .filter-wrapper {
+      align-items: flex-start;
+      .filter {
+        position: relative;
+        left: 0;
+        top: 0;
+        z-index: 0;
+      }
+    }
+    .sort-wrapper {
+      .select {
+        background-color: var(--white);
+        border: 1px solid rgba(#c4c4cd, 0.4);
+        img {
+          display: inline-block;
+        }
+        &::after {
+          display: block;
+          top: 0;
+          transform: translateY(75%) translateX(-50%);
+        }
+      }
+    }
+    .filter-wrapper,
+    .sort-wrapper {
+      padding-bottom: 0;
+    }
+    .filter-btn {
       display: none;
     }
   }
-  .filter {
-    position: relative;
-    top: 140px;
+  .studios--count {
+    display: none;
   }
-  .studios {
-    padding: 0;
-    &--content {
-      display: grid;
-      grid-template-columns: repeat(2, 300px);
-      grid-column-gap: 30px;
-    }
+  .studios--results {
+    padding-left: var(--fr-l);
   }
 }
 
 @media screen and (min-width: 1280px) {
-  .page-title {
-    padding-left: 0;
-    width: 1255px;
-  }
   .studios {
-    &--content {
-      grid-template-columns: repeat(3, 295px);
-      grid-column-gap: 20px;
+    justify-content: center;
+    grid-template-columns: 300px 910px;
+    &--title {
+      padding-left: 0;
     }
+  }
+  .studios--results {
+    padding-left: var(--fr-l);
   }
 }
 </style>
